@@ -4,7 +4,21 @@
   </div>
 </template>
 
-<script setup>
+<script>
+  import io from 'socket.io-client';
+
+  export default {
+  data: () => ({
+    
+  }),
+  setup() {
+    const socket = io('http://localhost:3000');
+
+    socket.on('message', message => {
+      console.log(message);
+    });
+  }
+};
 </script>
 
 <style scoped>
