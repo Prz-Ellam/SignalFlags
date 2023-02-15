@@ -1,9 +1,8 @@
 import express from 'express';
+import { createUser } from '../controllers/user.controller';
 const router = express.Router();
 
-router.post('/', (_req, res) => {
-
-});
+router.post('/', createUser);
 
 router.get('/:id', (_req, res) => {
 
