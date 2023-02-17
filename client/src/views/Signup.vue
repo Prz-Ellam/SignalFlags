@@ -1,27 +1,27 @@
 <template>
-	<section class="container">
+	<section class="container bg-dark">
 		<div class="row d-flex align-items-center justify-content-center vh-100">
-			<form @submit.prevent="createUser" class="bg-light rounded-1 p-5 col-lg-5 col-md-9 shadow-lg">
+			<form @submit.prevent="createUser" class="bg-light rounded-1 p-5 col-lg-5 col-md-9">
 				<div class="mb-4">
-					<label for="email" role="button" class="form-label">Correo electrónico:</label>
-					<input v-model="user.email" type="email" name="email" id="email" class="form-control shadow-none"
+					<label for="email" role="button" class="form-label text-white">Correo electrónico:</label>
+					<input v-model="user.email" type="email" name="email" id="email" class="bg-secondary form-control border-0 shadow-none text-white"
 						placeholder="example@domain.com">
 				</div>
 				<div class="mb-4">
-					<label for="email" role="button" class="form-label">Nombre de usuario:</label>
-					<input v-model="user.username" type="text" name="text" id="text" class="form-control shadow-none">
+					<label for="email" role="button" class="form-label text-white">Nombre de usuario:</label>
+					<input v-model="user.username" type="text" name="text" id="text" class="bg-secondary form-control border-0 shadow-none text-white">
 				</div>
 				<div class="mb-4">
-					<label for="email" role="button" class="form-label">Contraseña:</label>
-					<input v-model="user.password" type="password" name="password" id="password" class="form-control shadow-none">
+					<label for="email" role="button" class="form-label text-white">Contraseña:</label>
+					<input v-model="user.password" type="password" name="password" id="password" class="bg-secondary form-control border-0 shadow-none text-white">
 				</div>
 				<div class="mb-4">
-					<label for="email" role="button" class="form-label">Confirmar contraseña:</label>
+					<label for="email" role="button" class="form-label text-white">Confirmar contraseña:</label>
 					<input v-model="confirmPassword" type="password" name="confirm-password" id="confirm-password"
-						class="form-control shadow-none">
+						class="bg-secondary form-control border-0 shadow-none text-white">
 				</div>
 				<div class="d-grid mb-4">
-					<button type="submit" class="btn btn-primary">Registrarse</button>
+					<button type="submit" class="btn btn-primary rounded-5">Registrarse</button>
 				</div>
 			</form>
 		</div>
@@ -33,7 +33,7 @@ import User from '../models/login';
 import { createUser } from '../services/user.service';
 
 export default {
-	data: () => {
+	data() {
 		return {
 			user: new User('', '', ''),
 			confirmPassword: ''

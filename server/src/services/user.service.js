@@ -1,7 +1,8 @@
-createUser = async () => {
 
+export const createUser = async user => {
+    // Create an user in the database
 };
 
-updateUser = async () => {
+export const updateUser = async () => {
 
 };
