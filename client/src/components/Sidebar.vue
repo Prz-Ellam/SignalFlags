@@ -2,7 +2,7 @@
 
 <section>
 <div class="row vh-100">
-            <div class="col-2 bg-secondary text-center">
+            <div class="col-1 bg-secondary text-center">
                 <ul class="nav flex-column  ">
                     <li class="nav-item py-5">
                         <a class="nav-link active" href="#">
@@ -40,7 +40,7 @@
                     </li>
                 </ul>     
             </div>
-            <div class="col-10 bg-dark" >
+            <div class="col-11 bg-dark" >
                
             </div>
             

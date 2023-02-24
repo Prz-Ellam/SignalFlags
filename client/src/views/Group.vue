@@ -2,7 +2,7 @@
 <section class="bg-dark container-fluid">
     <div>   
         <div class="row">
-            <div class="col-2 bg-secondary text-center">
+            <div class="col-1 bg-secondary text-center">
                 <ul class="nav flex-column  ">
                     <li class="nav-item py-5">
                         <a class="nav-link active" href="#">
@@ -40,9 +40,9 @@
                     </li>
                 </ul>     
             </div>
-            <div class="col-10 bg-dark text-white text-center" >        
+            <div class="col-11 bg-dark text-white text-center" >        
                 <div class="py-3 px-5 ">
-                    <div class="box bg-secondary scrollbar-deep-purple bordered-deep-purple thin py-5 px-5">
+                    <div class="box bg-secondary scrollbar bordered thin py-5 px-5">
                         <div>
                         <h3> Mis grupos </h3>
                         <div class="row " id="group-container">
