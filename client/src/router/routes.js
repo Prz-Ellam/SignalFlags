@@ -2,10 +2,12 @@ import Home from '../views/Home.vue';
 import Login from '../views/Login.vue';
 import Signup from '../views/Signup.vue';
 import Chat from '../views/Chat.vue';
+import Homework from '../views/Homework.vue';
+import Group from '../views/Group.vue';
 
 const routes = [
     {
-        path: '/',
+        path: '/home',
         component: Home
     },
     {
@@ -19,6 +21,14 @@ const routes = [
     {
         path: '/chat',
         component: Chat
+    },
+    {
+        path: '/group',
+        component: Group
+    },
+    {
+        path: '/homework',
+        component: Homework
     }
 ]
 
