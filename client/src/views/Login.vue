@@ -1,5 +1,5 @@
 <template>
-  <section class="container bg-dark my-4 rounded-3">
+  <section class="container bg-accent my-4 rounded-3">
     <div class="row d-flex justify-content-center">
       <form @submit.prevent="loginUser" class="p-5 col-lg-5 col-md-7">
         <RouterLink to="/home" class="d-flex justify-content-center">
@@ -44,6 +44,8 @@
             ¡Registrate aquí!
           </RouterLink>
         </div>
+        <hr>
+        <a href="#" class="d-block text-center text-decoration-none text-primary mt-3">¿Olvidaste tu contraseña?</a>
       </form>
     </div>
   </section>
