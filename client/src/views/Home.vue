@@ -66,12 +66,12 @@
             </div>
         </div>
 
-        <div class="bg-secondary row text-center align-items-center justify-content-center " >
-            <div class=" col-auto p-5 text-center">
-            <img src="../assets/images/POI_SignalFalgs.png" width="300" height="300" class="img-fluid" alt="">
-            <h1 class="text-white"> Un footer (? </h1>
-            </div>
+        <footer class="bg-secondary text-center text-lg-start">
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            © 2020 Copyright:
+            <a class="text-white" href="https://mdbootstrap.com/">SignalFlags.com</a>
         </div>
+        </footer>
     </section>
 
     
