@@ -1,11 +1,11 @@
 <template>
-  <main>
-    <RouterLink to="/login">Login</RouterLink>
+  <main class="vh-100">
+    <!-- <RouterLink to="/login">Login</RouterLink>
     <RouterLink to="/signup">Registrarse</RouterLink>
     <RouterLink to="/chat">Chat</RouterLink>
     <RouterLink to="/homework">Homework</RouterLink>
     <RouterLink to="/group">Group</RouterLink>
-    <RouterLink to="/home">Home</RouterLink>
+    <RouterLink to="/home">Home</RouterLink> -->
 
     <RouterView />
   </main>

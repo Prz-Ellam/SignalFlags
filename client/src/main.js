@@ -3,6 +3,7 @@ import App from './App.vue';
 import router from './router/router';
 
 import './assets/main.scss';
+import '../node_modules/bootstrap/dist/js/bootstrap.bundle';
 /*
 import 'vuetify/styles';
 import { createVuetify } from 'vuetify';

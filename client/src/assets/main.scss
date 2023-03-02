@@ -1,10 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Nunito:wght@400;700&family=Roboto&family=Ubuntu:wght@400;700&display=swap');
+
+$primary-color: #0075f4;
+$secondary-color: #FFB800;
+$dark-color: #232323;
+$accent-color: #2C2C2C;
+$light-color: #ECECEC;
+
+* {
+    box-sizing: border-box !important;
+}
+
 $theme-colors: (
     'primary': #0075f4,
     'secondary': #38393b,
     'dark': #2c2c2c,
+    'white': $light-color,
+    'light': $light-color,
     'inactive': #6D6F7D,
-    'yellow': #FFB800
+    'danger': #F23F43,
+    'yellow': #FFB800,
 );
+
+$navbar-padding-y: .5;
+
+// $theme-colors: (
+//   "primary":    $primary,
+//   "secondary":  $secondary,
+//   "success":    $success,
+//   "info":       $info,
+//   "warning":    $warning,
+//   "danger":     $danger,
+//   "light":      $light,
+//   "dark":       $dark
+// ) !default;
+
+
+
+$body-bg: $dark-color;
+$body-color: $light-color;
+// $body-text-align:           null !default;
+
+$border-color: #6D6F7D;
+
+
+
+$link-color: $primary-color;
+$link-decoration: none;
+$font-family-sans-serif: 'Ubuntu', Verdana, Geneva, Tahoma, sans-serif;
+
+
+
+
+ $grid-columns:                12 !default;
+// $grid-gutter-width:           1.5rem !default;
+// $grid-row-columns:            6 !default;
+
+$input-color: $light-color;
+// $input-border-radius
+$input-line-height: 2;
+
+
+
+input {
+    border: none !important;
+    
+}
+
+input:focus {
+    border: none !important;
+    outline: 2px solid $primary-color !important;
+    
+}
+
+
+
+
 
 //bordes de las cajas de los grupos
 .border > div{
@@ -12,7 +82,12 @@ $theme-colors: (
 }
 
 //enciende los iconos
+.nav-icon {
+    color: grey;
+}
+
 .nav-icon:hover {
+    color: #FFB800;
     fill: #FFB800
 }
 
