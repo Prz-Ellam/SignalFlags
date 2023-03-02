@@ -44,6 +44,8 @@
             ¡Registrate aquí!
           </RouterLink>
         </div>
+        <hr>
+        <a href="#" class="d-block text-center text-decoration-none text-primary mt-3">¿Olvidaste tu contraseña?</a>
       </form>
     </div>
   </section>
