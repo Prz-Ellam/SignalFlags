@@ -1,12 +1,12 @@
 <template>
 	<div class="d-flex flex-column vh-100">
 		<div class="flex-grow-0 flex-shrink-1 header">
-			<nav class="navbar navbar-expand-lg shadow-sm" style="background-color: rgb(35,35,35);">
+			<nav class="navbar navbar-expand-lg shadow-lg bg-accent">
 				<div class="container-fluid">
-					<a class="navbar-brand text-light" href="#">
+					<RouterLink to="/home" class="navbar-brand text-light" href="#">
 						<img src="../assets/images/Isotipo.png" alt="Bootstrap" width="30" height="30">
 						SignalFlags
-					</a>
+					</RouterLink>
 					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
 						aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="navbar-toggler-icon"></span>
@@ -31,7 +31,7 @@
 										<img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
 											alt="Perfil" width="32" class="rounded-circle profile-picture">
 									</button>
-									<ul class="dropdown-menu dropdown-menu-end">
+									<ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
 										<li>
 											<a class="dropdown-item" href="instructor-profile.html">Mi perfil</a>
 										</li>
@@ -53,7 +53,7 @@
 		<div class="flex-grow-1 flex-shrink-1 overflow-auto">
 			<div class="bg-dark container-fluid h-100">
 				<div class="row h-100">
-					<section class="col-auto bg-secondary d-flex align-items-center text-center">
+					<section class="col-auto d-none bg-accent d-sm-flex align-items-center text-center">
 						<ul class="nav flex-column gap-5">
 							<li class="nav-item">
 								<a href="#" class="nav-icon">
@@ -77,10 +77,10 @@
 							</li>
 						</ul>
 					</section>
-					<section class="bg-dark col-4 h-100 d-flex align-items-center">
+					<section class="bg-dark d-none col-4 h-100 d-sm-flex align-items-center">
 
-						<div class="bg-secondary d-flex flex-column w-100 rounded-3 p-3" style="height: 95%;">
-							<h2 class="text-center pt-3 mb-0">Contactos</h2>
+						<div class="bg-accent d-flex flex-column w-100 rounded-3 p-3" style="height: 95%;">
+							<h2 class="text-center mb-0">Contactos</h2>
 							<hr>
 							<input type="search" name="search" class="bg-secondary form-control shadow-none text-white rounded-4 mb-1"
 								placeholder="Buscar personas...">
@@ -93,8 +93,8 @@
 											<img src="https://i.kym-cdn.com/photos/images/facebook/001/884/907/c86.jpg" alt="avatar"
 												class="rounded-circle d-flex align-self-center me-3 shadow-1-strong">
 											<div class="overflow-hidden text-nowrap">
-												<p class="h6 mb-0 text-white">Kevin Gold</p>
-												<small class="text-primary mb-0 text-white">Hola, ¿cómo estas?</small>
+												<p class="h6 mb-0 text-light">Kevin Gold</p>
+												<small class="text-primary mb-0 text-light">Hola, ¿cómo estas?</small>
 											</div>
 										</div>
 										<div>
@@ -104,14 +104,13 @@
 									</a>
 								</div>
 							</div>
-							<br>
 						</div>
 					</section>
 
 
 
-					<section class="bg-dark col h-100 d-flex align-items-center">
-						<section class="bg-secondary d-flex flex-column col w-100 rounded-3 my-3" style="height: 95%">
+					<section class="bg-dark col-sm-12 col-md h-100 d-flex align-items-center ps-0 pe-0 pe-md-2">
+						<section class="bg-accent d-flex flex-column col w-100 rounded-3 my-3" style="height: 95%">
 
 							<div class="d-flex justify-content-between align-items-center mt-3 px-3">
 
@@ -129,7 +128,7 @@
 									</button>
 								</div>
 							</div>
-							<hr>
+							<hr class="mx-3">
 							<div class="overflow-auto p-2 h-100 chat">
 
 								<div v-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9]" class="d-flex justify-content-end my-3">
@@ -148,11 +147,16 @@
 
 							</div>
 							<hr class="mb-1 text-light">
-							<div class="input-group mb-3">
+							<div class="input-group mb-1 p-2">
+								<button class="btn border-0" style="transform: rotateY(0deg) rotate(45deg);">
+									<i class="h4 mb-0 me-1 bi bi-paperclip" style="color: #6D6F7D"></i>
+								</button>
 								<input type="text" id="message"
 									class="bg-secondary form-control border-0 shadow-none text-white rounded-4"
-									placeholder="Escribe un mensaje" aria-label="Enviar mensaje" aria-describedby="basic-addon2">
-								<button class="btn btn-primary shadow-none" id="send-message"><i class="bx bxs-send"></i></button>
+									placeholder="Escribe un mensaje"
+									aria-label="Enviar mensaje"
+									aria-describedby="basic-addon2">
+								
 							</div>
 						</section>
 					</section>

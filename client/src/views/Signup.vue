@@ -1,5 +1,5 @@
 <template>
-	<section class="container bg-dark my-3 rounded-3">
+	<section class="container bg-accent my-3 rounded-3">
 		<div class="row d-flex justify-content-center">
 			<form @submit.prevent="createUser" class="p-5 col-lg-5 col-md-9 shadow-none">
 				<div class="d-flex justify-content-center">
@@ -50,7 +50,7 @@
 					>
 				</div>
 				<div class="mb-4">
-					<label for="email" role="button" class="form-label text-white">Contraseña</label>
+					<label for="password" role="button" class="form-label text-white">Contraseña</label>
 					<input
 						v-model="user.password"
 						type="password"
@@ -60,7 +60,7 @@
 					>
 				</div>
 				<div class="mb-5">
-					<label for="email" role="button" class="form-label text-white">Confirmar contraseña:</label>
+					<label for="confirm-password" role="button" class="form-label text-white">Confirmar contraseña:</label>
 					<input
 						v-model="confirmPassword"
 						type="password"
