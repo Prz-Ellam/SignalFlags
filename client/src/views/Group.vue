@@ -2,8 +2,7 @@
   <div class="d-flex flex-column vh-100">
     <div class="flex-grow-0 flex-shrink-1 header">
       <nav
-        class="navbar navbar-expand-lg shadow-sm"
-        style="background-color: rgb(35, 35, 35)"
+        class="navbar navbar-expand-lg shadow-sm bg-accent"
       >
         <div class="container-fluid">
           <a class="navbar-brand text-light" href="#">

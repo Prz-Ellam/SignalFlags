@@ -22,11 +22,14 @@
 			<div class="container px-5">
 				<div class="row">
 					<div class="col-6 d-flex bd-highlight">
-						<button type="submit" class="flex-fill bd-highlight btn btn-primary rounded-5 text-white ">Iniciar sesión
-						</button>
+						<RouterLink to="/login" class="flex-fill bd-highlight btn btn-primary rounded-5 text-white ">
+							Iniciar sesión
+						</RouterLink>
 					</div>
 					<div class="col-6 d-flex bd-highlight">
-						<button type="submit" class="flex-fill bd-highlight btn btn-yellow rounded-5">Registrarse </button>
+						<RouterLink to="/signup" class="flex-fill bd-highlight btn btn-yellow rounded-5">
+							Registrarse
+						</RouterLink>
 					</div>
 
 				</div>
