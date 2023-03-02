@@ -2,7 +2,7 @@
 	<section class="bg-dark container-fluid ">
 		<div>
 			<div class="row vh-100">
-				<div class="col-2 bg-secondary text-center">
+				<div class="col-auto bg-secondary text-center">
 					<ul class="nav flex-column  ">
 						<li class="nav-item py-5">
 							<a class="nav-link active" href="#">
@@ -52,7 +52,7 @@
 						</li>
 					</ul>
 				</div>
-				<div class="col-10 bg-dark">
+				<div class="col bg-dark">
 					<div class="py-5 px-5">
 						<div class="row rounded-4 bg-secondary">
 							<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">

@@ -90,10 +90,14 @@
 										data-bs-toggle="collapse" data-bs-target="chat-section" aria-expanded="false"
 										aria-controls="collapseExample">
 										<div class="d-flex flex-row flex-nowrap align-items-center overflow-hidden">
-											<img src="https://i.kym-cdn.com/photos/images/facebook/001/884/907/c86.jpg" alt="avatar"
+											<div class="position-relative d-inline-block">
+
+												<img src="https://i.kym-cdn.com/photos/images/facebook/001/884/907/c86.jpg" alt="avatar"
 												class="rounded-circle d-flex align-self-center me-3 shadow-1-strong">
+												<span class="dot"></span>
+											</div>
 											<div class="overflow-hidden text-nowrap">
-												<p class="h6 mb-0 text-light">Kevin Gold</p>
+												<p class="h6 mb-0 text-light">Jimmy McGuill</p>
 												<small class="text-primary mb-0 text-light">Hola, ¿cómo estas?</small>
 											</div>
 										</div>
@@ -117,7 +121,7 @@
 								<div class="d-flex align-items-center ">
 									<img class="img-fluid rounded-circle actual-chat-user-image"
 										src="https://i.kym-cdn.com/photos/images/facebook/001/884/907/c86.jpg" alt="Perfil">
-									<span class="h5 ms-3 mb-0">Kevin Gold</span>
+									<span class="h5 ms-3 mb-0">Saul Goodman</span>
 								</div>
 								<div>
 									<button class="btn border-0 position-relative me-3">
@@ -423,8 +427,19 @@ export default {
 </script>
 
 <style scoped>
+
+.dot {
+	position: absolute; 
+	bottom: 0; 
+	left: 50%;
+	height: 10px;
+  width: 10px;
+  background-color: #00ff00;
+  border-radius: 50%;
+  display: inline-block;
+}
 .chat-drawer:hover {
-	background-color: #2C2C2C;
+	background-color: #232323;
 	cursor: pointer;
 }
 
@@ -462,6 +477,11 @@ export default {
 	visibility: hidden;
 }
 
+.chat {
+	scrollbar-color: #FFB800 #6D6F7D !important;
+  scrollbar-width: thin !important;
+	
+}
 
 .chat::-webkit-scrollbar {
 	width: 8px;
