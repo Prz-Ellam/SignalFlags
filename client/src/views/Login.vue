@@ -20,6 +20,7 @@
             id="email"
             class="bg-secondary form-control text-white rounded-4"
             placeholder="example@domain.com"
+            required
           >
         </div>
         <div class="mb-5">
@@ -30,6 +31,7 @@
             name="password"
             id="password"
             class="bg-secondary form-control border-0 shadow-none rounded-4"
+            required
           >
         </div>
         <div class="d-grid mb-4">

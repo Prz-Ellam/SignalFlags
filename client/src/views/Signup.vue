@@ -38,6 +38,7 @@
 						id="email"
 						class="bg-secondary form-control text-white rounded-4"
 						placeholder="example@domain.com"
+						required
 					>
 				</div>
 				<div class="mb-4">
@@ -47,7 +48,9 @@
 						type="text"
 						name="username"
 						id="username"
+						minlength="3"
 						class="bg-secondary form-control text-white rounded-4"
+						required
 					>
 				</div>
 				<div class="mb-4">
@@ -58,6 +61,9 @@
 						name="password"
 						id="password"
 						class="bg-secondary form-control text-white rounded-4"
+						required
+						maxlength="20"
+						pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[\W_])\S{8,20}$" 
 					>
 				</div>
 				<div class="mb-5">
@@ -68,6 +74,9 @@
 						name="confirm-password"
 						id="confirm-password"
 						class="bg-secondary form-control text-white rounded-4"
+						required
+						maxlength="20"
+						pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[\W_])\S{8,20}$" 
 					>
 				</div>
 				<div class="d-grid mb-4">
