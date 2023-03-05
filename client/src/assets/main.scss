@@ -25,12 +25,12 @@ $light-color: #ECECEC;
 //     'yellow': #FFB800,
 // );
 
-$navbar-padding-y: .5;
+$navbar-padding-y: .7;
 
 $theme-colors: (
    "primary":    $blue-color,
    "secondary":  $gray-color,
-//    "success":    $success,
+    "success":    #28A745,
 //    "info":       $info,
 //    "warning":    $warning,
    "danger":     #F23F43,

@@ -1,5 +1,5 @@
 <template>
-  <main class="vh-100">
+  <main>
     <!-- <RouterLink to="/login">Login</RouterLink>
     <RouterLink to="/signup">Registrarse</RouterLink>
     <RouterLink to="/chat">Chat</RouterLink>

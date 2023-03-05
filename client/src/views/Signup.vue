@@ -1,7 +1,7 @@
 <template>
 	<section class="container bg-accent my-3 rounded-3">
 		<div class="row d-flex justify-content-center">
-			<form @submit.prevent="createUser" class="p-5 col-lg-5 col-md-9 shadow-none">
+			<form @submit.prevent="createUser" novalidate class="p-5 col-lg-5 col-md-9 shadow-none">
 				<div class="d-flex justify-content-center">
           <img
           src="../assets/images/POI_SignalFalgs.png"
@@ -26,46 +26,66 @@
           >
           <label for="profile-picture" role="button">Foto de perfil</label>
         </div>
+
+				<input
+					type="hidden"
+					name=""
+					v-model="profilePicture"
+				>
+				<small class="text-danger" v-if="v$.profilePicture.$dirty && v$.profilePicture.required.$invalid">La foto de perfil es requerida</small>
 				
 				<div class="mb-4">
 					<label for="email" role="button" class="form-label text-white">
 						Correo electrónico
 					</label>
 					<input
-						v-model="user.email"
+						v-model="email"
 						type="email"
 						name="email"
 						id="email"
 						class="bg-secondary form-control text-white rounded-4"
 						placeholder="example@domain.com"
-						required
 					>
+					<small class="text-danger" v-if="v$.email.$dirty && v$.email.required.$invalid">El corre electrónico es requerido</small>
+					<small class="text-danger" v-if="v$.email.$dirty && v$.email.email.$invalid">El corre electrónico no es válido</small>
 				</div>
 				<div class="mb-4">
 					<label for="username" role="button" class="form-label">Nombre de usuario</label>
 					<input
-						v-model="user.username"
+						v-model="username"
 						type="text"
 						name="username"
 						id="username"
-						minlength="3"
 						class="bg-secondary form-control text-white rounded-4"
-						required
 					>
+					<small class="text-danger" v-if="v$.username.$dirty && v$.username.required.$invalid">El nombre de usuario es requerido</small>
+					<small class="text-danger" v-if="v$.username.$dirty && v$.username.minLength.$invalid">El nombre de usuario debe tener al menos 3 caracteres</small>
 				</div>
+				
 				<div class="mb-4">
 					<label for="password" role="button" class="form-label text-white">Contraseña</label>
 					<input
-						v-model="user.password"
+						v-model="password"
 						type="password"
 						name="password"
 						id="password"
 						class="bg-secondary form-control text-white rounded-4"
-						required
-						maxlength="20"
-						pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[\W_])\S{8,20}$" 
 					>
+					<small class="text-danger" v-if="v$.password.$dirty && v$.password.required.$invalid">La contraseña es requerida</small>
+					<small class="text-danger" 
+					v-if="v$.password.$dirty && 
+					(v$.password.containsUpper.$invalid || v$.password.containsLower.$invalid ||
+					v$.password.containsNumber.$invalid || v$.password.containsSpecialChars.$invalid ||
+					v$.password.minLength.$invalid) && password !== ''">La contraseña no cumple con los parametros solicitados</small>
 				</div>
+				<ul>
+					<li :class="(password !== '') ? (v$.password.containsUpper.$invalid) ? 'text-danger' : 'text-success' : ''">Contiene mayúsculas</li>
+					<li :class="(password !== '') ? (v$.password.containsLower.$invalid) ? 'text-danger' : 'text-success' : ''">Contiene minúsculas</li>
+					<li :class="(password !== '') ? (v$.password.containsNumber.$invalid) ? 'text-danger' : 'text-success' : ''">Contiene números</li>
+					<li :class="(password !== '') ? (v$.password.containsSpecialChars.$invalid) ? 'text-danger' : 'text-success' : ''">Contiene carácteres especiales</li>
+					<li :class="(password !== '') ? (v$.password.minLength.$invalid) ? 'text-danger' : 'text-success' : ''">Contiene más de 8 caracteres</li>
+				</ul>
+
 				<div class="mb-5">
 					<label for="confirm-password" role="button" class="form-label text-white">Confirmar contraseña:</label>
 					<input
@@ -74,10 +94,9 @@
 						name="confirm-password"
 						id="confirm-password"
 						class="bg-secondary form-control text-white rounded-4"
-						required
-						maxlength="20"
-						pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[\W_])\S{8,20}$" 
 					>
+					<small class="text-danger" v-if="v$.confirmPassword.$dirty && v$.confirmPassword.required.$invalid">La contraseña es requerida</small>
+					<small class="text-danger" v-if="v$.confirmPassword.$dirty && (v$.confirmPassword.sameAsPassword.$invalid && confirmPassword !== '')">La confirmación de contraseña no coincide con la contraseña</small>
 				</div>
 				<div class="d-grid mb-4">
 					<button type="submit" class="btn btn-primary rounded-pill text-white">Registrarse</button>
@@ -98,19 +117,69 @@
 </template>
 
 <script>
+import { useVuelidate } from '@vuelidate/core'
+import { required, email, minLength, sameAs } from '@vuelidate/validators'
+
 import User from '../models/login';
 import { createUser } from '../services/user.service';
 
+const mustBeCool = (value) => value.indexOf('cool') >= 0;
+const containsUpper = (value) => /[A-Z]/.test(value);
+const containsLower = (value) => /[a-z]/.test(value);
+const containsNumber = (value) => /[0-9]/.test(value);
+const containsSpecialChars = (value) => /[°|¬!"#$%&/()=?¡'¿¨*\]´+}~`{[^;:_,.\-<>@]/.test(value);
+
 export default {
+	setup() {
+    return { v$: useVuelidate() }
+  },
 	data() {
 		return {
-			user: new User('', '', ''),
+			profilePicture: '',
+			username: '',
+			email: '',
+			password: '',
 			confirmPassword: ''
+		}
+	},
+	validations() {
+		return {
+			profilePicture: {
+				required
+			},
+			username: { 
+				required,
+				minLength: minLength(3)
+			},
+			email: { 
+				required,
+				email
+			},
+			password: { 
+				required,
+				containsUpper,
+				containsLower,
+				containsNumber,
+				containsSpecialChars,
+				minLength: minLength(8)
+			},
+			confirmPassword: { 
+				required,
+				sameAsPassword: sameAs(this.password)
+			}
 		}
 	},
 	methods: {
 		async createUser(event) {
-			console.log(await createUser(this.user));
+			this.v$.$touch();
+			if (this.v$.$error) {
+				console.log(this.v$);
+			}
+			else {
+				alert('No fallo');
+			}
+
+			//console.log(await createUser(this.user));
 		},
 		readFileAsync(file) {
 			return new Promise((resolve, reject) => {
@@ -129,6 +198,7 @@ export default {
 					const files = Array.from(event.target.files);
 					if (files.length === 0) {
 							pictureBox.src = defaultImage;
+							this.profilePicture = null;
 							return;
 					}
 					const file = files[0];
@@ -136,20 +206,24 @@ export default {
 					const size = parseFloat((file.size / 1024.0 / 1024.0).toFixed(2));
 					if (size > 8.0) {
 							pictureBox.src = defaultImage;
+							this.profilePicture = null;
 							return;
 					}
 
 					const allowedExtensions = /(jpg|jpeg|png|gif)$/i;
 					if (!allowedExtensions.exec(file.type)) {
 							pictureBox.src = defaultImage;
+							this.profilePicture = null;
 							return;
 					}
 					const dataUrl = await this.readFileAsync(file);
 					pictureBox.src = dataUrl;
+					this.profilePicture = file;
 			}
 			catch (exception) {
 					console.log(exception);
 					pictureBox.src = defaultImage;
+					this.profilePicture = null;
 			}
 		}
 	}

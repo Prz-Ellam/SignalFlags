@@ -4,8 +4,13 @@ import Signup from '../views/Signup.vue';
 import Chat from '../views/Chat.vue';
 import Homework from '../views/Homework.vue';
 import Group from '../views/Group.vue';
+import Layout from '../components/Layout.vue';
 
 const routes = [
+    {
+        path: '/',
+        component: Layout
+    },
     {
         path: '/home',
         component: Home
