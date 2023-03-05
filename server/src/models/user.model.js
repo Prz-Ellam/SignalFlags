@@ -1,12 +1,14 @@
 import { Schema, model } from 'mongoose';
 
 const userSchema = new Schema({
+    profilePicture: {
+        type: String,
+        required: true
+    },
     username: {
         type: String,
         required: true,
-        unique: true,
-        minLength: 3,
-        maxLength: 20
+        unique: true
     },
     email: {
         type: String,

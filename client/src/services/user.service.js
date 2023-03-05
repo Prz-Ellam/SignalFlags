@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const createUser = async (user) => {
-    let configuration = {
+    const configuration = {
         method: 'POST',
         url: 'http://localhost:3000/api/v1/users',
         headers: { 

@@ -4,13 +4,13 @@ User
 - password
 - photo
 
-Team
+Group
 - Name
 - Description
 - Admins
 - Members
 
-Subteam
+Subgroup
 - Name
 - Description
 - Admins
