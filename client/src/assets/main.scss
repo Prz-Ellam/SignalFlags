@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Nunito:wght@400;700&family=Roboto&family=Ubuntu:wght@400;700&display=swap');
+
+$blue-color: #0075f4;
+$yellow-color: #FFB800;
+
+$dark-color: #232323;
+$accent-color: #2C2C2C;
+$gray-color: #38393B;
+
+
+$light-color: #ECECEC;
+
+* {
+    box-sizing: border-box !important;
+}
+
+// $theme-colors: (
+//     'primary': $,
+//     'secondary': #38393b,
+//     'dark': #2c2c2c,
+//     'white': $light-color,
+//     'light': $light-color,
+//     'inactive': #6D6F7D,
+//     'danger': #F23F43,
+//     'yellow': #FFB800,
+// );
+
+$navbar-padding-y: .7;
+
+$theme-colors: (
+   "primary":    $blue-color,
+   "secondary":  $gray-color,
+    "success":    #28A745,
+//    "info":       $info,
+//    "warning":    $warning,
+   "danger":     #F23F43,
+   "light":      $light-color,
+   "dark":       $dark-color
+);
+
+$custom-colors: (
+    "accent": $accent-color,
+    "yellow": $yellow-color
+);
+
+$theme-colors: map-merge($theme-colors, $custom-colors);
+
+
+$body-bg: $dark-color;
+$body-color: $light-color;
+// $body-text-align:           null !default;
+
+$border-color: #6D6F7D;
+
+
+
+$link-color: $blue-color;
+$link-decoration: none;
+$font-family-sans-serif: 'Ubuntu', Verdana, Geneva, Tahoma, sans-serif;
+
+
+
+
+ $grid-columns:                12 !default;
+// $grid-gutter-width:           1.5rem !default;
+// $grid-row-columns:            6 !default;
+
+$input-color: $light-color;
+// $input-border-radius
+$input-line-height: 2;
+
+
+
+input {
+    border: none !important;
+    
+}
+
+input:focus {
+    border: none !important;
+    outline: 2px solid $blue-color !important;
+    
+}
+
+
+
+
+//enciende los iconos
+.nav-icon {
+    color: grey;
+}
+
+.nav-icon:hover {
+    color: #FFB800;
+    fill: #FFB800
+}
+
+
+
+@import '../../node_modules/bootstrap/scss/bootstrap.scss';
