@@ -1,10 +1,16 @@
-import { Schema, mode } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 const groupSchema = new Schema({
-    title: {
-        type: String
+    name: {
+        type: String,
+        required: true
     },
     description: {
         type: String
     }
+},
+{
+    timestamps: true
 });
+
+export default model('Group', groupSchema);

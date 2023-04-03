@@ -2,7 +2,6 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import cors from 'cors';
-import User from './models/user.model.js';
 
 import multer from 'multer';
 import database from './configuration/database.js';
@@ -49,7 +48,7 @@ const multerUpload = multer({
 
 
 
-
+app.set('port', 3000);
 
 app.use(cors());
 app.use(express.json());
@@ -77,6 +76,6 @@ app.post('/api/v1/images', multerUpload.single('profilePicture'),
 app.use('/api/v1/users', userRouter);
 
 
-httpServer.listen(3000, async () => {
-    console.log('Server started in port 3000');
+httpServer.listen(app.get('port'), async () => {
+    console.log(`Server started in port ${ app.get('port') }`);
 });
