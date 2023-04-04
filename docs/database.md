@@ -44,6 +44,8 @@ Chat
 
 
 Muchos Usuarios tienen Muchos Grupos
+Muchos Usuarios administran Muchos Grupos
+Un Usuario crea Muchos Grupos
 Muchos Usuarios tienen Muchas Tareas
 Un Usuario tiene Muchas Publicaciones
 Un Usuario tiene Muchas Participaciones (Participantes)

@@ -68,6 +68,14 @@ const createUser = async (req, res) => {
         });
     }
 
+    const existingProfilePictureUser = await User.findOne({ profilePicture });
+    if (existingProfilePictureUser) {
+        return res.status(409).json({
+            status: false,
+            message: 'La foto de perfil no es valida'
+        });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 12);
     const user = new User({
         profilePicture,
@@ -139,13 +147,21 @@ const userUpdateController = async (req, res) => {
     });
 };
 
-const findOneUser = (req, res) => {
-
+const findOneUserController = async (req, res) => {
+    const id = req.params.id;
+    const user = await User.findOne({ _id: id }, { __v: 0, groups: 0, password: 0 });
+    return user;
 };
+
+const findAllUsersController = async (req, res) => {
+    const users = await User.find({}, { __v: 0, groups: 0, password: 0 });
+    return res.json(users);
+}
 
 export default {
     createUser,
     userUpdateController,
-    findOneUser,
-    userLoginController
+    findOneUserController,
+    userLoginController,
+    findAllUsersController
 };

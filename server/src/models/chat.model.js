@@ -1,8 +1,22 @@
-import { Schema, mode } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 const chatSchema = new Schema({
-    participants: {
-        type: Array
+    name: {
+        type: String
+    },
+    type: {
+        type: String, 
+        enum: ['Individual', 'Group'], 
+        required: true 
+    },
+    members: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    ],
+    avatar: {
+        type: String
     }
 },
 {

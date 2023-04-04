@@ -1,10 +1,12 @@
-import express from 'express';
+import { Router } from 'express';
 
-const groupRouter = express.Router();
+const groupRouter = Router();
 
-groupRouter.post('/', () => {});
-groupRouter.get('/:id', () => {});
-groupRouter.put('/:id', () => {});
-groupRouter.delete('/:id', () => {});
+groupRouter.post('/');
+groupRouter.get('/:id');
+groupRouter.put('/:id');
+groupRouter.delete('/:id');
+
+// Buscar todos los grupos de un usuario
 
 export default groupRouter;

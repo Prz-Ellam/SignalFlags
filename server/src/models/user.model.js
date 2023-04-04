@@ -3,7 +3,8 @@ import { Schema, model } from 'mongoose';
 const userSchema = new Schema({
     profilePicture: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     username: {
         type: String,
