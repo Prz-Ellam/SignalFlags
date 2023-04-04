@@ -2,11 +2,17 @@ import { Schema, model } from 'mongoose';
 
 const groupSchema = new Schema({
     name: {
-        type: String,
+        type: Schema.Types.String,
         required: true
     },
     description: {
-        type: String
+        type: Schema.Types.String
+    },
+    subgroups: {
+        type: Schema.Types.Array
+    },
+    homeworks: {
+        type: Schema.Types.Array
     }
 },
 {

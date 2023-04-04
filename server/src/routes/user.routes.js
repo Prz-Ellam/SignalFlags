@@ -1,12 +1,14 @@
-import express from 'express';
+import { Router } from 'express';
 import UserController from '../controllers/user.controller.js';
-const userRouter = express.Router();
+import { authMiddleware } from '../middlewares/auth.middleware.js';
+import { validateCreateUser } from '../middlewares/validators/user.validator.js';
+const userRouter = Router();
 
-userRouter.post('/login', UserController.login);
+userRouter.post('/auth', UserController.userLoginController);
 
-userRouter.post('/', UserController.createUser);
+userRouter.post('/', validateCreateUser, UserController.createUser);
 userRouter.get('/:id', UserController.findOneUser);
-userRouter.put('/:id', UserController.updateUser);
-userRouter.delete('/:id', UserController.deleteUser);
+userRouter.patch('/:id', authMiddleware, UserController.userUpdateController);
+//userRouter.delete('/:id', UserController.deleteUser);
 
 export default userRouter;
