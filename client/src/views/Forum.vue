@@ -1,95 +1,8 @@
 <template>
-  <div class="d-flex flex-column vh-100">
-<div class="flex-grow-0 flex-shrink-1 header">
-			<nav class="navbar navbar-expand-lg shadow-lg bg-accent">
-				<div class="container-fluid">
-					<RouterLink to="/home" class="navbar-brand text-light" href="#">
-						<img src="../assets/images/Isotipo.png" alt="Bootstrap" width="30" height="30">
-						SignalFlags
-					</RouterLink>
-					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-						aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-						<span class="navbar-toggler-icon"></span>
-					</button>
-					<div class="collapse navbar-collapse" id="navbarSupportedContent">
-						<form class="col-md-auto col-lg-6 col-xl-7 ms-auto " role="search" action="search.html">
-							<div class="input-group">
-								<input
-									class="form-control bg-secondary shadow-none py-0"
-									type="search"
-									placeholder="Buscar..."
-									aria-label="Buscar">
-								<button class="btn btn-secondary border-0" type="button">
-									<i class="h6 bi bi-search"></i>
-								</button>
-							</div>
-						</form>
-						<ul class="navbar-nav ms-auto d-lg-flex align-items-lg-center me-2">
-							<li class="nav-item">
-								<div class="nav-link dropdown">
-									<button class="btn border-0 p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-										<img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-											alt="Perfil" width="32" class="rounded-circle profile-picture">
-									</button>
-									<ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
-										<li>
-											<a class="dropdown-item" href="instructor-profile.html">Mi perfil</a>
-										</li>
-										<li>
-											<hr class="dropdown-divider">
-										</li>
-										<li>
-											<a class="dropdown-item" href="#">Cerrar sesión</a>
-										</li>
-									</ul>
-								</div>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</nav>
-    </div>
+  <div class="d-flex flex-column h-100">
     <div class="flex-grow-1 flex-shrink-1 overflow-auto">
       <div class="bg-dark container-fluid h-100">
         <div class="row h-100 ">
-
-
-
-<section
-    class="py-2 col-auto bg-accent d-sm-flex justify-content-center align-items-center"
-  >
-    <ul class="nav flex-column gap-5">
-      <li class="nav-item">
-        <RouterLink to="/Group" class="nav-icon d-flex justify-content-center">
-          <i class="h2 bi bi-person-square"></i>
-        </RouterLink>
-      </li>
-      <li class="nav-item">
-        <RouterLink to="/Chat" class="nav-icon d-flex justify-content-center">
-          <i class="h2 bi bi-chat-dots"></i>
-        </RouterLink>
-      </li>
-      <li class="nav-item">
-        <RouterLink
-          to="/Homework"
-          class="nav-icon d-flex justify-content-center"
-        >
-          <i class="h2 bi bi-journal-check"></i>
-        </RouterLink>
-      </li>
-      <li class="nav-item">
-        <RouterLink to="/" class="nav-icon d-flex justify-content-center">
-          <i class="h2 bi bi-gear"></i>
-        </RouterLink>
-      </li>
-    </ul>
-  </section>
-
-
-
-
-
-
             <section class="col h-100 align-items-center p-3 text-center">
                 <div class="bg-accent rounded-3 h-100 ">
                     <div class="pt-3 px-3 h-100  overflow-hidden">
@@ -226,8 +139,8 @@
                                     </div>
 
                                 </div>
-                                <div class="w-100 pe-3 ps-5 mb-3 position-absolute bottom-0 start-50 translate-middle-x">
-                                    <div class="bg-secondary d-flex px-3 ms-4" >
+                                <div class="w-100 pe-4 ps-5 mb-3 position-absolute bottom-0 start-50 translate-middle-x">
+                                    <div class="bg-secondary d-flex px-3 ms-3" >
                                         <div class="input-group m-3">
                                             <input class="form-control bg-secondary text-white shadow-none py-0" type="text" placeholder="Inicia una conversación..."/>
                                             <button class="btn border-0 bg-yellow">
@@ -300,23 +213,7 @@
                                             </label>
                                             <br />
                                             <label for="" class="text-white"> Info </label>
-                                            </div> 
-                                            <div class="box_button rounded-4 container py-2 px-3 mb-3">
-                                            <img src="../assets/images/POI_SignalFalgs.png" width="50" height="50" class="rounded float-left" alt="..." />
-                                            <label for="" class="text-white">
-                                                Proyecto POI entrega
-                                            </label>
-                                            <br />
-                                            <label for="" class="text-white"> Info </label>
-                                            </div> 
-                                            <div class="box_button rounded-4 container py-2 px-3 mb-3">
-                                            <img src="../assets/images/POI_SignalFalgs.png" width="50" height="50" class="rounded float-left" alt="..." />
-                                            <label for="" class="text-white">
-                                                Proyecto POI entrega
-                                            </label>
-                                            <br />
-                                            <label for="" class="text-white"> Info </label>
-                                            </div>                      
+                                            </div>                       
                                         </div>
                                         </div>
                                     </div>
@@ -334,16 +231,6 @@
 </template>
 
 <script>
-import Sidebar from '../components/Sidebar.vue'
-import Navbar from '../components/Navbar.vue'
-
-export default {
-  name: 'Forum',
-  components: {
-    Sidebar,
-    Navbar
-  }
-}
 </script>
 
 <style>

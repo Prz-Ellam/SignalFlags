@@ -42,7 +42,10 @@
 </template>
 
 <script> 
+import { useVuelidate } from '@vuelidate/core';
 import AddUser from '../components/AddUser.vue'
+import { required, email, minLength, maxLength} from '@vuelidate/validators';
+
 export default {
   props:{
     titles: String
