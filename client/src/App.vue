@@ -18,6 +18,7 @@ import Chat from './views/Chat.vue';
 import Group from './views/Group.vue';
 import Homework from './views/Homework.vue';
 import Home from './views/Home.vue';
+import Forum from './views/Forum.vue';
 
 //import io from 'socket.io-client';
 
@@ -28,7 +29,8 @@ export default {
     Chat,
     Group,
     Homework,
-    Home
+    Home,
+    Forum
   },
   data: () => ({
 

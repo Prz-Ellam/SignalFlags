@@ -110,36 +110,23 @@
             </ul>
           </section>
 
-          <section class="bg-dark col h-100 p-5 ">
-            <div class="row rounded-4 bg-secondary ">
+          <section class="col h-100 align-items-center p-3 text-center">
+              <div class=" box bg-accent group-srcoll rounded-3 ">
               <ul
-                class="nav nav-pills mb-3 pt-1 px-2 bg-primary rounded-1"
-                id="pills-tab"
-                role="tablist"
-              >
+                class="nav nav-pills mb-3 pt-1 px-2 bg-accent rounded-1" id="pills-tab" role="tablist">
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link active rounded-0 bg-secondary" id="pills-asign_homework-tab" data-bs-toggle="pill" data-bs-target="#pills-asign_homework" type="button" role="tab" aria-controls="pills-asign_homework" aria-selected="true"
-                  >
+                  <button class="nav-link active rounded-0 bg-accent" id="pills-asign_homework-tab" data-bs-toggle="pill" data-bs-target="#pills-asign_homework" type="button" role="tab" aria-controls="pills-asign_homework" aria-selected="true">
                     Asignadas
                   </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                  <button
-                    class="nav-link"
-                    id="pills-completed-homework-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#pills-completed-homework"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-completed-homework"
-                    aria-selected="false">
-                    Completadas
+                  <button class="nav-link rounded-0 bg-accent" id="pills-completed-homework-tab" data-bs-toggle="pill" data-bs-target="#pills-completed-homework" type="button" role="tab" aria-controls="pills-completed-homework" aria-selected="false"> Completadas
                   </button>
                 </li>
               </ul>
               <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-asign_homework" role="tabpanel" aria-labelledby="pills-asign_homework-tab" tabindex="0">
-                  <div id="homework_container  group-srcoll">
+                  <div id="homework_container group-srcoll">
                     <div class="box_button rounded-4 container py-2 px-3 mb-3">
                       <img
                         src="../assets/images/POI_SignalFalgs.png"
@@ -178,15 +165,49 @@
                       </label>
                       <br />
                       <label for="" class="text-white"> Info </label>
-                    </div>
+                    </div>          
                     <div class="box_button rounded-4 container py-2 px-3 mb-3">
-                      <img
-                        src="../assets/images/POI_SignalFalgs.png"
-                        width="50"
-                        height="50"
-                        class="rounded float-left"
-                        alt="..."
-                      />
+                      <img src="../assets/images/POI_SignalFalgs.png" width="50" height="50" class="rounded float-left" alt="..." />
+                      <label for="" class="text-white"> Avance 2 PI </label>
+                      <br />
+                      <label for="" class="text-white"> Info </label>
+                    </div><div class="box_button rounded-4 container py-2 px-3 mb-3">
+                      <img src="../assets/images/POI_SignalFalgs.png" width="50" height="50" class="rounded float-left" alt="..." />
+                      <label for="" class="text-white"> Avance 2 PI </label>
+                      <br />
+                      <label for="" class="text-white"> Info </label>
+                    </div><div class="box_button rounded-4 container py-2 px-3 mb-3">
+                      <img src="../assets/images/POI_SignalFalgs.png" width="50" height="50" class="rounded float-left" alt="..." />
+                      <label for="" class="text-white"> Avance 2 PI </label>
+                      <br />
+                      <label for="" class="text-white"> Info </label>
+                    </div><div class="box_button rounded-4 container py-2 px-3 mb-3">
+                      <img src="../assets/images/POI_SignalFalgs.png" width="50" height="50" class="rounded float-left" alt="..." />
+                      <label for="" class="text-white"> Avance 2 PI </label>
+                      <br />
+                      <label for="" class="text-white"> Info </label>
+                    </div><div class="box_button rounded-4 container py-2 px-3 mb-3">
+                      <img src="../assets/images/POI_SignalFalgs.png" width="50" height="50" class="rounded float-left" alt="..." />
+                      <label for="" class="text-white"> Avance 2 PI </label>
+                      <br />
+                      <label for="" class="text-white"> Info </label>
+                    </div><div class="box_button rounded-4 container py-2 px-3 mb-3">
+                      <img src="../assets/images/POI_SignalFalgs.png" width="50" height="50" class="rounded float-left" alt="..." />
+                      <label for="" class="text-white"> Avance 2 PI </label>
+                      <br />
+                      <label for="" class="text-white"> Info </label>
+                    </div><div class="box_button rounded-4 container py-2 px-3 mb-3">
+                      <img src="../assets/images/POI_SignalFalgs.png" width="50" height="50" class="rounded float-left" alt="..." />
+                      <label for="" class="text-white"> Avance 2 PI </label>
+                      <br />
+                      <label for="" class="text-white"> Info </label>
+                    </div><div class="box_button rounded-4 container py-2 px-3 mb-3">
+                      <img src="../assets/images/POI_SignalFalgs.png" width="50" height="50" class="rounded float-left" alt="..." />
+                      <label for="" class="text-white"> Avance 2 PI </label>
+                      <br />
+                      <label for="" class="text-white"> Info </label>
+                    </div><div class="box_button rounded-4 container py-2 px-3 mb-3">
+                      <img src="../assets/images/POI_SignalFalgs.png" width="50" height="50" class="rounded float-left" alt="..." />
                       <label for="" class="text-white"> Avance 2 PI </label>
                       <br />
                       <label for="" class="text-white"> Info </label>
@@ -205,34 +226,4 @@
 <script></script>
 
 <style>
-.box_button {
-  background-color: #2c2c2c;
-}
-
-.box_button:hover {
-  background-color: #6d6f7d;
-}
-
-.group-srcoll::-webkit-scrollbar {
-	width: 8px;
-	border-radius: 1em;
-	background-color: #6D6F7D;
-	border-radius: 1em;
-}
-
-.group-srcoll::-webkit-scrollbar-thumb {
-
-	border-radius: 1em;
-	background-color: #6D6F7D;
-	background: #FFB800;
-	border-radius: 1em;
-}
-
-.group-srcoll::-webkit-scrollbar-thumb:hover {
-	visibility: visible;
-	background: #FFB800;
-}
-
-
-
 </style>

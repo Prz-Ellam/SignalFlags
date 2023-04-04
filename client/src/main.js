@@ -1,6 +1,5 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import Vuelidate from 'vuelidate';
 import router from './router/router';
 
 import './assets/main.scss';

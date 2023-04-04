@@ -1,7 +1,7 @@
 <template>
   <div class="bg-dark container-fluid h-100 overflow-auto">
-    <section class="bg-dark h-100 d-flex align-items-center text-center">
-      <div class=" box bg-secondary group-srcoll py-3 px-5 rounded-3">
+      <section class="col h-100 align-items-center p-3 text-center">
+      <div class=" box  bg-accent group-srcoll py-3 px-5 rounded-3">
         <div>
           <h3>Mis grupos</h3>
           <hr>
@@ -36,12 +36,12 @@
                 <img src="../assets/images/POI_SignalFalgs.png" width="150" height="150" class="rounded float-left"
                   alt="..." />
                 <h6 class="text-white pb-5 fw-bolder">Crea un grupo.</h6>
-                <button type="button" class="
-                              flex-fill
-                              bd-highlight
-                              btn btn-primary
-                              rounded-5
-                            ">
+                <button
+                  type="button"
+                  class="flex-fill bd-highlight btn btn-primary rounded-3"
+                  data-bs-toggle="modal"
+                  data-bs-target="#modal-g"
+                >
                   Crear
                 </button>
               </div>
@@ -52,10 +52,18 @@
                   alt="..." />
                 <h6 class="text-white fw-bolder">Unete a un grupo privado.</h6>
 
-                <input type="text" name="code" id="code" class="bg-secondary border-0 shadow-none text-white"
-                  placeholder="código" />
+                <input
+                  type="text"
+                  name="code"
+                  id="code"
+                  class="bg-accent border-0 rounded-2 shadow-none text-white"
+                  placeholder="código"
+                />
                 <br />
-                <br /><button type="button" class="flex-fill bd-highlight btn btn-primary rounded-5 ">
+                <br />
+                <button
+                  type="button"
+                  class="flex-fill bd-highlight btn btn-primary rounded-3">
                   Unirse
                 </button>
               </div>
@@ -88,10 +96,20 @@
         </div>
       </div>
     </section>
+          <CreateGroup titles="Crear grupo."/>
   </div>
 </template>
 
-<script></script>
+<script>
+import CreateGroup from '../components/CreateGroup.vue'
+
+export default {
+  components: {
+    CreateGroup
+  }
+}
+
+</script>
 
 <style>
 .text {
@@ -113,11 +131,12 @@ display: -webkit-box;
 .box {
   position: static;
   overflow-y: scroll;
-  height: 90%;
+  overflow-y: scroll;
+  height: 100%;
 }
 
 .box_button {
-  background-color: #2c2c2c;
+  background-color: #38393b;
 }
 
 .box_button:hover {

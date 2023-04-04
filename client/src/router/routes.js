@@ -5,6 +5,7 @@ import Chat from '../views/Chat.vue';
 import Homework from '../views/Homework.vue';
 import Group from '../views/Group.vue';
 import Layout from '../components/Layout.vue';
+import Forum from '../views/Forum.vue';
 
 const routes = [
     {
@@ -34,6 +35,10 @@ const routes = [
     {
         path: '/homework',
         component: Homework
+    },
+    {
+        path: '/forum',
+        component: Forum
     }
 ]
 
