@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
 
 const userSchema = new Schema({
-    profilePicture: {
+    avatar: {
         type: String,
         required: true,
         unique: true
@@ -10,23 +10,18 @@ const userSchema = new Schema({
         type: String,
         required: true,
         unique: true,
-        minLength: 1,
+        minLength: 3,
         maxLength: 50
     },
     email: {
         type: String,
         required: true,
         unique: true,
-        minLength: 1,
         maxLength: 255
     },
     password: {
         type: String,
         required: true
-    },
-    groups: {
-        type: Array,
-        default: []
     }
 },
 {

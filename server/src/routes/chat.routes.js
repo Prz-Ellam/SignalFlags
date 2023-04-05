@@ -1,13 +1,16 @@
 import { Router } from 'express';
-import { addUserToChatController, createChatController } from '../controllers/chat.controller.js';
+import { addUserToChatController, chatAccessController } from '../controllers/chat.controller.js';
+import { messagefindAllByChatController, messageCreateController } from '../controllers/message.controller.js';
+import { authMiddleware } from '../middlewares/auth.middleware.js';
+import { validateIdMiddleware } from '../middlewares/validate-id.middleware.js';
 
 const chatRouter = Router();
 
 // Crear un chat
-chatRouter.post('/', createChatController);
+chatRouter.post('/', authMiddleware, chatAccessController);
 
 // Añadir usuario al chat
-chatRouter.post('/:chatId/users/:userId', addUserToChatController);
+chatRouter.post('/:chatId/users/:userId', validateIdMiddleware, authMiddleware, addUserToChatController);
 
 // Eliminar usuario del chat
 chatRouter.delete('/:chatId/users/:userId');
@@ -16,8 +19,14 @@ chatRouter.delete('/:chatId/users/:userId');
 chatRouter.delete('/:id');
 
 
-// Mandar un mensaje a un chat
-chatRouter.post('/:chatId/messages');
+// Enviar un mensaje a un chat
+chatRouter.post('/:chatId/messages', authMiddleware, messageCreateController);
+
+// Obtener todos los mensajes de un chat
+chatRouter.get('/:chatId/messages', authMiddleware, messagefindAllByChatController);
+
+
+
 
 
 export default chatRouter;

@@ -7,8 +7,11 @@ export const validateCreateUser = async (req, res, next) => {
     const userSchema = {
         type: 'object',
         properties: {
-            profilePicture: {
-                type: 'string'
+            avatar: {
+                type: 'string',
+                errorMessage: {
+                    type: 'La foto de perfil debe ser una cadena de texto'
+                }
             },
             email: {
                 type: 'string',
@@ -25,9 +28,15 @@ export const validateCreateUser = async (req, res, next) => {
             },
             username: {
                 type: 'string',
-                minLength: 1,
-                maxLength: 50,
-                pattern: ""
+                minLength: 3,
+                maxLength: 20,
+                pattern: "^(?=[a-zA-Z0-9._ \u00C0-\u00FF]{3,50}$)(?!.*[_. ]{2})[^_. ].*[^_. ]$",
+                errorMessage: {
+                    type: 'El nombre de usuario debe ser una cadena de texto',
+                    minLength: 'El nombre de usuario es demasiado corto, al menos 3 caracteres son necesarios',
+                    maxLength: 'El nombre de usuario es demasiado largo, solo 20 caracteres son admitidos',
+                    pattern: 'El nombre de usuario que ingresó no es válido'
+                }
             },
             password: {
                 type: 'string',
@@ -39,12 +48,20 @@ export const validateCreateUser = async (req, res, next) => {
             },
             confirmPassword: {
                 type: 'string',
+                minLength: 1,
+                maxLength: 255,
                 const: {
                     $data: '1/password'
+                },
+                errorMessage: {
+                    type: 'La confirmación de contraseña debe ser una cadena de texto',
+                    minLength: 'La confirmación de contraseña es requerida',
+                    maxLength: 'La confirmación de contraseña es demasiado larga, solo 255 caracteres son admitidos',
+                    const: 'La confirmación de contraseña no coincide con la contraseña'
                 }
             }
         },
-        required: [ 'profilePicture', 'email', 'username', 'password', 'confirmPassword' ],
+        required: [ 'avatar', 'email', 'username', 'password', 'confirmPassword' ],
         additionalProperties: false
     };
 

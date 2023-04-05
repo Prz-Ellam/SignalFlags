@@ -5,11 +5,11 @@ import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const storage = multer.diskStorage({ //multers disk storage settings
-    destination: function (req, file, cb) {
+    destination: function (_req, _file, cb) {
         cb(null, path.join(__dirname, '../../../uploads'))
     },
-    filename: function (req, file, cb) {
-        var datetimestamp = Date.now();
+    filename: function (_req, file, cb) {
+        const datetimestamp = Date.now();
         cb(null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length -1])
     }
 });
@@ -17,8 +17,9 @@ const storage = multer.diskStorage({ //multers disk storage settings
 export const multerUpload = multer({
     storage: storage,
     fileFilter: function (req, file, callback) {
-        var ext = path.extname(file.originalname);
-        if(ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
+        const ext = path.extname(file.originalname);
+        const allowedExtension = [ '.png', '.jpg', '.jpg' ];
+        if (!allowedExtension.includes(ext)) {
             return callback(null, false);
         }
         callback(null, true);

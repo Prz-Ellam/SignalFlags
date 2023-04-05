@@ -68,8 +68,12 @@ Usuario
 - Nombre
 - Email
 - Contraseña
-- Foto de perfil
-- Grupos: []
+- Avatar
 
 
 
+
+Crear un chat
+Añadir a alguien al chat
+
+Añadir contacto al chat

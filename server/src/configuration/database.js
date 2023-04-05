@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 
-const url = 'mongodb://127.0.0.1:27017/signalflags';
+const url = process.env.DATABASE_URL;
 
 export default async () => {
-    mongoose.set("strictQuery", false);
+    mongoose.set('strictQuery', false);
     await mongoose.connect(url, {
         useUnifiedTopology: true,
         useNewUrlParser: true

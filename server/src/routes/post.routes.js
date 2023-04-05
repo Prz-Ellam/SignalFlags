@@ -1,5 +1,5 @@
-import express from 'express';
-const postRouter = express.Router();
+import { Router } from 'express';
+const postRouter = Router();
 
 postRouter.get('/:id', () => {});
 postRouter.post('/', () => {});

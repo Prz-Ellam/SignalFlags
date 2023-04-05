@@ -1,19 +1,31 @@
 import jwt from 'jsonwebtoken';
+import User from '../models/user.model.js';
 
 export const authMiddleware = async (req, res, next) => {
-    const { id } = req.params;
-    const token = req.get('Authorization');
-    try {
-        const decode = jwt.verify(token, 'Jeff');
-        if (decode.id !== id) {
+    const authorization = req.headers.authorization;
+    if (authorization && authorization.startsWith('Bearer')) {
+        try {
+            const token = authorization.split(' ')[1];
+            const decode = jwt.verify(token, process.env.JWT_SECRET);
+            // TODO: Si no devuelve ningun usuario el token no es valido
+            req.user = await User.findById(decode.id).select('-password -__v');
+            if (!req.user) {
+                return res.status(401).json({
+                    status: false,
+                    message: 'No autorizado'
+                });
+            }
+
+            next();
+        }
+        catch(ex) {
             return res.status(401).json({
                 status: false,
                 message: 'No autorizado'
             });
         }
-        next();
     }
-    catch(e) {
+    else {
         return res.status(401).json({
             status: false,
             message: 'No autorizado'

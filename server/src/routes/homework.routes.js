@@ -1,5 +1,5 @@
-import express from 'express';
-const homeworkRouter = express.Router();
+import { Router } from 'express';
+const homeworkRouter = Router();
 
 homeworkRouter.get('/:id');
 homeworkRouter.post('/');

@@ -2,7 +2,9 @@ import { Schema, model } from 'mongoose';
 
 const messageSchema = new Schema({
     text: {
-        type: String
+        type: String,
+        trim: true,
+        maxLength: 255
     },
     sender: {
         type: Schema.Types.ObjectId,
@@ -14,6 +16,18 @@ const messageSchema = new Schema({
         ref: 'Chat',
         required: true
     },
+    attachments: [
+        {
+            url: { 
+                type: String, 
+                required: true 
+            },
+            type: { 
+                type: String,
+                required: true 
+            }
+        }
+    ],
     viewed_by: [
         {
             user: {

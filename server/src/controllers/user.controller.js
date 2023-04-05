@@ -1,10 +1,10 @@
 import bcrypt from 'bcrypt';
 import fs from 'fs';
-import jwt from 'jsonwebtoken';
 import User from '../models/user.model.js';
 
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { generateToken } from '../configuration/generate-token.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -27,17 +27,16 @@ const userLoginController = async (req, res) => {
         });
     }
 
-    const token = jwt.sign({ id: requestedUser._id, username: requestedUser.username }, 'Jeff');
+    const token = generateToken(requestedUser._id);
     return res.json({
         status: true,
         message: 'El usuario se autentico éxitosamente',
         token: token
     });
-};
+}
 
-// createUserController
-const createUser = async (req, res) => {
-    const { profilePicture, email, username, password } = req.body;
+const userCreateController = async (req, res) => {
+    const { avatar, email, username, password } = req.body;
 
     // Validar que nadie mas tenga el nombre de usuario
     const existingUsernameUser = await User.findOne({ username });
@@ -47,7 +46,7 @@ const createUser = async (req, res) => {
             message: 'El nombre de usuario esta siendo utilizado por alguien más'
         });
     }
-
+    
     // Validar que nadie mas tenga el correo electróncio
     const existingEmailUser = await User.findOne({ email });
     if (existingEmailUser) {
@@ -56,29 +55,31 @@ const createUser = async (req, res) => {
             message: 'El correo electrónico esta siendo utilizado por alguien más'
         });
     }
-
+    
     // Validar que la imagen que paso realmente exista
     // TODO: Esta hardcodeada la direccion de uploads, parametrizarla en caso de cambios
     const uploadsDir = path.join(__dirname, '../../../uploads/');
-    const existingProfilePicture = fs.existsSync(path.join(uploadsDir, profilePicture));
-    if (!existingProfilePicture) {
+    const existingAvatar = fs.existsSync(path.join(uploadsDir, avatar));
+    if (!existingAvatar) {
         return res.status(404).json({
             status: false,
             message: 'No se encontró la foto de perfil especificada'
         });
     }
 
-    const existingProfilePictureUser = await User.findOne({ profilePicture });
-    if (existingProfilePictureUser) {
+    const existingAvatarUser = await User.findOne({ avatar });
+    if (existingAvatarUser) {
         return res.status(409).json({
             status: false,
             message: 'La foto de perfil no es valida'
         });
     }
 
+    // TODO: Validar que sea una foto
+
     const hashedPassword = await bcrypt.hash(password, 12);
     const user = new User({
-        profilePicture,
+        avatar,
         email,
         username,
         password: hashedPassword
@@ -96,7 +97,8 @@ const createUser = async (req, res) => {
 
     res.status(201).json({
         status: true,
-        message: 'El usuario fue creado con éxito'
+        message: 'El usuario fue creado con éxito',
+        token: generateToken(user._id)
     });
 };
 
@@ -147,21 +149,23 @@ const userUpdateController = async (req, res) => {
     });
 };
 
+// userFindOneController
 const findOneUserController = async (req, res) => {
     const id = req.params.id;
     const user = await User.findOne({ _id: id }, { __v: 0, groups: 0, password: 0 });
     return user;
 };
 
+// userFindAllController
 const findAllUsersController = async (req, res) => {
     const users = await User.find({}, { __v: 0, groups: 0, password: 0 });
     return res.json(users);
 }
 
 export default {
-    createUser,
+    userLoginController,
+    userCreateController,
     userUpdateController,
     findOneUserController,
-    userLoginController,
     findAllUsersController
 };

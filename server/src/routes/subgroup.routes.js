@@ -1,5 +1,5 @@
-import express from 'express';
-const subgroupRouter = express.Router();
+import { Router } from 'express';
+const subgroupRouter = Router();
 
 subgroupRouter.get('/:id', () => {});
 subgroupRouter.post('/', () => {});

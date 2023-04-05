@@ -12,17 +12,21 @@ const groupSchema = new Schema({
         minLength: 1,
         maxLenght: 255
     },
-    image: {
+    avatar: {
         type: String
     },
-    subgroups: {
-        type: Array,
-        default: []
-    },
-    homeworks: {
-        type: Array,
-        default: []
-    }
+    subgroups: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Group'
+        }
+    ],
+    homeworks: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Homework'
+        }
+    ]
 },
 {
     timestamps: true

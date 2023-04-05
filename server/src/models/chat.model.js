@@ -1,13 +1,18 @@
 import { Schema, model } from 'mongoose';
 
 const chatSchema = new Schema({
-    name: {
+    avatar: {
         type: String
+    },
+    name: {
+        type: String,
+        trim: true
     },
     type: {
         type: String, 
-        enum: ['Individual', 'Group'], 
-        required: true 
+        enum: [ 'individual', 'group' ], 
+        required: true,
+        default: 'individual'
     },
     members: [
         {
@@ -15,8 +20,15 @@ const chatSchema = new Schema({
             ref: 'User'
         }
     ],
-    avatar: {
-        type: String
+    groupAdmin: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    ],
+    latestMessage: {
+        type: Schema.Types.ObjectId,
+        ref: 'Message'
     }
 },
 {
