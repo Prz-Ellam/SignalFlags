@@ -10,35 +10,58 @@ import Forum from '../views/Forum.vue';
 const routes = [
     {
         path: '/',
-        component: Layout
-    },
-    {
-        path: '/home',
-        component: Home
+        component: Layout,
+        children: [
+            {
+                path: '/',
+                component: Group,
+                meta: {
+                    requiresAuth: false
+                }
+            },
+            { 
+                path: '/chat', 
+                component: Chat, 
+                meta: {
+                    requiresAuth: true
+                } 
+            },
+            { 
+                path: '/group', 
+                component: Group, 
+                meta: {
+                    requiresAuth: true  
+                }
+            },
+            { 
+                path: '/homework', 
+                component: Homework, 
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            { 
+                path: '/forum', 
+                component: Forum, 
+                meta: {
+                    requiresAuth: true 
+                } 
+            }
+        ]
     },
     {
         path: '/login',
-        component: Login
+        component: Login,
+        meta: {
+            requiresAuth: false
+        }
     },
     {
         path: '/signup',
-        component: Signup
-    },
-    {
-        path: '/chat',
-        component: Chat
-    },
-    {
-        path: '/group',
-        component: Group
-    },
-    {
-        path: '/homework',
-        component: Homework
-    },
-    {
-        path: '/forum',
-        component: Forum
+        component: Signup,
+        meta: {
+            requiresAuth: false
+        }
     }
 ]
 

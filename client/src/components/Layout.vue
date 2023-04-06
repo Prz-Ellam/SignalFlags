@@ -7,7 +7,7 @@
       class="d-flex flex-md-row-reverse flex-column flex-grow-1 flex-shrink-1 overflow-auto"
     >
       <section class="flex-grow-1 flex-shrink-1 overflow-auto">
-        <Chat />
+        <RouterView />
       </section>
       <aside class="d-flex flex-grow-0 flex-shrink-1">
         <Sidebar />
@@ -30,8 +30,8 @@ export default {
     Sidebar,
     Chat,
     Group,
-	Forum,
-	Homework
+    Forum,
+    Homework,
   },
   data() {
     return {}
