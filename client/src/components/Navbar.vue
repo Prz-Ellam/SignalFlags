@@ -2,7 +2,7 @@
 		<nav class="navbar navbar-expand-lg shadow-lg bg-accent">
 			<div class="container-fluid">
 				<RouterLink to="/home" class="navbar-brand text-light" href="#">
-					<img src="../assets/images/Isotipo.png" alt="Bootstrap" width="30" height="30">
+					<img src="../assets/images/isotipo.png" alt="Bootstrap" width="30" height="30">
 					SignalFlags
 				</RouterLink>
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -23,7 +23,8 @@
 						<li class="nav-item">
 							<div class="nav-link dropdown">
 								<button class="btn border-0 p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-									<img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+									<img 
+                    :src="user?.avatar ? `http://localhost:3000/api/v1/images/${user?.avatar}` : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'"
 										alt="Perfil" width="30" class="rounded-circle profile-picture">
 								</button>
 								<ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
@@ -34,7 +35,7 @@
 										<hr class="dropdown-divider">
 									</li>
 									<li>
-										<a class="dropdown-item" href="#">Cerrar sesión</a>
+										<a class="dropdown-item" href="#" @click="logout">Cerrar sesión</a>
 									</li>
 								</ul>
 							</div>
@@ -46,6 +47,19 @@
 </template>
 
 <script>
+export default {
+  data() {
+    return {
+      user: JSON.parse(localStorage.getItem('user'))
+    }
+  },
+  methods: {
+    logout() {
+      localStorage.clear();
+      this.$router.push('/home');
+    }
+  }
+}
 </script>
 
 <style></style>

@@ -1,169 +1,201 @@
 <template>
-	<div class="bg-dark container-fluid h-100 ">
-		<div class="row h-100">
-			<section class="col-md-4 col-sm-12 bg-dark h-100 d-flex align-items-center">
-				 <div class="bg-accent d-flex flex-column w-100 rounded-3 p-3" style="height: 95%;">
-					<h2 class="text-center mb-0">Contactos</h2>
-					<hr>
-					<input type="search" name="search" class="bg-secondary form-control shadow-none text-white rounded-4 mb-1"
-						placeholder="Buscar personas...">
-					<div class="overflow-auto chat">
-						<ChatContact 
-							v-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
-							image="https://i.kym-cdn.com/photos/images/facebook/001/884/907/c86.jpg" 
-							@click="sendAlert"
-						/>	
-					</div>
-				</div>
-			</section>
+  <div class="bg-dark container-fluid h-100 ">
+    <div class="row h-100">
+      <section class="col-md-4 col-sm-12 bg-dark h-100 d-flex align-items-center">
+        <div class="bg-accent d-flex flex-column w-100 rounded-3 p-3" style="height: 95%;">
+          <h2 class="text-center mb-0">Contactos</h2>
+          <hr>
+          <input type="search" name="search" class="bg-secondary form-control shadow-none text-white rounded-4 mb-1"
+            id="search-box" placeholder="Buscar personas...">
+          <div class="overflow-auto chat">
+            <ChatContact v-for="chat in chats" :key="chat._id" :chatId="chat._id"
+              :image="`http://localhost:3000/api/v1/images/${(chat.avatar instanceof Array) ? chat.avatar[0] : chat.avatar}`"
+              :username="chat.name" 
+              :lastMessage="(user._id === chat.lastMessage.sender._id ? 'Tú: ' : chat.lastMessage.sender.username + ': ' ) + chat.lastMessage.text" 
+              :lastMessageTime="chat.lastMessageTime"
+              :unseenMessagesCount="chat.unseenMessagesCount" @click="sendAlert" />
+          </div>
+        </div>
+      </section>
 
-			<section class="bg-dark col-sm-12 col-md h-100 d-flex align-items-center ps-0 pe-0 pe-md-2">
-				<section class="bg-accent d-flex flex-column col w-100 rounded-3 my-3" style="height: 95%">
+      <section class="bg-dark col-sm-12 col-md h-100 d-flex align-items-center ps-0 pe-0 pe-md-2">
+        <section class="bg-accent d-flex flex-column col w-100 rounded-3 my-3" style="height: 95%">
 
-					<div class="d-flex justify-content-between align-items-center mt-3 px-3">
+          <div class="d-flex justify-content-between align-items-center mt-3 px-3">
 
-						<div class="d-flex align-items-center ">
-							<img class="img-fluid rounded-circle actual-chat-user-image"
-								src="https://i.kym-cdn.com/photos/images/facebook/001/884/907/c86.jpg" alt="Perfil">
-							<span class="h5 ms-3 mb-0">Saul Goodman</span>
-						</div>
-						<div>
-							<button class="btn border-0 position-relative me-3">
-								<i class="h4 bi bi-telephone" style="color: #6D6F7D"></i>
-							</button>
-							<button class="btn border-0 position-relative fw-bold">
-								<i class="h4 bi bi-camera-video" style="color: #6D6F7D"></i>
-							</button>
-						</div>
-					</div>
-					<hr class="mx-3">
-					<div class="overflow-auto p-2 h-100 chat">
+            <div class="d-flex align-items-center ">
+              <img class="img-fluid rounded-circle actual-chat-user-image"
+                src="https://i.kym-cdn.com/photos/images/facebook/001/884/907/c86.jpg" alt="Perfil">
+              <span class="h5 ms-3 mb-0">Saul Goodman</span>
+            </div>
+            <div>
+              <button class="btn border-0 position-relative me-3">
+                <i class="h4 bi bi-telephone" style="color: #6D6F7D"></i>
+              </button>
+              <button class="btn border-0 position-relative fw-bold">
+                <i class="h4 bi bi-camera-video" style="color: #6D6F7D"></i>
+              </button>
+            </div>
+          </div>
+          <hr class="mx-3">
 
-						<div v-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9]" class="d-flex justify-content-end my-3">
-							<small class="bg-primary text-light p-2 rounded-pill overflow-auto" data-bs-toggle="tooltip"
-								data-bs-placement="left" data-bs-title="26 de enero de 2023 a las 02:21">
-								message
-							</small>
-						</div>
-
-						<div class="d-flex justify-content-start my-3">
-							<small class="bg-dark text-light p-2 rounded-pill overflow-auto" data-bs-toggle="tooltip"
-								data-bs-placement="right" data-bs-title="26 de enero de 2023 a las 02:21">
-								message
-							</small>
-						</div>
-
-					</div>
-					<hr class="mb-1 text-light">
-					<div class="input-group mb-1 p-2">
-						<button class="btn border-0" style="transform: rotateY(0deg) rotate(45deg);">
-							<i class="h4 mb-0 me-1 bi bi-paperclip" style="color: #6D6F7D"></i>
-						</button>
-						<input type="text" id="message" class="bg-secondary form-control border-0 shadow-none text-white rounded-4"
-							placeholder="Escribe un mensaje" aria-label="Enviar mensaje" aria-describedby="basic-addon2">
-
-					</div>
-				</section>
-			</section>
-		</div>
-	</div>
+          <div class="overflow-auto p-2 h-100 chat" id="message-box">
+            <ChatMessage 
+              v-for="message in messages" 
+              :key="message._id" 
+              :ownMessage="message.sender === user._id" 
+              :content="message.text" 
+            />
+          </div>
+          <hr class="mb-1 text-light">
+          <div class="input-group mb-1 p-2">
+            <button class="btn border-0" style="transform: rotateY(0deg) rotate(45deg);">
+              <i class="h4 mb-0 me-1 bi bi-paperclip" style="color: #6D6F7D"></i>
+            </button>
+            <input 
+              type="text" 
+              id="message" 
+              class="bg-secondary form-control border-0 shadow-none text-white rounded-4"
+              v-model="content" 
+              placeholder="Escribe un mensaje" aria-label="Enviar mensaje"
+              aria-describedby="basic-addon2"
+              @keydown="(e) => { if (e.key == 'Enter') sendMessage() }"
+            >
+            <button class="btn btn-dark" @click="sendMessage">Enviar</button>
+          </div>
+        </section>
+      </section>
+    </div>
+  </div>
 </template>
 
 <script>
 import ChatContact from '../components/ChatContact.vue';
+import ChatMessage from '../components/ChatMessage.vue';
+import { chatFindAllByUserService } from '../services/chat.service';
+import { createMessage, messageFindAllByChatService } from '../services/message.service';
 
 export default {
-	components: {
-		ChatContact
-	},
-	data() {
-		return {
+  components: {
+    ChatContact,
+    ChatMessage
+  },
+  data() {
+    return {
+      user: {},
+      content: '',
+      actualChatId: '',
+      chats: [],
+      messages: []
+    }
+  },
+  async created() {
+    this.user = JSON.parse(localStorage.getItem('user'));
+    const response = await chatFindAllByUserService(this.user._id);
+    console.log(response);
+    if (response?.status) {
+      this.chats = response.message;
+    }
 
-		}
-	},
-	methods: {
-		sendAlert(num) {
-			console.log(num);
-		}
-	}
+    // var autocomplete = new Autocomplete(document.getElementById('search-box'), {
+    //   data: [ { label: 'Hola Mundo', value: 2 }, { label: 'Hola D', value: 3 } ],
+    //   maximumItems: 10
+    // });
+  },
+  methods: {
+    async sendAlert(chatId) {
+      const response = await messageFindAllByChatService(chatId);
+      if (response?.status) {
+        this.messages = response.message;
+        this.actualChatId = chatId;
+      }
+    },
+    async sendMessage() {
+      const response = await createMessage({ text: this.content }, this.actualChatId);
+      if (response?.status) {
+        this.content = '';
+        const messageBox = document.getElementById('message-box');
+        messageBox.scrollTo({
+          left: 0,
+          top: messageBox.scrollHeight,
+          behavior: 'smooth'
+        });
+      }
+    }
+  }
 }
 </script>
 
 <style scoped>
 .dot {
-	position: absolute;
-	bottom: 0;
-	left: 50%;
-	height: 10px;
-	width: 10px;
-	background-color: #00ff00;
-	border-radius: 50%;
-	display: inline-block;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  height: 10px;
+  width: 10px;
+  background-color: #00ff00;
+  border-radius: 50%;
+  display: inline-block;
 }
 
 .chat-drawer:hover {
-	background-color: #232323;
-	cursor: pointer;
+  background-color: #232323;
+  cursor: pointer;
 }
 
 .chat-drawer a div img {
-	width: 40px;
-	height: 40px;
-	object-fit: cover;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
 }
 
 .chat-drawer a div div {
-	text-overflow: ellipsis;
+  text-overflow: ellipsis;
 }
 
 .chat-drawer adiv div small {
-	overflow: hidden;
-	text-overflow: ellipsis;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .chat-drawer a div div p {
-	overflow: hidden;
-	text-overflow: ellipsis;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-
-
 
 .actual-chat-user-image {
-	width: 38px;
-	height: 38px;
-	object-fit: cover;
+  width: 38px;
+  height: 38px;
+  object-fit: cover;
 }
 
-
-
 .visibility-hidden {
-	visibility: hidden;
+  visibility: hidden;
 }
 
 .chat {
-	scrollbar-color: #FFB800 #6D6F7D !important;
-	scrollbar-width: thin !important;
+  scrollbar-color: #FFB800 #6D6F7D !important;
+  scrollbar-width: thin !important;
 
 }
 
 .chat::-webkit-scrollbar {
-	width: 8px;
-	border-radius: 1em;
-	background-color: #6D6F7D;
-	border-radius: 1em;
+  width: 8px;
+  border-radius: 1em;
+  background-color: #6D6F7D;
+  border-radius: 1em;
 }
-
 
 .chat::-webkit-scrollbar-thumb {
 
-	border-radius: 1em;
-	background-color: #6D6F7D;
-	background: #FFB800;
-	border-radius: 1em;
+  border-radius: 1em;
+  background-color: #6D6F7D;
+  background: #FFB800;
+  border-radius: 1em;
 }
 
 .chat::-webkit-scrollbar-thumb:hover {
-	visibility: visible;
-	background: #FFB800;
+  visibility: visible;
+  background: #FFB800;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
 	<div class="chat-drawer ps-1 py-2 pe-3 rounded-3">
-		<a @click="$event => $emit('click', 10)" class="text-decoration-none d-flex justify-content-between align-items-center">
+		<a @click="$event => $emit('click', chatId)" class="text-decoration-none d-flex justify-content-between align-items-center">
 			<div class="d-flex flex-row flex-nowrap align-items-center overflow-hidden">
 				<div class="position-relative d-inline-block">
 					<img 
@@ -11,13 +11,19 @@
 					<span class="dot"></span>
 				</div>
 				<div class="overflow-hidden text-nowrap">
-					<p class="h6 mb-0 text-light">Jimmy McGuill</p>
-					<small class="text-primary mb-0 text-light">Hola, ¿cómo estas?</small>
+					<p class="h6 mb-0 text-light">{{ username }}</p>
+					<small class="text-primary mb-0 text-light">{{ lastMessage }}</small>
 				</div>
 			</div>
 			<div>
-				<p class="small text-muted mb-1 text-end">23/02/21 04:00</p>
-				<span class="badge rounded-pill bg-danger float-end">1</span>
+				<p class="small text-muted mb-1 text-end">
+          {{ lastMessageTime }}
+        </p>
+				<span
+          :class="{ hidden: unseenMessagesCount === 0  }"
+          class="badge rounded-pill bg-danger float-end">
+          {{ unseenMessagesCount }}
+        </span>
 			</div>
 		</a>
 	</div>
@@ -26,10 +32,12 @@
 <script>
 export default {
 	props: [
+    'chatId',
 		'image',
 		'username',
 		'lastMessage',
-		'date'
+		'lastMessageTime',
+    'unseenMessagesCount'
 	],
 	emits: [
 		'click'
@@ -72,5 +80,9 @@ export default {
 .chat-drawer a div div p {
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+
+.hidden {
+  visibility: hidden;
 }
 </style>

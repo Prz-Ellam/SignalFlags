@@ -36,12 +36,7 @@ export default {
 
   }),
   setup() {
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MmNjNWFhNTQ0NzA3YzBmNTg3ODEwMiIsInVzZXJuYW1lIjoiTWljaGFlbCBSdWRkIiwiaWF0IjoxNjgwNjU1OTMyfQ.6jeXmzrVZ8eMq3S80-Vrv25z6v1BGyThpgp2sy-9HuM';
-    const socket = io('http://localhost:3000', { query: { token } });
-
-    socket.on('message', message => {
-       console.log(message);
-    });
+    
   }
 };
 </script>

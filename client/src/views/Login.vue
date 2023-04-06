@@ -77,9 +77,10 @@
 </template>
 
 <script>
-import User from '@/models/login';
 import { useVuelidate } from '@vuelidate/core';
 import { required, email } from '@vuelidate/validators';
+import { userLoginService } from '../services/user.service';
+import io from 'socket.io-client';
 
 export default {
   setup() {
@@ -103,12 +104,41 @@ export default {
     }
   },
   methods: {
-    loginUser(event) {
+    async loginUser(event) {
       this.v$.$touch();
 			if (this.v$.$error) {
 				return;
 			}
-      console.log('Good');
+
+      const response = await userLoginService({
+        email: this.email,
+        password: this.password
+      });
+
+      if (response?.status) {
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify(response.user));
+
+        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MmNjNWFhNTQ0NzA3YzBmNTg3ODEwMiIsInVzZXJuYW1lIjoiTWljaGFlbCBSdWRkIiwiaWF0IjoxNjgwNjU1OTMyfQ.6jeXmzrVZ8eMq3S80-Vrv25z6v1BGyThpgp2sy-9HuM';
+        const socket = io('http://localhost:3000', { 
+          auth: {
+            token
+          },
+          autoConnect: false
+        });
+
+        socket.connect();
+
+        socket.on('message', message => {
+          console.log(message);
+        });
+
+
+        this.$router.push('/');
+      }
+      else {
+        console.log(response);
+      }
     }
   }
 };

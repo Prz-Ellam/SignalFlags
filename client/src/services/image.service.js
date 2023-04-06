@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const createImage = async (image) => {
     const formData = new FormData();
-    formData.append('profilePicture', image, image.name);
+    formData.append('image', image, image.name);
     
     const configuration = {
         method: 'POST',
@@ -18,6 +18,6 @@ export const createImage = async (image) => {
         return response.data;
     }
     catch (exception) {
-        return exception;
+        return exception.response.data;
     }
 }
