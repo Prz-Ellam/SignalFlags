@@ -9,9 +9,9 @@
             id="search-box" placeholder="Buscar personas...">
           <div class="overflow-auto chat">
             <ChatContact v-for="chat in chats" :key="chat._id" :chatId="chat._id"
-              :image="`http://localhost:3000/api/v1/images/${(chat.avatar instanceof Array) ? chat.avatar[0] : chat.avatar}`"
+              :image="`/api/v1/images/${(chat.avatar instanceof Array) ? chat.avatar[0] : chat.avatar}`"
               :username="chat.name" 
-              :lastMessage="(user._id === chat.lastMessage.sender._id ? 'Tú: ' : chat.lastMessage.sender.username + ': ' ) + chat.lastMessage.text" 
+              :lastMessage="(user._id === chat.lastMessage.sender?._id ? 'Tú: ' : chat.lastMessage.sender?.username + ': ' ) + chat.lastMessage?.text" 
               :lastMessageTime="chat.lastMessageTime"
               :unseenMessagesCount="chat.unseenMessagesCount" @click="sendAlert" />
           </div>
@@ -96,11 +96,23 @@ export default {
     if (response?.status) {
       this.chats = response.message;
     }
+  },
+  mounted() {
+    window.socket.on('message', (message) => {
+      console.log(message);
+    });
 
-    // var autocomplete = new Autocomplete(document.getElementById('search-box'), {
-    //   data: [ { label: 'Hola Mundo', value: 2 }, { label: 'Hola D', value: 3 } ],
-    //   maximumItems: 10
-    // });
+    window.socket.on('pushNotification', async () => {
+      const response = await chatFindAllByUserService(this.user._id);
+      if (response?.status) {
+        this.chats = response.message;
+        const totalUnseenMessages = this.chats.reduce((total, message) => total + message.unseenMessagesCount, 0);
+        if (totalUnseenMessages > 0) {
+          const notificationSound = new Audio('src/assets/audios/notification.mp3');
+          notificationSound.play();
+        }
+      }
+    });
   },
   methods: {
     async sendAlert(chatId) {
@@ -109,11 +121,19 @@ export default {
         this.messages = response.message;
         this.actualChatId = chatId;
       }
+      const response2 = await chatFindAllByUserService(this.user._id);
+      if (response2?.status) {
+        this.chats = response2.message;
+      }
     },
     async sendMessage() {
       const response = await createMessage({ text: this.content }, this.actualChatId);
       if (response?.status) {
         this.content = '';
+        const response = await messageFindAllByChatService(this.actualChatId);
+        if (response?.status) {
+          this.messages = response.message;
+        }
         const messageBox = document.getElementById('message-box');
         messageBox.scrollTo({
           left: 0,

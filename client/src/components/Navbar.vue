@@ -24,7 +24,7 @@
             <div class="nav-link dropdown">
               <button class="btn border-0 p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <img
-                  :src="user?.avatar ? `http://localhost:3000/api/v1/images/${user?.avatar}` : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'"
+                  :src="user?.avatar ? `/api/v1/images/${user?.avatar}` : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'"
                   alt="Perfil" width="30" class="rounded-circle profile-picture">
               </button>
               <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">

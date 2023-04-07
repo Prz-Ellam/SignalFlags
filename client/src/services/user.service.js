@@ -4,7 +4,7 @@ export const userLoginService = async (user) => {
     try {
         const configuration = {
             method: 'POST',
-            url: 'http://localhost:3000/api/v1/users/auth',
+            url: '/api/v1/users/auth',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -22,7 +22,7 @@ export const createUser = async (user) => {
     try {
         const configuration = {
             method: 'POST',
-            url: 'http://localhost:3000/api/v1/users',
+            url: '/api/v1/users',
             headers: { 
             'Content-Type': 'application/json'
             },

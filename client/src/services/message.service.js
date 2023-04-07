@@ -4,7 +4,7 @@ export const createMessage = async (message, chatId) => {
     try {
         const configuration = {
             method: 'POST',
-            url: `http://localhost:3000/api/v1/chats/${ chatId }/messages`,
+            url: `/api/v1/chats/${ chatId }/messages`,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${ localStorage.getItem('token') || '' }`
@@ -31,7 +31,7 @@ export const messageFindAllByChatService = async (chatId) => {
     try {
         const configuration = {
             method: 'GET',
-            url: `http://localhost:3000/api/v1/chats/${ chatId }/messages`,
+            url: `/api/v1/chats/${ chatId }/messages`,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${ localStorage.getItem('token') || '' }`

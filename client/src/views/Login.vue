@@ -119,20 +119,13 @@ export default {
         localStorage.setItem('token', response.token);
         localStorage.setItem('user', JSON.stringify(response.user));
 
-        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MmNjNWFhNTQ0NzA3YzBmNTg3ODEwMiIsInVzZXJuYW1lIjoiTWljaGFlbCBSdWRkIiwiaWF0IjoxNjgwNjU1OTMyfQ.6jeXmzrVZ8eMq3S80-Vrv25z6v1BGyThpgp2sy-9HuM';
+        const token = response.token;
         const socket = io('http://localhost:3000', { 
           auth: {
             token
-          },
-          autoConnect: false
+          }
         });
-
-        socket.connect();
-
-        socket.on('message', message => {
-          console.log(message);
-        });
-
+        window.socket = socket;
 
         this.$router.push('/');
       }

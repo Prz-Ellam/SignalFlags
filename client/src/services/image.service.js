@@ -6,7 +6,7 @@ export const createImage = async (image) => {
     
     const configuration = {
         method: 'POST',
-        url: 'http://localhost:3000/api/v1/images',
+        url: '/api/v1/images',
         headers: { 
           'Content-Type': 'multipart/form-data'
         },

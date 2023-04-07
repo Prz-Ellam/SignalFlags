@@ -29,6 +29,10 @@ const chatSchema = new Schema({
     latestMessage: {
         type: Schema.Types.ObjectId,
         ref: 'Message'
+    },
+    unseenMessages: {
+        type: Number,
+        default: 0
     }
 },
 {

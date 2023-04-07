@@ -31,6 +31,12 @@ const userLoginController = async (req, res) => {
     return res.json({
         status: true,
         message: 'El usuario se autentico éxitosamente',
+        user: { 
+            _id: requestedUser._id, 
+            username: requestedUser.username,
+            email: requestedUser.email,
+            avatar: requestedUser.avatar
+        },
         token: token
     });
 }

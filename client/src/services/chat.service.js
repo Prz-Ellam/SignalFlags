@@ -4,7 +4,7 @@ export const chatFindAllByUserService = async (userId) => {
     try {
         const configuration = {
             method: 'GET',
-            url: `http://localhost:3000/api/v1/users/${ userId }/chats`,
+            url: `/api/v1/users/${ userId }/chats`,
             headers: {
                 'Content-Type': 'application/json'
             }

@@ -14,16 +14,25 @@ export const messageCreateController = async (req, res) => {
             message: 'No autorizado'
         });
     }
-
+    
     try {
         const message = new Message({
             text,
             sender: authUser._id,
-            chat: chatId
+            chat: chatId,
+            viewed_by: {
+                user: authUser._id
+            }
         });
-
+        
         await message.save();
-        await Chat.findOneAndUpdate({ _id: chatId }, { latestMessage: message._id });
+        const unseenMessageCount = await Message.find({ 
+            chat: chatId, 'viewed_by.user': { $ne: authUser._id } }).length;
+        
+        await Chat.findOneAndUpdate({ _id: chatId }, { 
+            latestMessage: message._id,
+            unseenMessages: unseenMessageCount
+        });
 
         return res.status(201).json({
             status: true,
@@ -52,5 +61,8 @@ export const messagefindAllByChatController = async (req, res) => {
     });
 
     const messages = await Message.find({ chat: chatId }, { __v: 0, 'viewed_by._id': 0 });
-    res.json(messages);
+    res.json({
+        status: true,
+        message: messages
+    });
 }
