@@ -3,7 +3,7 @@
     
   <div
     class="modal fade modal-lg pt-5"
-    id="modal-add"
+    id="modalAddUsers"
     tabindex="-1"
     aria-labelledby="modalGroup"
     aria-hidden="true"
@@ -12,7 +12,7 @@
       <div class="modal-content bg-accent">
         <div class="modal-header">
           <h5 class="modal-title" id="modalGroup">
-            Agregar usuarios a el grupo:
+            Agregar usuarios a el grupo.
           </h5>
           <button
             type="button"
@@ -25,7 +25,7 @@
           <form>
             <div class="mb-3">
               <label for="message-text" class="col-form-label">
-                Correo:
+                Escriba un nombre para agregar miembros a su equipo.
               </label>
               <div class="input-group">
                 <input
@@ -33,7 +33,7 @@
                   type="text"
                   name="email_user"
                   id="email_user"
-                  placeholder="correo."
+                  placeholder="Nombre..."
                 />
                 <button
                   class="btn btn-primary border-0 m-2 rounded-3"

@@ -23,6 +23,7 @@ import Chat from '../views/Chat.vue'
 import Group from '../views/Group.vue'
 import Forum from '../views/Forum.vue'
 import Homework from '../views/Homework.vue'
+import HomeworkDetail from '../views/HomeworkDetail.vue'
 
 export default {
   components: {
@@ -30,8 +31,9 @@ export default {
     Sidebar,
     Chat,
     Group,
-	Forum,
-	Homework
+	  Forum,
+	  Homework,
+    HomeworkDetail
   },
   data() {
     return {}
