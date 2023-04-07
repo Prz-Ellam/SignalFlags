@@ -51,6 +51,8 @@ export const chatCreateController = async (req, res) => {
     const authUser = req.user;
     const { members } = req.body;
 
+    // TODO: Cuando se cree el chat validar si los usuarios involucrados estan conectados
+
     // Validar que el propio authUser no este ya en la lista de miembros
     // Validar que la lista contenga miembros que si existen
     for (const member of members) {
@@ -164,6 +166,11 @@ export const findUserChatsController = async (req, res) => {
         const avatar = chat.avatar || chat.members.filter(member => member._id.toString() !== id)[0].avatar;
         const lastMessage = chat.latestMessage ? chat.latestMessage : {};
         const lastMessageTime = chat.latestMessage ? format(new Date(chat.latestMessage.createdAt), 'dd/MM/yy HH:mm'): '';
+        
+        const activeUser = chat.activeUsers.filter(activeUser => activeUser.toString() !== id);
+        //console.log(chat.activeUsers);
+        const active = activeUser.length > 0 ? true : false;
+
         let unseenMessagesCount = 0;
 
         if (chat.latestMessage) {
@@ -184,7 +191,8 @@ export const findUserChatsController = async (req, res) => {
             avatar,
             lastMessage,
             lastMessageTime,
-            unseenMessagesCount
+            unseenMessagesCount,
+            active
         };
     }));
 

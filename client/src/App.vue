@@ -10,12 +10,6 @@ import Layout from './components/Layout.vue';
 export default {
   components: {
     Layout
-  },
-  data: () => ({
-
-  }),
-  setup() {
-    
   }
 };
 </script>

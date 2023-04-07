@@ -6,7 +6,7 @@
           <img
             src="../assets/images/POI_SignalFalgs.png"
             alt="Logo"
-            class="w-50 img-fluid"
+            class="w-25 img-fluid"
           >
         </RouterLink>
         <h1 class="text-center mb-4">Inicia sesión</h1>
@@ -107,6 +107,7 @@ export default {
     async loginUser(event) {
       this.v$.$touch();
 			if (this.v$.$error) {
+        // SweetAlert
 				return;
 			}
 
@@ -120,23 +121,17 @@ export default {
         localStorage.setItem('user', JSON.stringify(response.user));
 
         const token = response.token;
-        const socket = io('http://localhost:3000', { 
+        const socket = io('http://192.168.0.180:3000', { 
           auth: {
             token
-          }
+          },
+          transports: [ 'websocket' ]
         });
         window.socket = socket;
 
         this.$router.push('/');
       }
-      else {
-        console.log(response);
-      }
     }
   }
 };
 </script>
-
-<style scoped>
-
-</style>

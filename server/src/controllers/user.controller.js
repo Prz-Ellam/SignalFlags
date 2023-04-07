@@ -149,7 +149,7 @@ const userUpdateController = async (req, res) => {
         });
     }
 
-    return res.status(200).json({
+    return res.json({
         status: true,
         message: 'El usuario fue actualizado con éxito'
     });

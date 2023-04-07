@@ -104,7 +104,6 @@ import { useVuelidate } from '@vuelidate/core';
 import { required, email, minLength, sameAs } from '@vuelidate/validators';
 import { createImage } from '../services/image.service';
 
-import User from '../models/login';
 import { createUser } from '../services/user.service';
 
 const containsUpper = (value) => /[A-Z]/.test(value);
@@ -157,25 +156,21 @@ export default {
       this.v$.$touch();
       if (this.v$.$error) {
         console.log(this.v$);
-      }
-      else {
-        const user = {
-          avatar: this.avatar,
-          email: this.email,
-          username: this.username,
-          password: this.password,
-          confirmPassword: this.confirmPassword
-        }
-        const response = await createUser(user);
-        if (response?.status) {
-          localStorage.setItem('token', response.token);
-          this.$router.push('/');
-        }
-        else {
-          console.log(response);
-        }
+        return;
       }
 
+      const user = {
+        avatar: this.avatar,
+        email: this.email,
+        username: this.username,
+        password: this.password,
+        confirmPassword: this.confirmPassword
+      }
+      const response = await createUser(user);
+      if (response?.status) {
+        localStorage.setItem('token', response.token);
+        this.$router.push('/');
+      }
     },
     readFileAsync(file) {
       return new Promise((resolve, reject) => {

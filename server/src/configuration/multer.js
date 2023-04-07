@@ -16,7 +16,7 @@ const storage = multer.diskStorage({ //multers disk storage settings
 
 export const multerUpload = multer({
     storage: storage,
-    fileFilter: function (req, file, callback) {
+    fileFilter: function (_req, file, callback) {
         const ext = path.extname(file.originalname);
         const allowedExtension = [ '.png', '.jpg', '.jpg' ];
         if (!allowedExtension.includes(ext)) {

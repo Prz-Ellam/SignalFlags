@@ -57,6 +57,7 @@ export default {
     logout() {
       localStorage.clear();
       this.$router.push('/');
+      window.socket.disconnect();
     }
   }
 }

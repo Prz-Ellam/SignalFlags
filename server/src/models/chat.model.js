@@ -9,8 +9,8 @@ const chatSchema = new Schema({
         trim: true
     },
     type: {
-        type: String, 
-        enum: [ 'individual', 'group' ], 
+        type: String,
+        enum: ['individual', 'group'],
         required: true,
         default: 'individual'
     },
@@ -33,7 +33,13 @@ const chatSchema = new Schema({
     unseenMessages: {
         type: Number,
         default: 0
-    }
+    },
+    activeUsers: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+        }
+    ],
 },
 {
     timestamps: true

@@ -8,12 +8,15 @@
           <input type="search" name="search" class="bg-secondary form-control shadow-none text-white rounded-4 mb-1"
             id="search-box" placeholder="Buscar personas...">
           <div class="overflow-auto chat">
-            <ChatContact v-for="chat in chats" :key="chat._id" :chatId="chat._id"
+            <ChatContact v-for="chat in chats" :key="chat._id" 
+              :chatId="chat._id"
               :image="`/api/v1/images/${(chat.avatar instanceof Array) ? chat.avatar[0] : chat.avatar}`"
               :username="chat.name" 
               :lastMessage="(user._id === chat.lastMessage.sender?._id ? 'Tú: ' : chat.lastMessage.sender?.username + ': ' ) + chat.lastMessage?.text" 
               :lastMessageTime="chat.lastMessageTime"
-              :unseenMessagesCount="chat.unseenMessagesCount" @click="sendAlert" />
+              :unseenMessagesCount="chat.unseenMessagesCount"
+              :active="chat.active"
+              @click="sendAlert" />
           </div>
         </div>
       </section>
@@ -25,8 +28,9 @@
 
             <div class="d-flex align-items-center ">
               <img class="img-fluid rounded-circle actual-chat-user-image"
-                src="https://i.kym-cdn.com/photos/images/facebook/001/884/907/c86.jpg" alt="Perfil">
-              <span class="h5 ms-3 mb-0">Saul Goodman</span>
+                :src="selectedChat.avatar ? '/api/v1/images/' + selectedChat.avatar : ''" 
+                alt="Perfil">
+              <span class="h5 ms-3 mb-0">{{ selectedChat.name }}</span>
             </div>
             <div>
               <button class="btn border-0 position-relative me-3">
@@ -85,6 +89,7 @@ export default {
       user: {},
       content: '',
       actualChatId: '',
+      selectedChat: [],
       chats: [],
       messages: []
     }
@@ -103,23 +108,51 @@ export default {
     });
 
     window.socket.on('pushNotification', async () => {
+      const response0 = await messageFindAllByChatService(this.actualChatId);
+      if (response0?.status) {
+        this.messages = response0.message;
+        this.$nextTick(() => {
+          const messageBox = document.getElementById('message-box');
+          messageBox.scrollTo({
+          left: 0,
+          top: messageBox.scrollHeight,
+        });
+        })
+      }
+
       const response = await chatFindAllByUserService(this.user._id);
       if (response?.status) {
+        const chat2 = response.message.find(chat => chat._id === this.selectedChat?._id);
+        console.log(chat2);
+
         this.chats = response.message;
         const totalUnseenMessages = this.chats.reduce((total, message) => total + message.unseenMessagesCount, 0);
-        if (totalUnseenMessages > 0) {
-          const notificationSound = new Audio('src/assets/audios/notification.mp3');
-          notificationSound.play();
-        }
+        // if (totalUnseenMessages > 0) {
+        //   const notificationSound = new Audio('src/assets/audios/notification.mp3');
+        //   notificationSound.play();
+        // }
       }
     });
   },
+  destroyed() {
+
+  },
   methods: {
     async sendAlert(chatId) {
+      this.selectedChat = this.chats.find(chat => chat._id === chatId);
+      console.log(this.selectedChat);
       const response = await messageFindAllByChatService(chatId);
       if (response?.status) {
         this.messages = response.message;
         this.actualChatId = chatId;
+        this.$nextTick(() => {
+          const messageBox = document.getElementById('message-box');
+        messageBox.scrollTo({
+          left: 0,
+          top: messageBox.scrollHeight,
+          
+        });
+        })
       }
       const response2 = await chatFindAllByUserService(this.user._id);
       if (response2?.status) {
@@ -147,17 +180,6 @@ export default {
 </script>
 
 <style scoped>
-.dot {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  height: 10px;
-  width: 10px;
-  background-color: #00ff00;
-  border-radius: 50%;
-  display: inline-block;
-}
-
 .chat-drawer:hover {
   background-color: #232323;
   cursor: pointer;
@@ -196,7 +218,6 @@ export default {
 .chat {
   scrollbar-color: #FFB800 #6D6F7D !important;
   scrollbar-width: thin !important;
-
 }
 
 .chat::-webkit-scrollbar {
@@ -207,7 +228,6 @@ export default {
 }
 
 .chat::-webkit-scrollbar-thumb {
-
   border-radius: 1em;
   background-color: #6D6F7D;
   background: #FFB800;

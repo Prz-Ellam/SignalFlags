@@ -8,7 +8,7 @@
 						alt="avatar"
 						class="rounded-circle d-flex align-self-center me-3 shadow-1-strong"
 					>
-					<span class="dot"></span>
+					<span class="dot" :class="active ? 'green' : 'gray'"></span>
 				</div>
 				<div class="overflow-hidden text-nowrap">
 					<p class="h6 mb-0 text-light">{{ username }}</p>
@@ -37,7 +37,8 @@ export default {
 		'username',
 		'lastMessage',
 		'lastMessageTime',
-    'unseenMessagesCount'
+    'unseenMessagesCount',
+    'active'
 	],
 	emits: [
 		'click'
@@ -52,9 +53,16 @@ export default {
 	left: 50%;
 	height: 10px;
 	width: 10px;
-	background-color: #00ff00;
 	border-radius: 50%;
 	display: inline-block;
+}
+
+.green {
+  background-color: #00ff00;
+}
+
+.gray {
+  background-color: #494949;
 }
 
 .chat-drawer:hover {
