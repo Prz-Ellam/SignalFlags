@@ -34,7 +34,7 @@ export default {
       results: [],
       search: "",
       isLoading: false,
-      arrowCounter: 0
+      arrowCounter: -1
     };
   },
   methods: {
@@ -54,9 +54,9 @@ export default {
 
     filterResults() {
       // first uncapitalize all the things
-      this.results = this.items.filter(item => {
-        return item.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
-      });
+      this.results = items.filter(
+        (item) => item.toLowerCase().indexOf(this.search.toLowerCase()) > -1,
+      )
     },
     setResult(result) {
       this.search = result;
@@ -85,13 +85,13 @@ export default {
     }
   },
   watch: {
-    items: function(val, oldValue) {
-      // actually compare them
-      if (val.length !== oldValue.length) {
-        this.results = val;
-        this.isLoading = false;
+    items: function (value, oldValue) {
+      if (this.isAsync) {
+        this.results = value
+        this.isOpen = true
+        this.isLoading = false
       }
-    }
+    },
   },
   mounted() {
     document.addEventListener("click", this.handleClickOutside);
@@ -100,6 +100,17 @@ export default {
     document.removeEventListener("click", this.handleClickOutside);
   }
 }
+
+
+let items = [
+  'Esmeralda Rodriguez',
+  'Roberto Arriaga',
+  'Saul Goodman',
+  'James Lee',
+  'Karina Smith',
+  'Leonardo',
+  'Oscar Villanueva',
+]
 </script>
 
 <style scoped>
@@ -111,31 +122,22 @@ export default {
   margin-top: 60px;
 }
 
-.autocomplete {
-  position: relative;
-  width: 130px;
-}
-
 .autocomplete-results {
   padding: 0;
-  margin: 0;
-  border: 1px solid #eeeeee;
-  height: 120px;
+  max-height: 50%;
   overflow: auto;
-  width: 100%;
+  min-height: 50px;
+  z-index: 10;
 }
 
 .autocomplete-result {
-  list-style: none;
   text-align: left;
   padding: 4px 2px;
   cursor: pointer;
 }
-
 .autocomplete-result.is-active,
 .autocomplete-result:hover {
-  background-color: #4aae9b;
-  color: white;
+  background-color: #232323;
 }
 
 </style>
