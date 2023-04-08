@@ -9,50 +9,68 @@
     >
       <div class="modal-dialog">
         <div class="modal-content bg-accent">
-          <div class="modal-header">
-            <h5 class="modal-title" id="modalGroup">
-              Agregar usuarios a el grupo:
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <form>
+          <form>
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalGroup">
+                Agregar usuarios a el grupo:
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
               <div class="mb-3">
                 <label for="message-text" class="col-form-label">
                   Escriba un nombre para agregar miembros al chat.
                 </label>
-                <div class="input-group">
-                  <input
-                    class="form-control shadow-none bg-secondary border-0 rounded-2 text-white"
-                    type="text"
-                    name="name_user"
-                    id="name_user"
-                    placeholder="Nombre..."
-                    v-model="search"
-                    v-on:keyup="onChange"
-                    @keydown.down="onArrowDown"
-                    @keydown.up="onArrowUp"
-                    @keydown.enter="onEnter"
-                  />
-                  <Autocomplete />
+                <div>
+                <Autocomplete />
+                </div>
+                <div id="AddedusersContainer">
+                  <div class="d-flex mt-2">
+                    <div class="text-start w-100 rounded-3 bg-dark">
+                      <div class="p-3">
+                        <img
+                          class="rounded-circle chat user-image"
+                          src="https://i.kym-cdn.com/photos/images/facebook/001/884/907/c86.jpg"
+                          alt="Perfil"
+                        />
+                        <span class="h5 ms-2 me-2">
+                          Nombre de usuario agregado
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="d-flex mt-2">
+                    <div class="text-start w-100 rounded-3 bg-dark">
+                      <div class="p-3">
+                        <img
+                          class="rounded-circle chat user-image"
+                          src="https://i.kym-cdn.com/photos/images/facebook/001/884/907/c86.jpg"
+                          alt="Perfil"
+                        />
+                        <span class="h5 ms-2 me-2">
+                          Nombre de usuario agregado
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="mb-3"></div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button
-              class="btn btn-primary border-0 m-2 rounded-3"
-              type="button"
-            >
-              <span>Crear</span>
-            </button>
-          </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                class="btn btn-primary border-0 m-2 rounded-3"
+                type="button"
+              >
+                <span>Crear chat grupal</span>
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

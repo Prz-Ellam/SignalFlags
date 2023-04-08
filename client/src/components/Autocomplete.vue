@@ -13,7 +13,7 @@
       @keydown.enter="onEnter"
     />
     <ul
-      class="autocomplete-results chat bg-secondary rounded-3 position-absolute start-25"
+      class="autocomplete-results scrollbar bg-secondary rounded-3 position-absolute start-25"
       style="width: 28.5%; max-width: 29%;"
       v-show="isOpen"
     >
@@ -31,7 +31,7 @@
           <div class="text-start w-100 rounded-3">
             <div class="p-1">
               <img
-                class="img-fluid rounded-circle actual-chat-user-image"
+                class="img-fluid rounded-circle user-image"
                 src="https://i.kym-cdn.com/photos/images/facebook/001/884/907/c86.jpg"
                 alt="Perfil"
               />
@@ -155,36 +155,32 @@ let items = [
 </script>
 
 <style scoped>
-.actual-chat-user-image {
+.user-image {
   width: 38px;
   height: 38px;
   object-fit: cover;
 }
 
-.visibility-hidden {
-  visibility: hidden;
-}
-
-.chat {
+.scrollbar {
   scrollbar-color: #ffb800 #6d6f7d !important;
   scrollbar-width: thin !important;
 }
 
-.chat::-webkit-scrollbar {
+.scrollbar::-webkit-scrollbar {
   width: 8px;
   border-radius: 1em;
   background-color: #6d6f7d;
   border-radius: 1em;
 }
 
-.chat::-webkit-scrollbar-thumb {
+.scrollbar::-webkit-scrollbar-thumb {
   border-radius: 1em;
   background-color: #6d6f7d;
   background: #ffb800;
   border-radius: 1em;
 }
 
-.chat::-webkit-scrollbar-thumb:hover {
+.scrollbar::-webkit-scrollbar-thumb:hover {
   visibility: visible;
   background: #ffb800;
 }
