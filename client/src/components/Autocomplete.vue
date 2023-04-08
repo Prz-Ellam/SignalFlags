@@ -1,5 +1,17 @@
 <template>
   <div>
+    <input
+      type="search"
+      name="search"
+      autocomplete="off"
+      class="bg-secondary form-control shadow-none text-white rounded-4 mb-1"
+      placeholder="Buscar personas..."
+      v-model="search"
+      v-on:keyup="onChange"
+      @keydown.down="onArrowDown"
+      @keydown.up="onArrowUp"
+      @keydown.enter="onEnter"
+    />
     <ul
       class="autocomplete-results chat bg-secondary rounded-3 position-absolute start-25"
       style="width: 28.5%; max-width: 29%;"
@@ -100,14 +112,18 @@ export default {
       if (this.isAsync) {
         this.isLoading = true
       } else {
-        this.filterResults()
-        this.isOpen = true
+        if (this.filterResults().length > 0) {
+          this.isOpen = true
+        } else {
+          this.isOpen = false
+        }
       }
     },
     filterResults() {
       this.results = items.filter(
         (item) => item.toLowerCase().indexOf(this.search.toLowerCase()) > -1,
       )
+      return this.results
     },
     onArrowDown() {
       if (this.arrowCounter < this.results.length) {

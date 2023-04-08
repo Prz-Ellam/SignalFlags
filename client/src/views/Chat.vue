@@ -27,18 +27,6 @@
           </div>
           <hr />
           <div>
-            <input
-              type="search"
-              name="search"
-              autocomplete="off"
-              class="bg-secondary form-control shadow-none text-white rounded-4 mb-1"
-              placeholder="Buscar personas..."
-              v-model="search"
-              v-on:keyup="onChange"
-              @keydown.down="onArrowDown"
-              @keydown.up="onArrowUp"
-              @keydown.enter="onEnter"
-            />
             <Autocomplete />
           </div>
           <div class="overflow-auto chat">
