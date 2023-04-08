@@ -1,88 +1,69 @@
 <template>
-  <div class="autocomplete">
-    <input type="text" @input="onChange" v-model="search" @keyup.down="onArrowDown" @keyup.up="onArrowUp"
-      @keyup.enter="onEnter" />
-    <ul id="autocomplete-results" v-show="isOpen" class="autocomplete-results">
-      <li class="loading" v-if="isLoading">
+  <div>
+    <ul
+      class="autocomplete-results chat bg-secondary rounded-3 position-absolute start-25"
+      style="width: 28.5%; max-width: 29%;"
+      v-show="isOpen"
+    >
+      <li v-if="isLoading" class="loading">
         Loading results...
       </li>
-      <li v-else v-for="(result, i) in results" :key="i" @click="setResult(result)" class="autocomplete-result"
-        :class="{ 'is-active': i === arrowCounter }">
-        {{ result }}
+      <li
+        v-for="(result, i) in results"
+        :key="i"
+        @click="setResult(result)"
+        class="autocomplete-result"
+        :class="{ 'is-active': i === arrowCounter }"
+      >
+        <div class="d-flex">
+          <div class="text-start w-100 rounded-3">
+            <div class="p-1">
+              <img
+                class="img-fluid rounded-circle actual-chat-user-image"
+                src="https://i.kym-cdn.com/photos/images/facebook/001/884/907/c86.jpg"
+                alt="Perfil"
+              />
+              <span class="h5 ms-2 me-2">{{ result }}</span>
+            </div>
+          </div>
+        </div>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+import ChatContact from '../components/ChatContact.vue'
+import { useVuelidate } from '@vuelidate/core'
+import { required, minLength, maxLength } from '@vuelidate/validators'
+
 export default {
-  props: {
-    items: {
-      type: Array,
-      required: false,
-      default: () => []
-    },
-    isAsync: {
-      type: Boolean,
-      required: false,
-      default: false
-    }
+  name: 'SearchAutocomplete',
+  setup() {
+    return { v$: useVuelidate() }
   },
   data() {
     return {
-      isOpen: false,
+      search: '',
       results: [],
-      search: "",
-      isLoading: false,
-      arrowCounter: -1
-    };
-  },
-  methods: {
-    onChange() {
-      // Let's warn the parent that a change was made
-      this.$emit("input", this.search);
-
-      // Is the data given by an outside ajax request?
-      if (this.isAsync) {
-        this.isLoading = true;
-      } else {
-        // Let's search our flat array
-        this.filterResults();
-        this.isOpen = true;
-      }
-    },
-
-    filterResults() {
-      // first uncapitalize all the things
-      this.results = items.filter(
-        (item) => item.toLowerCase().indexOf(this.search.toLowerCase()) > -1,
-      )
-    },
-    setResult(result) {
-      this.search = result;
-      this.isOpen = false;
-    },
-    onArrowDown(evt) {
-      if (this.arrowCounter < this.results.length) {
-        this.arrowCounter = this.arrowCounter + 1;
-      }
-    },
-    onArrowUp() {
-      if (this.arrowCounter > 0) {
-        this.arrowCounter = this.arrowCounter - 1;
-      }
-    },
-    onEnter() {
-      this.search = this.results[this.arrowCounter];
-      this.isOpen = false;
-      this.arrowCounter = -1;
-    },
-    handleClickOutside(evt) {
-      if (!this.$el.contains(evt.target)) {
-        this.isOpen = false;
-        this.arrowCounter = -1;
-      }
+      isOpen: false,
+      arrowCounter: -1,
     }
+  },
+  components: {
+    ChatContact,
+  },
+  props: {
+    isAsync: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    items: {
+      type: Array,
+      required: false,
+      default: () => [],
+    },
   },
   watch: {
     items: function (value, oldValue) {
@@ -94,13 +75,57 @@ export default {
     },
   },
   mounted() {
-    document.addEventListener("click", this.handleClickOutside);
+    document.addEventListener('click', this.handleClickOutside)
   },
   destroyed() {
-    document.removeEventListener("click", this.handleClickOutside);
-  }
-}
+    document.removeEventListener('click', this.handleClickOutside)
+  },
+  methods: {
+    setResult(result) {
+      this.search = result
+      this.isOpen = false
+    },
+    sendAlert(num) {
+      console.log(num)
+    },
+    handleClickOutside(event) {
+      if (!this.$el.contains(event.target)) {
+        this.arrowCounter = -1
+        this.isOpen = false
+      }
+    },
+    onChange() {
+      this.$emit('input', this.search)
 
+      if (this.isAsync) {
+        this.isLoading = true
+      } else {
+        this.filterResults()
+        this.isOpen = true
+      }
+    },
+    filterResults() {
+      this.results = items.filter(
+        (item) => item.toLowerCase().indexOf(this.search.toLowerCase()) > -1,
+      )
+    },
+    onArrowDown() {
+      if (this.arrowCounter < this.results.length) {
+        this.arrowCounter = this.arrowCounter + 1
+      }
+    },
+    onArrowUp() {
+      if (this.arrowCounter > 0) {
+        this.arrowCounter = this.arrowCounter - 1
+      }
+    },
+    onEnter() {
+      this.search = this.results[this.arrowCounter]
+      this.arrowCounter = -1
+      this.isOpen = false
+    },
+  },
+}
 
 let items = [
   'Esmeralda Rodriguez',
@@ -114,12 +139,38 @@ let items = [
 </script>
 
 <style scoped>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  margin-top: 60px;
+.actual-chat-user-image {
+  width: 38px;
+  height: 38px;
+  object-fit: cover;
+}
+
+.visibility-hidden {
+  visibility: hidden;
+}
+
+.chat {
+  scrollbar-color: #ffb800 #6d6f7d !important;
+  scrollbar-width: thin !important;
+}
+
+.chat::-webkit-scrollbar {
+  width: 8px;
+  border-radius: 1em;
+  background-color: #6d6f7d;
+  border-radius: 1em;
+}
+
+.chat::-webkit-scrollbar-thumb {
+  border-radius: 1em;
+  background-color: #6d6f7d;
+  background: #ffb800;
+  border-radius: 1em;
+}
+
+.chat::-webkit-scrollbar-thumb:hover {
+  visibility: visible;
+  background: #ffb800;
 }
 
 .autocomplete-results {
@@ -139,5 +190,4 @@ let items = [
 .autocomplete-result:hover {
   background-color: #232323;
 }
-
 </style>
