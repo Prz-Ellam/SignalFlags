@@ -1,6 +1,5 @@
 <template>
   <section class="container-fluid bg-dark group-scroll">
-    <Autocomplete/>
     <div
       class="bg-secondary row text-center align-items-center justify-content-center pb-5 vh-100"
       style="
@@ -110,15 +109,6 @@
 </template>
 
 <script>
-
-import Autocomplete from '../components/Autocomplete.vue'
-
-export default {
-  components: {
-    Autocomplete,
-  },
-}
-
 </script>
 
 <style scoped>
