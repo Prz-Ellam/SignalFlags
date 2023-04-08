@@ -10,7 +10,7 @@ import '../node_modules/bootstrap/dist/js/bootstrap.bundle';
 const token = localStorage.getItem('token');
 if (token) {
     // 192.168.0.180
-    const socket = io('http://192.168.0.180:3000', { 
+    const socket = io('/', { 
         auth: {
             token
         },

@@ -103,7 +103,7 @@
 import { useVuelidate } from '@vuelidate/core';
 import { required, email, minLength, sameAs } from '@vuelidate/validators';
 import { createImage } from '../services/image.service';
-
+import io from 'socket.io-client';
 import { createUser } from '../services/user.service';
 
 const containsUpper = (value) => /[A-Z]/.test(value);
@@ -169,6 +169,16 @@ export default {
       const response = await createUser(user);
       if (response?.status) {
         localStorage.setItem('token', response.token);
+        
+        const token = response.token;
+        const socket = io('/', { 
+          auth: {
+            token
+          },
+          transports: [ 'websocket' ]
+        });
+        window.socket = socket;
+
         this.$router.push('/');
       }
     },

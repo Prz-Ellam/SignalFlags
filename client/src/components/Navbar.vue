@@ -29,7 +29,7 @@
               </button>
               <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
                 <li>
-                  <a class="dropdown-item" href="instructor-profile.html">Mi perfil</a>
+                  <RouterLink class="dropdown-item" to="/profile">Mi perfil</RouterLink>
                 </li>
                 <li>
                   <hr class="dropdown-divider">

@@ -27,7 +27,9 @@
           <div class="d-flex justify-content-between align-items-center mt-3 px-3">
 
             <div class="d-flex align-items-center ">
-              <img class="img-fluid rounded-circle actual-chat-user-image"
+              <img
+                v-if="selectedChat.avatar"
+                class="img-fluid rounded-circle actual-chat-user-image"
                 :src="selectedChat.avatar ? '/api/v1/images/' + selectedChat.avatar : ''" 
                 alt="Perfil">
               <span class="h5 ms-3 mb-0">{{ selectedChat.name }}</span>

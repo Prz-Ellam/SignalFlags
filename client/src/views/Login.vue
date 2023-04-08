@@ -121,7 +121,7 @@ export default {
         localStorage.setItem('user', JSON.stringify(response.user));
 
         const token = response.token;
-        const socket = io('http://192.168.0.180:3000', { 
+        const socket = io('/', { 
           auth: {
             token
           },

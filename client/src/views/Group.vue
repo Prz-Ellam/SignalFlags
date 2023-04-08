@@ -4,16 +4,17 @@
       <div class="box bg-accent group-srcoll py-3 px-5 rounded-3">
         <div>
           <h3>Mis grupos</h3>
-          <hr />
+          <hr>
           <div class="row" id="group-container">
             <div
-              v-for="i in [1, 2, 3, 4, 5, 6]"
+              v-for="i in groups"
               class="col-sm-6 col-md-4 col-lg-3"
-              role="button"
             >
-              <div
-                class="mb-4 d-flex flex-column justify-content-center align-items-center shadow-sm rounded-3 box_button"
+              <RouterLink
+                to="/forum"
+                class="mb-4 text-white d-flex flex-column justify-content-center align-items-center shadow-sm rounded-3 box_button"
                 style="height: 240px; min-width: 200px;"
+                role="button"
               >
                 <div class="d-flex align-items-center" style="height: 66%;">
                   <img
@@ -28,14 +29,14 @@
                     ORDINARIA
                   </h6>
                 </div>
-              </div>
+              </RouterLink>
             </div>
           </div>
         </div>
 
         <div>
           <h3>Unirse a un grupo</h3>
-          <hr />
+          <hr>
           <div class="row" id="group-container">
             <div class="col-md-3">
               <div
@@ -158,6 +159,11 @@ export default {
   components: {
     CreateGroup,
   },
+  data() {
+    return {
+      groups: [ 1, 2, 3, 4, 5, 6, 7, 8 ]
+    }
+  }
 }
 </script>
 
