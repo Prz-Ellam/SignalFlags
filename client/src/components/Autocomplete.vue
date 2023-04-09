@@ -1,14 +1,43 @@
 <template>
-  <div class="autocomplete">
-    <input type="text" @input="onChange" v-model="search" @keyup.down="onArrowDown" @keyup.up="onArrowUp"
-      @keyup.enter="onEnter" />
-    <ul id="autocomplete-results" v-show="isOpen" class="autocomplete-results">
-      <li class="loading" v-if="isLoading">
+  <div class="autocomplete-container">
+    <input
+      type="search"
+      name="search"
+      autocomplete="off"
+      class="bg-secondary form-control shadow-none text-white rounded-4 mb-1"
+      placeholder="Buscar personas..."
+      v-model="search"
+      
+      @keydown.down="onArrowDown"
+      @keydown.up="onArrowUp"
+      @keydown.enter="onEnter"
+    />
+    <ul
+      class="autocomplete-results scrollbar bg-secondary rounded-3 position-absolute w-100"
+      v-if="isOpen"
+    >
+      <li v-if="isLoading" class="loading">
         Loading results...
       </li>
-      <li v-else v-for="(result, i) in results" :key="i" @click="setResult(result)" class="autocomplete-result"
-        :class="{ 'is-active': i === arrowCounter }">
-        {{ result }}
+      <li
+        v-for="(result, i) in results"
+        :key="i"
+        @click="setResult(result)"
+        class="autocomplete-result"
+        :class="{ 'is-active': i === arrowCounter }"
+      >
+        <div class="d-flex align-items-center">
+          <div class="text-start w-100 rounded-3">
+            <div class="p-1">
+              <img
+                class="img-fluid rounded-circle user-image"
+                :src="`/api/v1/images/${result.avatar}`"
+                alt="Perfil"
+              />
+              <span class="h6 ms-2 me-2">{{ result.username }}</span>
+            </div>
+          </div>
+        </div>
       </li>
     </ul>
   </div>
@@ -16,118 +45,131 @@
 
 <script>
 export default {
+  data() {
+    return {
+      search: '',
+      results: [],
+      isOpen: false,
+      arrowCounter: -1,
+      isLoading: false
+    }
+  },
   props: {
-    items: {
-      type: Array,
-      required: false,
-      default: () => []
-    },
     isAsync: {
       type: Boolean,
       required: false,
-      default: false
-    }
+      default: false,
+    },
+    items: {
+      type: Array,
+      required: true,
+      default: () => [],
+    },
   },
-  data() {
-    return {
-      isOpen: false,
-      results: [],
-      search: "",
-      isLoading: false,
-      arrowCounter: -1
-    };
-  },
-  methods: {
-    onChange() {
-      // Let's warn the parent that a change was made
-      this.$emit("input", this.search);
+  watch: {
+      search: function(val, oldVal) {
+        if (val == '') {
+          this.isOpen = false;
+          return;
+        }
 
-      // Is the data given by an outside ajax request?
-      if (this.isAsync) {
-        this.isLoading = true;
-      } else {
-        // Let's search our flat array
         this.filterResults();
-        this.isOpen = true;
+        if (this.results.length > 0) {
+          this.isOpen = true
+        } else {
+          this.isOpen = false
+        }
       }
     },
-
-    filterResults() {
-      // first uncapitalize all the things
-      this.results = items.filter(
-        (item) => item.toLowerCase().indexOf(this.search.toLowerCase()) > -1,
-      )
-    },
+  mounted() {
+    document.addEventListener('click', this.handleClickOutside)
+  },
+  destroyed() {
+    document.removeEventListener('click', this.handleClickOutside)
+  },
+  methods: {
     setResult(result) {
-      this.search = result;
-      this.isOpen = false;
+      this.search = result
+      this.isOpen = false
     },
-    onArrowDown(evt) {
+    sendAlert(num) {
+      console.log(num)
+    },
+    handleClickOutside(event) {
+      if (!this.$el.contains(event.target)) {
+        this.arrowCounter = -1
+        this.isOpen = false
+      }
+    },
+    filterResults() {
+      this.results = this.items.filter(
+        (item) => item.username.toLowerCase().indexOf(this.search.toLowerCase()) > -1,
+      );
+      return this.results;
+    },
+    onArrowDown() {
       if (this.arrowCounter < this.results.length) {
         this.arrowCounter = this.arrowCounter + 1;
       }
     },
     onArrowUp() {
       if (this.arrowCounter > 0) {
-        this.arrowCounter = this.arrowCounter - 1;
+        this.arrowCounter = this.arrowCounter - 1
       }
     },
     onEnter() {
+      console.log('Enter');
       this.search = this.results[this.arrowCounter];
-      this.isOpen = false;
       this.arrowCounter = -1;
-    },
-    handleClickOutside(evt) {
-      if (!this.$el.contains(evt.target)) {
-        this.isOpen = false;
-        this.arrowCounter = -1;
-      }
-    }
-  },
-  watch: {
-    items: function (value, oldValue) {
-      if (this.isAsync) {
-        this.results = value
-        this.isOpen = true
-        this.isLoading = false
-      }
+      this.isOpen = false;
     },
   },
-  mounted() {
-    document.addEventListener("click", this.handleClickOutside);
-  },
-  destroyed() {
-    document.removeEventListener("click", this.handleClickOutside);
-  }
 }
-
-
-let items = [
-  'Esmeralda Rodriguez',
-  'Roberto Arriaga',
-  'Saul Goodman',
-  'James Lee',
-  'Karina Smith',
-  'Leonardo',
-  'Oscar Villanueva',
-]
 </script>
 
 <style scoped>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  margin-top: 60px;
+.autocomplete-container {
+  position: relative;
+}
+
+.user-image {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+}
+
+.scrollbar {
+  scrollbar-color: #ffb800 #6d6f7d !important;
+  scrollbar-width: thin !important;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 8px;
+  border-radius: 1em;
+  background-color: #6d6f7d;
+  border-radius: 1em;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 1em;
+  background-color: #6d6f7d;
+  background: #ffb800;
+  border-radius: 1em;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  visibility: visible;
+  background: #ffb800;
 }
 
 .autocomplete-results {
   padding: 0;
-  max-height: 50%;
+  max-height: 300px;
   overflow: auto;
   min-height: 50px;
   z-index: 10;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .autocomplete-result {
@@ -139,5 +181,4 @@ let items = [
 .autocomplete-result:hover {
   background-color: #232323;
 }
-
 </style>

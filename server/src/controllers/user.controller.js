@@ -165,7 +165,10 @@ const findOneUserController = async (req, res) => {
 // userFindAllController
 const findAllUsersController = async (req, res) => {
     const users = await User.find({}, { __v: 0, groups: 0, password: 0 });
-    return res.json(users);
+    return res.json({
+        status: true,
+        message: users
+    });
 }
 
 export default {

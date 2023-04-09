@@ -163,7 +163,7 @@ export const findUserChatsController = async (req, res) => {
     const chatList = await Promise.all(sortedChats.map(async chat => {
         const _id = chat.id;
         const name = chat.name || chat.members.filter(member => member._id.toString() !== id).map(member => member.username).join(', ');
-        const avatar = chat.avatar || chat.members.filter(member => member._id.toString() !== id)[0].avatar;
+        const avatar = chat.avatar || chat.members.filter(member => member._id.toString() !== id)[0]?.avatar;
         const lastMessage = chat.latestMessage ? chat.latestMessage : {};
         const lastMessageTime = chat.latestMessage ? format(new Date(chat.latestMessage.createdAt), 'dd/MM/yy HH:mm'): '';
         

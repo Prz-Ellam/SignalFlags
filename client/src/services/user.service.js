@@ -36,3 +36,21 @@ export const createUser = async (user) => {
         return exception.response.data;
     }
 }
+
+export const userFindAllService = async () => {
+    try {
+        const configuration = {
+            method: 'GET',
+            url: '/api/v1/users',
+            headers: { 
+            'Content-Type': 'application/json'
+            }
+        };
+
+        const response = await axios(configuration);
+        return response.data;
+    }
+    catch (exception) {
+        return exception.response.data;
+    }
+}
