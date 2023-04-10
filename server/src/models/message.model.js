@@ -4,7 +4,7 @@ const messageSchema = new Schema({
     text: {
         type: String,
         trim: true,
-        maxLength: 255
+        maxLength: 512
     },
     sender: {
         type: Schema.Types.ObjectId,
@@ -39,7 +39,11 @@ const messageSchema = new Schema({
                 default: Date.now
             }
         }
-    ]
+    ],
+    active: {
+        type: Boolean,
+        default: true
+    }
 },
 {
     timestamps: true

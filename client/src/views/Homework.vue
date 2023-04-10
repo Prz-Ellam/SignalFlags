@@ -23,7 +23,7 @@
               <div class="tab-pane fade show active" id="pills-asign_homework" role="tabpanel"
                 aria-labelledby="pills-asign_homework-tab" tabindex="0">
                 <div id="homework_container group-srcoll">
-                  <div class="box_button rounded-4 container py-2 px-3 mb-3">
+                  <RouterLink to="/homework-detail" class="d-block box_button rounded-4 container py-2 px-3 mb-3" role="button">
                     <img src="../assets/images/POI_SignalFalgs.png" width="50" height="50" class="rounded float-left"
                       alt="..." />
                     <label for="" class="text-white">
@@ -31,94 +31,21 @@
                     </label>
                     <br />
                     <label for="" class="text-white"> Info </label>
-                  </div>
-
-                  <div class="box_button rounded-4 container py-2 px-3 mb-3">
-                    <img src="../assets/images/POI_SignalFalgs.png" width="50" height="50" class="rounded float-left"
-                      alt="..." />
-                    <label for="" class="text-white">
-                      Proyecto BDM entrega
-                    </label>
-                    <br />
-                    <label for="" class="text-white"> Info </label>
-                  </div>
+                  </RouterLink>
                 </div>
               </div>
               <div class="tab-pane fade" id="pills-completed-homework" role="tabpanel"
                 aria-labelledby="pills-completed-homework-tab" tabindex="0">
                 <div id="completed_container">
-                  <div class="box_button rounded-4 container py-2 px-3 mb-3">
+                  <RouterLink to="/homework-detail" class="d-block box_button rounded-4 container py-2 px-3 mb-3" role="button">
                     <img src="../assets/images/POI_SignalFalgs.png" width="50" height="50" class="rounded float-left"
                       alt="..." />
                     <label for="" class="text-white">
-                      Proyecto POI entrega
+                      Proyecto BDM entrega
                     </label>
                     <br />
                     <label for="" class="text-white"> Info </label>
-                  </div>
-                  <div class="box_button rounded-4 container py-2 px-3 mb-3">
-                    <img src="../assets/images/POI_SignalFalgs.png" width="50" height="50" class="rounded float-left"
-                      alt="..." />
-                    <label for="" class="text-white"> Avance 2 PI </label>
-                    <br />
-                    <label for="" class="text-white"> Info </label>
-                  </div>
-                  <div class="box_button rounded-4 container py-2 px-3 mb-3">
-                    <img src="../assets/images/POI_SignalFalgs.png" width="50" height="50" class="rounded float-left"
-                      alt="..." />
-                    <label for="" class="text-white"> Avance 2 PI </label>
-                    <br />
-                    <label for="" class="text-white"> Info </label>
-                  </div>
-                  <div class="box_button rounded-4 container py-2 px-3 mb-3">
-                    <img src="../assets/images/POI_SignalFalgs.png" width="50" height="50" class="rounded float-left"
-                      alt="..." />
-                    <label for="" class="text-white"> Avance 2 PI </label>
-                    <br />
-                    <label for="" class="text-white"> Info </label>
-                  </div>
-                  <div class="box_button rounded-4 container py-2 px-3 mb-3">
-                    <img src="../assets/images/POI_SignalFalgs.png" width="50" height="50" class="rounded float-left"
-                      alt="..." />
-                    <label for="" class="text-white"> Avance 2 PI </label>
-                    <br />
-                    <label for="" class="text-white"> Info </label>
-                  </div>
-                  <div class="box_button rounded-4 container py-2 px-3 mb-3">
-                    <img src="../assets/images/POI_SignalFalgs.png" width="50" height="50" class="rounded float-left"
-                      alt="..." />
-                    <label for="" class="text-white"> Avance 2 PI </label>
-                    <br />
-                    <label for="" class="text-white"> Info </label>
-                  </div>
-                  <div class="box_button rounded-4 container py-2 px-3 mb-3">
-                    <img src="../assets/images/POI_SignalFalgs.png" width="50" height="50" class="rounded float-left"
-                      alt="..." />
-                    <label for="" class="text-white"> Avance 2 PI </label>
-                    <br />
-                    <label for="" class="text-white"> Info </label>
-                  </div>
-                  <div class="box_button rounded-4 container py-2 px-3 mb-3">
-                    <img src="../assets/images/POI_SignalFalgs.png" width="50" height="50" class="rounded float-left"
-                      alt="..." />
-                    <label for="" class="text-white"> Avance 2 PI </label>
-                    <br />
-                    <label for="" class="text-white"> Info </label>
-                  </div>
-                  <div class="box_button rounded-4 container py-2 px-3 mb-3">
-                    <img src="../assets/images/POI_SignalFalgs.png" width="50" height="50" class="rounded float-left"
-                      alt="..." />
-                    <label for="" class="text-white"> Avance 2 PI </label>
-                    <br />
-                    <label for="" class="text-white"> Info </label>
-                  </div>
-                  <div class="box_button rounded-4 container py-2 px-3 mb-3">
-                    <img src="../assets/images/POI_SignalFalgs.png" width="50" height="50" class="rounded float-left"
-                      alt="..." />
-                    <label for="" class="text-white"> Avance 2 PI </label>
-                    <br />
-                    <label for="" class="text-white"> Info </label>
-                  </div>
+                  </RouterLink>
                 </div>
               </div>
             </div>
@@ -130,4 +57,4 @@
 
 <script></script>
 
-<style></style>
+<style scoped></style>

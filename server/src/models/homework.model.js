@@ -14,9 +14,21 @@ const homeworkSchema = new Schema({
         type: String
     },
     group: {
-        type: String,
-        required: true
-    }
+        type: Schema.Types.ObjectId,
+        required: true,
+        ref: 'Group'
+    },
+    delivers: [
+        {
+            user: {
+                type: Schema.Types.ObjectId,
+                ref: 'User'
+            },
+            deliverDate: {
+                type: String
+            }
+        }
+    ]
 },
 {
     timestamps: true

@@ -32,11 +32,7 @@ export default {
     Group,
     Forum,
     Homework,
-  },
-  data() {
-    return {}
-  },
-  methods: {},
+  }
 }
 </script>
 

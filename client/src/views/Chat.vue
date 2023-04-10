@@ -18,10 +18,7 @@
                 data-bs-toggle="modal"
                 data-bs-target="#AddUsuertoGroupChat"
               >
-                <i
-                  class="h4 me-1 bi bi-pencil-square"
-                  style="color: #6d6f7d;"
-                ></i>
+                <i class="h4 me-1 bi bi-pencil-square"></i>
               </button>
             </div>
           </div>
@@ -70,11 +67,8 @@
               <span class="h5 ms-3 mb-0">{{ selectedChat.name }}</span>
             </div>
             <div>
-              <button class="btn border-0 position-relative me-3">
-                <i class="h4 bi bi-telephone" style="color: #6d6f7d;"></i>
-              </button>
               <button class="btn border-0 position-relative fw-bold">
-                <i class="h4 bi bi-camera-video" style="color: #6d6f7d;"></i>
+                <i class="h4 bi bi-camera-video"></i>
               </button>
             </div>
           </div>
@@ -84,8 +78,9 @@
             <ChatMessage
               v-for="message in messages"
               :key="message._id"
-              :ownMessage="message.sender === user._id"
+              :ownMessage="message.sender._id === user._id"
               :content="message.text"
+              :avatar="message.sender.avatar"
             />
           </div>
           <hr class="mb-1 text-light" />
@@ -206,7 +201,10 @@ export default {
       }
     })
   },
-  destroyed() {},
+  destroyed() {
+    window.socket.off('message');
+    window.socket.off('pushNotification');
+  },
   methods: {
     async print(id) {
       await chatAccessService(id);

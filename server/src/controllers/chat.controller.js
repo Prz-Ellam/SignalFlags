@@ -186,26 +186,34 @@ export const findUserChatsController = async (req, res) => {
     const { id } = req.params;
 
     const chats = await Chat.find({ members: id })
-        .populate('members', '-password -__v')
+        .populate('members', '-password -__v -active')
         .populate({
-        path: 'latestMessage',
-        select: '-chat -__v',
-        populate: { path: 'sender', select: '-password -__v' }
+            path: 'latestMessage',
+            select: '-chat -__v -active',
+            populate: { path: 'sender', select: '-password -__v' }
         })
-        .select('-__v -groupAdmin');
+        .select('-__v -groupAdmin -active');
 
     const sortedChats = chats.sort((a, b) => {
-        const aLatestMessageDate = a.latestMessage ? new Date(a.latestMessage.createdAt) : new Date(0);
-        const bLatestMessageDate = b.latestMessage ? new Date(b.latestMessage.createdAt) : new Date(0);
-        return bLatestMessageDate - aLatestMessageDate;
+        if (!a.latestMessage && !b.latestMessage) {
+            return 0;
+        } else if (!a.latestMessage) {
+            return -1;
+        } else if (!b.latestMessage) {
+            return 1;
+        } else {
+            const aLatestMessageDate = new Date(a.latestMessage.createdAt);
+            const bLatestMessageDate = new Date(b.latestMessage.createdAt);
+            return bLatestMessageDate - aLatestMessageDate;
+        }
     });
     
     const chatList = await Promise.all(sortedChats.map(async chat => {
         const _id = chat.id;
         const name = chat.name || chat.members.filter(member => member._id.toString() !== id).map(member => member.username).join(', ');
         const avatar = chat.avatar || chat.members.filter(member => member._id.toString() !== id)[0]?.avatar;
-        const lastMessage = chat.latestMessage ? chat.latestMessage : {};
-        const lastMessageTime = chat.latestMessage ? format(new Date(chat.latestMessage.createdAt), 'dd/MM/yy HH:mm'): '';
+        const lastMessage = chat.latestMessage ? chat.latestMessage : { text: '', sender: {username: ''} };
+        const lastMessageTime = chat.latestMessage ? format(new Date(chat.latestMessage.createdAt), 'dd/MM/yy HH:mm').toLocaleString('es-MX', { timeZone: 'America/Monterrey' }) : '';
         
         const activeUser = chat.activeUsers.filter(activeUser => activeUser.toString() !== id);
         //console.log(chat.activeUsers);

@@ -40,6 +40,10 @@ const chatSchema = new Schema({
             ref: 'User',
         }
     ],
+    active: {
+        type: Boolean,
+        default: true
+    }
 },
 {
     timestamps: true

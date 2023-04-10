@@ -60,7 +60,9 @@ export const messagefindAllByChatController = async (req, res) => {
         }
     });
 
-    const messages = await Message.find({ chat: chatId }, { __v: 0, 'viewed_by._id': 0 });
+    const messages = await Message.find({ chat: chatId })
+        .populate('sender', '-__v -password -active')
+        .select('-__v -viewed_by.id -active');
     res.json({
         status: true,
         message: messages

@@ -86,11 +86,11 @@ input:focus {
 
 
 //enciende los iconos
-.nav-icon {
+.nav-icon, .bi {
     color: grey;
 }
 
-.nav-icon:hover {
+.nav-icon:hover, .bi:hover {
     color: #FFB800;
     fill: #FFB800
 }
