@@ -96,15 +96,7 @@
           </div>
           <hr class="mb-1 text-light" />
           <div class="input-group mb-1 p-2">
-            <button
-              class="btn border-0"
-              style="transform: rotateY(0deg) rotate(45deg);"
-            >
-              <i
-                class="h4 mb-0 me-1 bi bi-paperclip"
-                style="color: #6d6f7d;"
-              ></i>
-            </button>
+            <Buttons />
             <input
               type="text"
               id="message"
@@ -132,6 +124,7 @@
 import ChatContact from '../components/ChatContact.vue'
 import ChatMessage from '../components/ChatMessage.vue'
 import Autocomplete from '../components/Autocomplete.vue'
+import Buttons from '../components/Buttons.vue'
 import AddUserToGroupChat from '../components/AddUserToGroupChat.vue'
 import { chatFindAllByUserService } from '../services/chat.service'
 import {
@@ -145,6 +138,7 @@ export default {
     ChatMessage,
     Autocomplete,
     AddUserToGroupChat,
+    Buttons
   },
   data() {
     return {
