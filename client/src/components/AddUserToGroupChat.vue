@@ -27,20 +27,26 @@
                   Escriba un nombre para agregar miembros al chat.
                 </label>
                 <div class="input-group">
-                  <input
-                    class="form-control shadow-none bg-secondary border-0 rounded-2 text-white"
-                    type="text"
-                    name="name_user"
-                    id="name_user"
-                    placeholder="Nombre..."
-                    v-model="search"
-                    v-on:keyup="onChange"
-                    @keydown.down="onArrowDown"
-                    @keydown.up="onArrowUp"
-                    @keydown.enter="onEnter"
-                  />
-                  <Autocomplete />
+                  <Autocomplete 
+                    :items="users"
+                    @click="selectedUser"/>
                 </div>
+
+                <div 
+                  v-for="user in selectedUsers"
+                  class="d-flex align-items-center justify-content-between alert bg-dark my-1 py-2" 
+                  role="alert">
+                  <div>
+                    <img width="40" height="40" class="me-2 rounded-circle"
+                    style="object-fit: cover;"
+                    :src="`/api/v1/images/${ user.avatar }`" />
+                    <span>{{ user.username }}</span>
+                  </div>
+                  <div class="d-inline-flex bg-danger p-2 rounded-circle" role="button">
+                    <i class="fa-solid fa-trash"></i>
+                  </div>
+                </div>
+
               </div>
               <div class="mb-3"></div>
             </form>
@@ -49,23 +55,54 @@
             <button
               class="btn btn-primary border-0 m-2 rounded-3"
               type="button"
+              @click="createChatGroup"
             >
               <span>Crear</span>
             </button>
           </div>
         </div>
       </div>
-    </div>
+     </div>
   </div>
 </template>
 
 <script>
 import Autocomplete from '../components/Autocomplete.vue'
+import { userFindAllService, userFindOneService } from '../services/user.service';
+import { chatCreateChatGroupService } from '../services/chat.service';
 
 export default {
   components: {
     Autocomplete,
   },
+  data() {
+    return {
+      users: [],
+      selectedUsers: []
+    }
+  },
+  async created() {
+    const response2 = await userFindAllService();
+    console.log(response2);
+    if (response2?.status) {
+      this.users = response2.message;
+      console.log(response2.message);
+    }
+  },
+  methods: {
+    async selectedUser(userId) {
+      const foundUser = this.selectedUsers.find(user => user._id === userId);
+      if (!foundUser) {
+        const user = await userFindOneService(userId);
+        this.selectedUsers.push(user.message);
+      }
+    },
+    async createChatGroup() {
+      const members = this.selectedUsers.map(({ _id }) => _id);
+      console.log(members);
+      await chatCreateChatGroupService(members);
+    }
+  }
 }
 </script>
 

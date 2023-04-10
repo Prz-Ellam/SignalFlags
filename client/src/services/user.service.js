@@ -54,3 +54,39 @@ export const userFindAllService = async () => {
         return exception.response.data;
     }
 }
+
+export const userFindOneService = async (userId) => {
+    try {
+        const configuration = {
+            method: 'GET',
+            url: `/api/v1/users/${ userId }`,
+            headers: { 
+            'Content-Type': 'application/json'
+            }
+        };
+
+        const response = await axios(configuration);
+        return response.data;
+    }
+    catch (exception) {
+        return exception.response.data;
+    }
+}
+
+export const userFindAllWithoutChatService = async () => {
+    try {
+        const configuration = {
+            method: 'GET',
+            url: '/api/v1/users/without-chat',
+            headers: { 
+            'Content-Type': 'application/json'
+            }
+        };
+
+        const response = await axios(configuration);
+        return response.data;
+    }
+    catch (exception) {
+        return exception.response.data;
+    }
+}

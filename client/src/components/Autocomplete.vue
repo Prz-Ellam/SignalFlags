@@ -21,8 +21,8 @@
       </li>
       <li
         v-for="(result, i) in results"
-        :key="i"
-        @click="setResult(result)"
+        :key="result._id"
+        @click="$event => { setResult(result); $emit('click', result._id) }"
         class="autocomplete-result"
         :class="{ 'is-active': i === arrowCounter }"
       >
@@ -66,6 +66,9 @@ export default {
       default: () => [],
     },
   },
+  emits: [
+    'click'
+  ],
   watch: {
       search: function(val, oldVal) {
         if (val == '') {
@@ -89,7 +92,7 @@ export default {
   },
   methods: {
     setResult(result) {
-      this.search = result
+      this.search = result.username
       this.isOpen = false
     },
     sendAlert(num) {
@@ -103,7 +106,7 @@ export default {
     },
     filterResults() {
       this.results = this.items.filter(
-        (item) => item.username.toLowerCase().indexOf(this.search.toLowerCase()) > -1,
+        (item) => item.username.toLowerCase().indexOf(this.search?.toLowerCase()) > -1,
       );
       return this.results;
     },
@@ -119,7 +122,7 @@ export default {
     },
     onEnter() {
       console.log('Enter');
-      this.search = this.results[this.arrowCounter];
+      this.search = this.results[this.arrowCounter].username;
       this.arrowCounter = -1;
       this.isOpen = false;
     },

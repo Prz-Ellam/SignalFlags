@@ -94,6 +94,46 @@ export const chatCreateController = async (req, res) => {
     }
 }
 
+// Solo se pueden actualizar los chats que son grupales
+export const chatUpdateController = async (req, res) => {
+    // /api/v1/chats/:id
+    const { id } = req.params;
+    const { avatar, name } = req.body;
+
+    // Validar que el chat exista realmente
+    const requestedChat = await Chat.findById(id);
+    if (!requestedChat) {
+        return res.status(404).json({
+            status: false,
+            message: 'El chat solicitado no existe'
+        });
+    }
+
+    if (requestedChat.type !== 'group') {
+        return res.status(401).json({
+            status: false,
+            message: 'El chat solicitado no se puede actualizar'
+        });
+    }
+
+    try {
+        requestedChat.avatar = avatar;
+        requestedChat.name = name;
+        await requestedChat.save();
+
+        return res.status(200).json({
+            status: true,
+            message: 'El chat se actualizó éxitosamente'
+        });
+    }
+    catch (exception) {
+        return res.status(500).json({
+            status: false,
+            message: 'Ocurrio un error interno'
+        });
+    }
+}
+
 export const addUserToChatController = async (req, res) => {
     const { userId, chatId } = req.params;
 
@@ -189,6 +229,7 @@ export const findUserChatsController = async (req, res) => {
             _id,
             name,
             avatar,
+            type: chat.type,
             lastMessage,
             lastMessageTime,
             unseenMessagesCount,

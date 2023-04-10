@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import fs from 'fs';
 import User from '../models/user.model.js';
+import Chat from '../models/chat.model.js';
 
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -159,7 +160,10 @@ const userUpdateController = async (req, res) => {
 const findOneUserController = async (req, res) => {
     const id = req.params.id;
     const user = await User.findOne({ _id: id }, { __v: 0, groups: 0, password: 0 });
-    return user;
+    return res.json({
+        status: true,
+        message: user
+    });
 };
 
 // userFindAllController
@@ -168,6 +172,32 @@ const findAllUsersController = async (req, res) => {
     return res.json({
         status: true,
         message: users
+    });
+}
+
+export const userFindAllNotChatController = async (req, res) => {
+    const authUser = req.user; 
+    
+    const chats = await Chat.find({
+        type: 'individual',
+        members: authUser._id
+    });
+
+    const usersInChats = await Chat.distinct('members', {
+        type: 'individual',
+        _id: { $in: chats.map((chat) => chat._id) }
+      });
+
+    const usersWithoutChat = await User.find({
+        _id: { $ne: authUser._id },
+        _id: { $nin: usersInChats }
+    })
+        .select('-password -__v');
+      
+
+    return res.json({
+        status: true,
+        message: usersWithoutChat
     });
 }
 

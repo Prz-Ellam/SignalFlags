@@ -8,7 +8,7 @@
 						alt="avatar"
 						class="rounded-circle d-flex align-self-center me-3 shadow-1-strong"
 					>
-					<span class="dot" :class="active ? 'green' : 'gray'"></span>
+					<span v-if="type !== 'group'" class="dot" :class="active ? 'green' : 'gray'"></span>
 				</div>
 				<div class="overflow-hidden text-nowrap">
 					<p class="h6 mb-0 text-light">{{ username }}</p>
@@ -38,7 +38,8 @@ export default {
 		'lastMessage',
 		'lastMessageTime',
     'unseenMessagesCount',
-    'active'
+    'active',
+    'type'
 	],
 	emits: [
 		'click'

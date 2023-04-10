@@ -28,13 +28,15 @@
           <hr />
           <div>
             <Autocomplete 
-              :items="users"/>
+              :items="users"
+              @click="print"/>
           </div>
           <div class="overflow-auto chat">
             <ChatContact
               v-for="chat in chats"
               :key="chat._id"
               :chatId="chat._id"
+              :type="chat.type"
               :image="`/api/v1/images/${
                 chat.avatar instanceof Array ? chat.avatar[0] : chat.avatar
               }`"
@@ -130,7 +132,8 @@ import {
   createMessage,
   messageFindAllByChatService,
 } from '../services/message.service'
-import { userFindAllService } from '../services/user.service'
+import { userFindAllWithoutChatService } from '../services/user.service'
+import { chatAccessService } from '../services/chat.service';
 
 export default {
   components: {
@@ -151,7 +154,7 @@ export default {
     }
   },
   async created() {
-    const response2 = await userFindAllService();
+    const response2 = await userFindAllWithoutChatService();
     console.log(response2);
     if (response2?.status) {
       this.users = response2.message;
@@ -205,6 +208,9 @@ export default {
   },
   destroyed() {},
   methods: {
+    async print(id) {
+      await chatAccessService(id);
+    },
     async sendAlert(chatId) {
       this.selectedChat = this.chats.find((chat) => chat._id === chatId)
       console.log(this.selectedChat)
