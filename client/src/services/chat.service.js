@@ -1,5 +1,21 @@
 import axios from 'axios';
 
+class ChatService {
+    static async access(userId) {
+
+    }
+
+    static async createGroup(members) {
+
+    }
+
+    static async findByUser(userId) {
+
+    }
+}
+
+export default ChatService;
+
 export const chatAccessService = async (userId) => {
     try {
         const configuration = {

@@ -1,5 +1,47 @@
 import axios from 'axios';
 
+class UserService {
+    static async login(user) {
+        try {
+            const configuration = {
+                method: 'POST',
+                url: '/api/v1/users/auth',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify(user)
+            }
+            const response = await axios(configuration);
+            return response.data;
+        }
+        catch (exception) {
+            return exception.response.data;
+        }
+    }
+
+    static async create() {
+
+    }
+
+    static async update() {
+
+    }
+
+    static async find() {
+
+    }
+
+    static async findOne() {
+
+    }
+
+    static async findWithoutChat() {
+
+    }
+}
+
+export default UserService;
+
 export const userLoginService = async (user) => {
     try {
         const configuration = {

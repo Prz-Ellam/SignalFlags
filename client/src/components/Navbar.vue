@@ -35,7 +35,7 @@
                   <hr class="dropdown-divider">
                 </li>
                 <li>
-                  <a class="dropdown-item" href="#" @click="logout">Cerrar sesión</a>
+                  <a class="dropdown-item" @click="logout">Cerrar sesión</a>
                 </li>
               </ul>
             </div>

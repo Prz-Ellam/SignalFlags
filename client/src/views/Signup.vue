@@ -106,8 +106,8 @@
 <script>
 import { useVuelidate } from '@vuelidate/core';
 import { required, email, minLength, sameAs } from '@vuelidate/validators';
-import { createImage } from '../services/image.service';
-import { createUser } from '../services/user.service';
+import { createImage } from '@/services/image.service';
+import { createUser } from '@/services/user.service';
 import io from 'socket.io-client';
 
 const containsUpper = (value) => /[A-Z]/.test(value);

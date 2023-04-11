@@ -115,6 +115,9 @@ import ChatMessage from '../components/ChatMessage.vue'
 import Autocomplete from '../components/Autocomplete.vue'
 import Buttons from '../components/Buttons.vue'
 import AddUserToGroupChat from '../components/AddUserToGroupChat.vue'
+
+import ChatService from '@/services/chat.service';
+
 import { chatFindAllByUserService } from '../services/chat.service'
 import {
   createMessage,
@@ -147,10 +150,12 @@ export default {
     console.log(response2);
     if (response2?.status) {
       this.users = response2.message;
-      console.log(response2.message);
     }
 
-    this.user = JSON.parse(localStorage.getItem('user'))
+    this.user = JSON.parse(localStorage.getItem('user'));
+
+    this.chats = await ChatService.findByUser(this.user._id);
+
     const response = await chatFindAllByUserService(this.user._id)
     if (response?.status) {
       this.chats = response.message

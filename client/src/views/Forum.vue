@@ -416,12 +416,11 @@
 </template>
 
 <script>
-import CreateHomework from '../components/CreateHomework.vue'
-import AddUser from '../components/AddUser.vue'
-import Buttons from '../components/Buttons.vue'
+import CreateHomework from '@/components/CreateHomework.vue';
+import AddUser from '@/components/AddUser.vue';
+import Buttons from '@/components/Buttons.vue';
 
 export default {
-
   components: {
     CreateHomework,
     AddUser,

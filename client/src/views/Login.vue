@@ -75,10 +75,12 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2';
+import io from 'socket.io-client';
 import { useVuelidate } from '@vuelidate/core';
 import { required, email } from '@vuelidate/validators';
-import { userLoginService } from '../services/user.service';
-import io from 'socket.io-client';
+import { userLoginService } from '@/services/user.service';
+import UserService from '@/services/user.service';
 
 export default {
   setup() {
@@ -105,7 +107,9 @@ export default {
     async loginUser(event) {
       this.v$.$touch();
 			if (this.v$.$error) {
-        // SweetAlert
+        Swal.fire({
+          text: 'Hola Mundo'
+        });
 				return;
 			}
 

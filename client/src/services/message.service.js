@@ -1,5 +1,23 @@
 import axios from 'axios';
 
+class MessageService {
+    static async create() {
+
+    }
+
+    static async update() {
+
+    }
+
+    static async delete() {
+
+    }
+
+    static async findByChat() {
+        
+    }
+}
+
 export const createMessage = async (message, chatId) => {
     try {
         const configuration = {
