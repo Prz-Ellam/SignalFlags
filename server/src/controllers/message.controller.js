@@ -1,6 +1,8 @@
 import Chat from '../models/chat.model.js';
 import Message from '../models/message.model.js';
 
+const MessageController = {};
+
 export const messageCreateController = async (req, res) => {
     const { chatId } = req.params;
     const { text } = req.body;

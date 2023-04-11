@@ -9,6 +9,8 @@ import { generateToken } from '../configuration/generate-token.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+const UserController = {};
+
 const userLoginController = async (req, res) => {
     const { email, password } = req.body;
 
@@ -50,7 +52,7 @@ const userCreateController = async (req, res) => {
     if (existingUsernameUser) {
         return res.status(409).json({
             status: false,
-            message: 'El nombre de usuario esta siendo utilizado por alguien más'
+            message: 'El nombre de usuario está siendo utilizado por alguien más'
         });
     }
     
@@ -105,6 +107,12 @@ const userCreateController = async (req, res) => {
     res.status(201).json({
         status: true,
         message: 'El usuario fue creado con éxito',
+        user: { 
+            _id: requestedUser._id, 
+            username: requestedUser.username,
+            email: requestedUser.email,
+            avatar: requestedUser.avatar
+        },
         token: generateToken(user._id)
     });
 };

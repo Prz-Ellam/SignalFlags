@@ -4,6 +4,8 @@ import Chat from '../models/chat.model.js';
 import Message from '../models/message.model.js';
 import { format } from 'date-fns';
 
+const ChatController = {};
+
 export const chatAccessController = async (req, res) => {
     const { userId } = req.body;
     const authUser = req.user;
