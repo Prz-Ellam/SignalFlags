@@ -1,19 +1,38 @@
-import express from 'express';
-import { createUser } from '../controllers/user.controller';
-const router = express.Router();
+import { Router } from 'express';
+import { findUserChatsController } from '../controllers/chat.controller.js';
+import UserController, { userFindAllNotChatController } from '../controllers/user.controller.js';
+import { authMiddleware } from '../middlewares/auth.middleware.js';
+import { validateIdMiddleware } from '../middlewares/validate-id.middleware.js';
+import { validateCreateUser } from '../middlewares/validators/user.validator.js';
+const userRouter = Router();
 
-router.post('/', createUser);
+// Iniciar sesión
+// Cerrar sesión
+// Registrarse
+// Actualizar informacion
+// Actualizar contraseña
+// Actualizar avatar
+// Confirmar cuenta con el token
 
-router.get('/:id', (_req, res) => {
+// Obtener todos los chats de un usuario
+// Obtener un usuario basado en su id
+// Obtener todos los usuarios excepto el autenticado
+// Obtener todos los usuarios con los que no se tiene un chat
 
-});
 
-router.put('/:id', (_req, res) => {
 
-});
+userRouter.post('/auth', UserController.userLoginController);
 
-router.delete('/:id', (_req, res) => {
+userRouter.get('/without-chat', authMiddleware, userFindAllNotChatController);
 
-});
+userRouter.get('/', UserController.findAllUsersController);
+userRouter.get('/:id', validateIdMiddleware, UserController.findOneUserController);
+userRouter.post('/', validateCreateUser, UserController.userCreateController);
+userRouter.patch('/:id', authMiddleware, UserController.userUpdateController);
+//userRouter.delete('/:id', UserController.deleteUser);
 
-export default router;
+
+// Busca todos los chats de un usuario
+userRouter.get('/:id/chats', validateIdMiddleware, authMiddleware, findUserChatsController);
+
+export default userRouter;

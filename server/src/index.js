@@ -1,47 +1,39 @@
+import './configuration/env.js';
+
 import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import cors from 'cors';
-import User from './models/user.model.js';
 
 import database from './configuration/database.js';
+import userRouter from './routes/user.routes.js';
+import groupRouter from './routes/group.routes.js';
+import homeworkRouter from './routes/homework.routes.js';
+import imageRouter from './routes/image.routes.js';
+import chatRouter from './routes/chat.routes.js';
+import chatGroupRouter from './routes/chat-group.routes.js';
+import { notFoundMiddleware } from './middlewares/not-found.middleware.js';
+import socket from './events/socket.js';
 
 const app = express();
 const httpServer = createServer(app);
-const io = new Server(httpServer, {
-    cors: {
-        origin: '*'
-    }
-});
+const io = new Server(httpServer);
 
 await database();
 
-app.use(cors());
+app.set('port', process.env.PORT || 3000);
 app.use(express.json());
+app.use('/api/v1/images', express.static('../uploads/'));
+app.use('/api/v1/users', userRouter);
+app.use('/api/v1/images', imageRouter);
+app.use('/api/v1/chats', chatRouter);
+app.use('/api/v1/chatGroups', chatGroupRouter);
+app.use('/api/v1/groups', groupRouter);
+app.use('/api/v1/homeworks', homeworkRouter);
 
-io.on('connection', socket => {
-    console.log('A new connection in the server');
-    socket.emit('message', 'Welcome to SignalFlags');
-});
+app.use(notFoundMiddleware);
 
-app.post('/', (_req, res) => {
-    res.json('GET OK');
-});
+socket(io);
 
-
-app.post('/api/v1/users', async (request, response) => {
-    console.log(request.body);
-
-    const user = new User();
-    user.email = request.body.email;
-    user.username = request.body.username;
-    user.password = request.body.password;
-
-    await user.save();
-
-    response.send('Usuario atrapado');
-});
-
-httpServer.listen(3000, async () => {
-    console.log('Server started in port 3000');
+httpServer.listen(app.get('port'), async () => {
+    console.log(`Server started in port ${ app.get('port') }`);
 });
