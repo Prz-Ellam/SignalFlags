@@ -26,45 +26,10 @@
                 <label for="message-text" class="col-form-label">
                   Escriba un nombre para agregar miembros al chat.
                 </label>
-<<<<<<< HEAD
                 <div class="input-group">
                   <Autocomplete 
                     :items="users"
                     @click="selectedUser"/>
-=======
-                <div>
-                <Autocomplete />
-                </div>
-                <div id="AddedusersContainer">
-                  <div class="d-flex mt-2">
-                    <div class="text-start w-100 rounded-3 bg-dark">
-                      <div class="p-3">
-                        <img
-                          class="rounded-circle chat user-image"
-                          src="https://i.kym-cdn.com/photos/images/facebook/001/884/907/c86.jpg"
-                          alt="Perfil"
-                        />
-                        <span class="h5 ms-2 me-2">
-                          Nombre de usuario agregado
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="d-flex mt-2">
-                    <div class="text-start w-100 rounded-3 bg-dark">
-                      <div class="p-3">
-                        <img
-                          class="rounded-circle chat user-image"
-                          src="https://i.kym-cdn.com/photos/images/facebook/001/884/907/c86.jpg"
-                          alt="Perfil"
-                        />
-                        <span class="h5 ms-2 me-2">
-                          Nombre de usuario agregado
-                        </span>
-                      </div>
-                    </div>
-                  </div>
->>>>>>> bk/autocompleteVer2
                 </div>
 
                 <div 
@@ -84,19 +49,6 @@
 
               </div>
               <div class="mb-3"></div>
-<<<<<<< HEAD
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button
-              class="btn btn-primary border-0 m-2 rounded-3"
-              type="button"
-              @click="createChatGroup"
-            >
-              <span>Crear</span>
-            </button>
-          </div>
-=======
             </div>
             <div class="modal-footer">
               <button
@@ -107,7 +59,6 @@
               </button>
             </div>
           </form>
->>>>>>> bk/autocompleteVer2
         </div>
       </div>
      </div>
