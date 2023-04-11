@@ -2,7 +2,7 @@
   <section class="container bg-accent my-4 rounded-3">
     <div class="row d-flex justify-content-center">
       <form @submit.prevent="loginUser" novalidate class="p-5 col-lg-5 col-md-7">
-        <RouterLink to="/home" class="d-flex justify-content-center">
+        <RouterLink to="/" class="d-flex justify-content-center">
           <img
             src="../assets/images/POI_SignalFalgs.png"
             alt="Logo"
@@ -12,15 +12,14 @@
         <h1 class="text-center mb-4">Inicia sesión</h1>
           
         <div class="mb-4">
-          <label for="email" role="button" class="form-label text-light">
+          <label for="email" role="button" class="form-label">
             Correo electrónico
           </label>
           <input
             v-model="email"
             type="email"
             name="email"
-            id="email"
-            class="bg-secondary form-control text-light rounded-4"
+            class="bg-secondary form-control rounded-4"
             placeholder="example@domain.com"
           >
           <small 
@@ -36,15 +35,14 @@
         </div>
 
         <div class="mb-5">
-          <label for="password" role="button" class="form-label text-light">
+          <label for="password" role="button" class="form-label">
             Contraseña
           </label>
           <input
             v-model="password"
             type="password"
             name="password"
-            id="password"
-            class="bg-secondary form-control border-0 rounded-4"
+            class="bg-secondary form-control rounded-4"
           >
           <small 
             class="text-danger" 
@@ -88,8 +86,8 @@ export default {
 	},
   data() {
     return {
-      email: null,
-      password: null
+      email: '',
+      password: ''
     }
   },
   validations() {
@@ -117,6 +115,10 @@ export default {
       });
 
       if (response?.status) {
+
+        this.$store.dispatch('setToken', response.token);
+        this.$store.dispatch('setUser', response.user);
+
         localStorage.setItem('token', response.token);
         localStorage.setItem('user', JSON.stringify(response.user));
 

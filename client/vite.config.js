@@ -15,12 +15,6 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:3000'
       },
-      '/sockets': {
-        target: 'http://localhost:3000',
-        rewrite: (path) => path.replace(/^\/sockets/, ''),
-        changeOrigin: true,
-        ws: true
-      },
       '/socket.io': {
         target: 'ws://localhost:3000',
         ws: true,

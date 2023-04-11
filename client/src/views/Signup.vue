@@ -1,10 +1,14 @@
 <template>
   <section class="container bg-accent my-3 rounded-3">
     <div class="row d-flex justify-content-center">
-      <form @submit.prevent="createUser" class="p-5 col-lg-5 col-md-9 shadow-sm" novalidate>
-        <div class="d-flex justify-content-center">
-          <img src="../assets/images/POI_SignalFalgs.png" alt="SignalFlags" class="w-25 img-fluid">
-        </div>
+      <form @submit.prevent="createUser" novalidate class="p-5 col-lg-5 col-md-9">
+        <RouterLink to="/" class="d-flex justify-content-center">
+          <img
+            src="../assets/images/POI_SignalFalgs.png"
+            alt="Logo"
+            class="w-25 img-fluid"
+          >
+        </RouterLink>
         <h1 class="text-center mb-4">Registrate</h1>
 
         <div class="form-group text-center mb-4">
@@ -15,7 +19,7 @@
               src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
               alt="Profile picture">
           </div>
-          <input type="file" accept="image/png, image/gif, image/jpeg, image/jpg" class="form-control position-absolute"
+          <input type="file" accept="image/png, image/jpeg, image/jpg" class="form-control position-absolute"
             name="profile-picture" id="profile-picture" autocomplete="off" @change="uploadProfilePicture">
           <label for="profile-picture" role="button">Foto de perfil</label>
         </div>
@@ -25,11 +29,11 @@
           perfil es requerida</small>
 
         <div class="mb-4">
-          <label for="email" role="button" class="form-label text-white">
+          <label for="email" role="button" class="form-label">
             Correo electrónico
           </label>
-          <input v-model="email" type="email" name="email" id="email"
-            class="bg-secondary form-control text-white rounded-4" placeholder="example@domain.com">
+          <input v-model="email" type="email" name="email"
+            class="bg-secondary form-control rounded-4" placeholder="example@domain.com">
           <small class="text-danger" v-if="v$.email.$dirty && v$.email.required.$invalid">El corre electrónico es
             requerido</small>
           <small class="text-danger" v-if="v$.email.$dirty && v$.email.email.$invalid">El corre electrónico no es
@@ -37,8 +41,8 @@
         </div>
         <div class="mb-4">
           <label for="username" role="button" class="form-label">Nombre de usuario</label>
-          <input v-model="username" type="text" name="username" id="username"
-            class="bg-secondary form-control text-white rounded-4">
+          <input v-model="username" type="text" name="username"
+            class="bg-secondary form-control rounded-4">
           <small class="text-danger" v-if="v$.username.$dirty && v$.username.required.$invalid">El nombre de
             usuario es
             requerido</small>
@@ -48,9 +52,9 @@
         </div>
 
         <div class="mb-4">
-          <label for="password" role="button" class="form-label text-white">Contraseña</label>
-          <input v-model="password" type="password" name="password" id="password"
-            class="bg-secondary form-control text-white rounded-4">
+          <label for="password" role="button" class="form-label">Contraseña</label>
+          <input v-model="password" type="password" name="password"
+            class="bg-secondary form-control rounded-4">
           <small class="text-danger" v-if="v$.password.$dirty && v$.password.required.$invalid">La contraseña es
             requerida</small>
           <small class="text-danger" v-if="v$.password.$dirty &&
@@ -75,9 +79,9 @@
         </div>
 
         <div class="mb-5">
-          <label for="confirm-password" role="button" class="form-label text-white">Confirmar contraseña:</label>
-          <input v-model="confirmPassword" type="password" name="confirm-password" id="confirm-password"
-            class="bg-secondary form-control text-white rounded-4">
+          <label for="confirm-password" role="button" class="form-label">Confirmar contraseña</label>
+          <input v-model="confirmPassword" type="password" name="confirm-password"
+            class="bg-secondary form-control rounded-4">
           <small class="text-danger" v-if="v$.confirmPassword.$dirty && v$.confirmPassword.required.$invalid">La
             contraseña es requerida</small>
           <small class="text-danger"
@@ -90,7 +94,7 @@
 
         <div class="text-center">
           <p class="text-white mb-0">¿Ya tienes una cuenta?</p>
-          <RouterLink to="/login" class="">
+          <RouterLink to="/login">
             ¡Inicia sesión aquí!
           </RouterLink>
         </div>
@@ -103,8 +107,8 @@
 import { useVuelidate } from '@vuelidate/core';
 import { required, email, minLength, sameAs } from '@vuelidate/validators';
 import { createImage } from '../services/image.service';
-import io from 'socket.io-client';
 import { createUser } from '../services/user.service';
+import io from 'socket.io-client';
 
 const containsUpper = (value) => /[A-Z]/.test(value);
 const containsLower = (value) => /[a-z]/.test(value);
@@ -168,6 +172,7 @@ export default {
       }
       const response = await createUser(user);
       if (response?.status) {
+        this.$store.dispatch('setToken', response.token);
         localStorage.setItem('token', response.token);
         
         const token = response.token;

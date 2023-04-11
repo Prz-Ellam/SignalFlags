@@ -1,4 +1,5 @@
 import { createApp } from 'vue';
+import { createStore } from 'vuex';
 import App from './App.vue';
 import axios from 'axios';
 import router from './router/router';
@@ -9,7 +10,6 @@ import '../node_modules/bootstrap/dist/js/bootstrap.bundle';
 
 const token = localStorage.getItem('token');
 if (token) {
-    // 192.168.0.180
     const socket = io('/', { 
         auth: {
             token
@@ -32,4 +32,40 @@ axios.interceptors.request.use(
     }
 );
 
-createApp(App).use(router).mount('#app');
+const store = createStore({
+    strict: true,
+    state: {
+      // Estado de tu aplicación
+      token: null,
+      user: null,
+      socket: null
+    },
+    mutations: {
+        setToken(state, token) {
+            state.token = token;
+        },
+        setUser(state, user) {
+            state.user = user;
+        }
+    },
+    actions: {
+        setToken({ commit }, token) {
+            commit('setToken', token);
+        },
+        setUser({ commit }, user) {
+            commit('setUser', user);
+        }
+    },
+    getters: {
+        getToken() {
+            return token;
+        }
+      // Getters para obtener datos del estado
+    }
+});
+  
+
+createApp(App)
+    .use(router)
+    .use(store)
+    .mount('#app');
