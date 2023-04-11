@@ -1,5 +1,9 @@
 <template>
+<<<<<<< HEAD
   <div class="autocomplete-container">
+=======
+  <div>
+>>>>>>> bk/autocompleteVer2
     <input
       type="search"
       name="search"
@@ -7,14 +11,24 @@
       class="bg-secondary form-control shadow-none text-white rounded-4 mb-1"
       placeholder="Buscar personas..."
       v-model="search"
+<<<<<<< HEAD
       
+=======
+      v-on:keyup="onChange"
+>>>>>>> bk/autocompleteVer2
       @keydown.down="onArrowDown"
       @keydown.up="onArrowUp"
       @keydown.enter="onEnter"
     />
     <ul
+<<<<<<< HEAD
       class="autocomplete-results scrollbar bg-secondary rounded-3 position-absolute w-100"
       v-if="isOpen"
+=======
+      class="autocomplete-results scrollbar bg-secondary rounded-3 position-absolute start-25"
+      style="width: 28.5%; max-width: 29%;"
+      v-show="isOpen"
+>>>>>>> bk/autocompleteVer2
     >
       <li v-if="isLoading" class="loading">
         Loading results...
@@ -31,7 +45,11 @@
             <div class="p-1">
               <img
                 class="img-fluid rounded-circle user-image"
+<<<<<<< HEAD
                 :src="`/api/v1/images/${result.avatar}`"
+=======
+                src="https://i.kym-cdn.com/photos/images/facebook/001/884/907/c86.jpg"
+>>>>>>> bk/autocompleteVer2
                 alt="Perfil"
               />
               <span class="h6 ms-2 me-2">{{ result.username }}</span>
@@ -104,11 +122,32 @@ export default {
         this.isOpen = false
       }
     },
+<<<<<<< HEAD
     filterResults() {
       this.results = this.items.filter(
         (item) => item.username.toLowerCase().indexOf(this.search?.toLowerCase()) > -1,
       );
       return this.results;
+=======
+    onChange() {
+      this.$emit('input', this.search)
+
+      if (this.isAsync) {
+        this.isLoading = true
+      } else {
+        if (this.filterResults().length > 0) {
+          this.isOpen = true
+        } else {
+          this.isOpen = false
+        }
+      }
+    },
+    filterResults() {
+      this.results = items.filter(
+        (item) => item.toLowerCase().indexOf(this.search.toLowerCase()) > -1,
+      )
+      return this.results
+>>>>>>> bk/autocompleteVer2
     },
     onArrowDown() {
       if (this.arrowCounter < this.results.length) {
@@ -131,6 +170,7 @@ export default {
 </script>
 
 <style scoped>
+<<<<<<< HEAD
 .autocomplete-container {
   position: relative;
 }
@@ -138,6 +178,11 @@ export default {
 .user-image {
   width: 32px;
   height: 32px;
+=======
+.user-image {
+  width: 38px;
+  height: 38px;
+>>>>>>> bk/autocompleteVer2
   object-fit: cover;
 }
 

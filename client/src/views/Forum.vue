@@ -255,11 +255,10 @@
                         </div>
                       </div>
                     </div>
-                    <div
-                      class="w-100 pe-4 ps-5 mb-3 position-absolute bottom-0 start-50 translate-middle-x"
-                    >
-                      <div class="bg-secondary d-flex px-3 ms-3">
+                    <div class="w-75 translate-middle-x bottom-0 start-50 position-absolute mb-3" >
+                      <div class="bg-secondary d-flex ms-3">
                         <div class="input-group m-3">
+                          <Buttons/>
                           <input
                             class="form-control bg-secondary text-white shadow-none py-0"
                             type="text"
@@ -419,12 +418,14 @@
 <script>
 import CreateHomework from '../components/CreateHomework.vue'
 import AddUser from '../components/AddUser.vue'
+import Buttons from '../components/Buttons.vue'
 
 export default {
 
   components: {
     CreateHomework,
-    AddUser
+    AddUser,
+    Buttons
   },
 }
 </script>
