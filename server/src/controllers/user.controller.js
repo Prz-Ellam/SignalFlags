@@ -175,6 +175,15 @@ const findAllUsersController = async (req, res) => {
     });
 }
 
+export const userGetAllExceptMeController = async (req, res) => {
+    const authUser = req.user;
+    const users = await User.find({ _id: { $ne: authUser._id } }, { __v: 0, groups: 0, password: 0 });
+    return res.json({
+        status: true,
+        message: users
+    });
+}
+
 export const userFindAllNotChatController = async (req, res) => {
     const authUser = req.user; 
     
