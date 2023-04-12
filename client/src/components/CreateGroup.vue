@@ -11,7 +11,7 @@
         <div class="modal-content bg-accent">
           <form @submit.prevent="CreateGroup" novalidate>
             <div class="modal-header">
-              <h5 class="modal-title" id="modalGroup">{{ titles }}</h5>
+              <h5 class="modal-title" id="modalGroup">{{ title }}</h5>
               <button
                 type="button"
                 class="btn-close"
@@ -107,6 +107,7 @@ export default {
   },
   data() {
     return {
+      title: '',
       groupDescription: null,
       groupName: null,
     }

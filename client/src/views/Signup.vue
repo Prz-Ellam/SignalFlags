@@ -1,32 +1,23 @@
 <template>
   <section class="container bg-accent my-3 rounded-3">
     <div class="row d-flex justify-content-center">
-      <form @submit.prevent="createUser" novalidate class="p-5 col-lg-5 col-md-9">
+      <form @submit.prevent="submitSignup" novalidate class="p-5 col-lg-5 col-md-9">
         <RouterLink to="/" class="d-flex justify-content-center">
           <img
-            src="../assets/images/POI_SignalFalgs.png"
+            src="@/assets/images/POI_SignalFalgs.png"
             alt="Logo"
             class="w-25 img-fluid"
           >
         </RouterLink>
         <h1 class="text-center mb-4">Registrate</h1>
 
-        <div class="form-group text-center mb-4">
-          <div class="position-relative">
-            <label for="profile-picture" role="button"
-              class="profile-picture-label text-white position-absolute rounded-circle"></label>
-            <img class="img img-fluid rounded-circle mb-1" id="picture-box"
-              src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-              alt="Profile picture">
-          </div>
-          <input type="file" accept="image/png, image/jpeg, image/jpg" class="form-control position-absolute"
-            name="profile-picture" id="profile-picture" autocomplete="off" @change="uploadProfilePicture">
-          <label for="profile-picture" role="button">Foto de perfil</label>
-        </div>
+        <ProfilePicture 
+          @update="update"  
+        />
+        <small class="d-block text-center text-danger mb-4" v-if="v$.avatar.$dirty && v$.avatar.required.$invalid">La foto de
+          perfil es requerida</small>
 
         <input type="hidden" name="" v-model="avatar">
-        <small class="text-danger" v-if="v$.avatar.$dirty && v$.avatar.required.$invalid">La foto de
-          perfil es requerida</small>
 
         <div class="mb-4">
           <label for="email" role="button" class="form-label">
@@ -104,11 +95,14 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2';
 import { useVuelidate } from '@vuelidate/core';
 import { required, email, minLength, sameAs } from '@vuelidate/validators';
-import { createImage } from '@/services/image.service';
 import { createUser } from '@/services/user.service';
 import io from 'socket.io-client';
+import UserService from '@/services/user.service';
+
+import ProfilePicture from '@/components/ProfilePicture.vue';
 
 const containsUpper = (value) => /[A-Z]/.test(value);
 const containsLower = (value) => /[a-z]/.test(value);
@@ -116,6 +110,9 @@ const containsNumber = (value) => /[0-9]/.test(value);
 const containsSpecialChars = (value) => /[°|¬!"#$%&/()=?¡'¿¨*\]´+}~`{[^;:_,.\-<>@]/.test(value);
 
 export default {
+  components: {
+    ProfilePicture
+  },
   setup() {
     return { v$: useVuelidate() }
   },
@@ -156,10 +153,25 @@ export default {
     }
   },
   methods: {
-    async createUser(event) {
+    update(image) {
+      console.log(image);
+      this.avatar = image;
+    },
+    async submitSignup(event) {
       this.v$.$touch();
       if (this.v$.$error) {
-        console.log(this.v$);
+        await Swal.fire({
+            icon: 'error',
+            title: '...Opps',
+            html: '<span class="text-light">Faltan parametros</span>',
+            confirmButtonColor: "#F23F43",
+            background: "#38393B",
+            customClass: {
+                title: 'text-light',
+                text: 'text-light',
+                confirmButton: 'btn btn-danger text-light shadow-none rounded-pill'
+            },
+        });
         return;
       }
 
@@ -170,9 +182,11 @@ export default {
         password: this.password,
         confirmPassword: this.confirmPassword
       }
+      //await UserService.create(user);
       const response = await createUser(user);
       if (response?.status) {
         this.$store.dispatch('setToken', response.token);
+        this.$store.dispatch('setUser', response.user);
         localStorage.setItem('token', response.token);
         
         const token = response.token;
@@ -186,52 +200,18 @@ export default {
 
         this.$router.push('/');
       }
-    },
-    readFileAsync(file) {
-      return new Promise((resolve, reject) => {
-        const fileReader = new FileReader();
-        fileReader.onload = () => {
-          resolve(fileReader.result);
-        };
-        fileReader.onerror = reject;
-        fileReader.readAsDataURL(file);
-      });
-    },
-    async uploadProfilePicture(event) {
-      const pictureBox = document.getElementById('picture-box');
-      const defaultImage = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
-      try {
-        const files = Array.from(event.target.files);
-        if (files.length === 0) {
-          pictureBox.src = defaultImage;
-          this.avatar = null;
-          return;
-        }
-        const file = files[0];
-
-        const size = parseFloat((file.size / 1024.0 / 1024.0).toFixed(2));
-        if (size > 8.0) {
-          pictureBox.src = defaultImage;
-          this.avatar = null;
-          return;
-        }
-
-        const allowedExtensions = /(jpg|jpeg|png|gif)$/i;
-        if (!allowedExtensions.exec(file.type)) {
-          pictureBox.src = defaultImage;
-          this.avatar = null;
-          return;
-        }
-        const dataUrl = await this.readFileAsync(file);
-        pictureBox.src = dataUrl;
-
-        const image = await createImage(file);
-        this.avatar = image.file;
-      }
-      catch (exception) {
-        console.log(exception);
-        pictureBox.src = defaultImage;
-        this.avatar = null;
+      else {
+        await Swal.fire({
+            icon: 'error',
+            title: response.message,
+            confirmButtonColor: "#F23F43",
+            background: "#38393B",
+            customClass: {
+                title: 'text-white',
+                text: 'text-white',
+                confirmButton: 'btn btn-danger text-white shadow-none rounded-pill'
+            },
+        });
       }
     }
   }
@@ -239,29 +219,4 @@ export default {
 </script>
 
 <style scoped>
-.img {
-  width: 128px;
-  height: 128px;
-  object-fit: cover;
-}
-
-.profile-picture-label {
-  width: 128px;
-  height: 128px;
-  line-height: 128px;
-}
-
-.profile-picture-label:hover::after {
-  content: 'Foto de perfil'
-}
-
-.profile-picture-label:hover {
-  background-color: rgba(48, 133, 214, 0.5);
-}
-
-#profile-picture,
-#edit-profile-picture,
-#upload-image {
-  scale: 0.01;
-}
 </style>

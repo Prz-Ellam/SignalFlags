@@ -1,36 +1,17 @@
 <template>
-  <div class="bg-dark container-fluid h-100 overflow-auto">
-    <section class="col h-100 align-items-center p-3 text-center">
+  <section class="bg-dark container-fluid h-100 overflow-auto">
+    <div class="col h-100 align-items-center p-3 text-center">
       <div class="box bg-accent group-srcoll py-3 px-5 rounded-3">
         <div>
           <h3>Mis grupos</h3>
           <hr>
           <div class="row" id="group-container">
-            <div
-              v-for="i in groups"
-              class="col-sm-6 col-md-4 col-lg-3"
-            >
-              <RouterLink
-                to="/forum"
-                class="mb-4 text-white d-flex flex-column justify-content-center align-items-center shadow-sm rounded-3 box_button"
-                style="height: 240px; min-width: 200px;"
-                role="button"
-              >
-                <div class="d-flex align-items-center" style="height: 66%;">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/d/d3/Syd_barrett.jpg"
-                    alt="Foto de grupo"
-                    class="rounded group-img"
-                  />
-                </div>
-                <div class="d-flex align-items-start px-3" style="height: 33%;">
-                  <h6 class="text">
-                    003 E2023 Programación orientada a la internet CLASE
-                    ORDINARIA
-                  </h6>
-                </div>
-              </RouterLink>
-            </div>
+            <GroupCard 
+              v-for="group in groups"
+              :bind="group._id"
+              :name="group.name"
+              :avatar="group.avatar"
+            />
           </div>
         </div>
 
@@ -38,7 +19,7 @@
           <h3>Unirse a un grupo</h3>
           <hr>
           <div class="row" id="group-container">
-            <div class="col-md-3">
+            <div class="col-sm-6 col-md-4 col-lg-3">
               <div
                 class="mb-5 mt-5 rounded-3 box_button"
                 style="height: 300px;"
@@ -61,7 +42,7 @@
                 </button>
               </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-sm-6 col-md-4 col-lg-3">
               <div
                 class="mb-5 mt-5 rounded-3 box_button"
                 style="height: 300px;"
@@ -94,7 +75,7 @@
               </div>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-sm-6 col-md-4 col-lg-3">
               <div
                 class="mb-5 mt-5 rounded-3 box_button"
                 style="height: 250px;"
@@ -111,7 +92,7 @@
               </div>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-sm-6 col-md-4 col-lg-3">
               <div
                 class="mb-5 mt-5 rounded-3 box_button"
                 style="height: 250px;"
@@ -128,7 +109,7 @@
               </div>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-sm-6 col-md-4 col-lg-3">
               <div
                 class="mb-5 mt-5 rounded-3 box_button"
                 style="height: 250px;"
@@ -147,21 +128,59 @@
           </div>
         </div>
       </div>
-    </section>
-    <CreateGroup/>
-  </div>
+    </div>
+    <CreateGroup />
+  </section>
 </template>
 
 <script>
-import CreateGroup from '../components/CreateGroup.vue'
+import CreateGroup from '../components/CreateGroup.vue';
+import GroupCard from '@/components/GroupCard.vue';
 
 export default {
   components: {
     CreateGroup,
+    GroupCard
   },
   data() {
     return {
-      groups: [ 1, 2, 3, 4, 5, 6, 7, 8 ]
+      groups: [ 
+        {
+          _id: 1,
+          name: '003 E2023 Programación orientada a la internet CLASE ORDINARIA',
+          avatar: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Syd_barrett.jpg'
+        },
+        {
+          _id: 2,
+          name: '003 E2023 Programación orientada a la internet CLASE ORDINARIA',
+          avatar: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Syd_barrett.jpg'
+        },
+        { 
+          _id: 3,
+          name: '003 E2023 Programación orientada a la internet CLASE ORDINARIA',
+          avatar: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Syd_barrett.jpg'
+        },
+        { 
+          _id: 4,
+          name: '003 E2023 Programación orientada a la internet CLASE ORDINARIA',
+          avatar: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Syd_barrett.jpg'
+        },
+        { 
+          _id: 5,
+          name: '003 E2023 Programación orientada a la internet CLASE ORDINARIA',
+          avatar: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Syd_barrett.jpg'
+        },
+        { 
+          _id: 6,
+          name: '003 E2023 Programación orientada a la internet CLASE ORDINARIA',
+          avatar: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Syd_barrett.jpg'
+        },
+        { 
+          _id: 7,
+          name: '003 E2023 Programación orientada a la internet CLASE ORDINARIA',
+          avatar: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Syd_barrett.jpg'
+        }
+      ]
     }
   }
 }
@@ -191,11 +210,14 @@ export default {
 
 .box_button {
   background-color: #38393b;
+  height: 240px; 
+  min-width: 200px;
 }
 
 .box_button:hover {
   background-color: #6d6f7d;
 }
+
 
 .group-srcoll::-webkit-scrollbar {
   width: 8px;

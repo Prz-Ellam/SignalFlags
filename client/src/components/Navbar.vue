@@ -25,16 +25,16 @@
               <button class="btn border-0 p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <img
                   :src="user?.avatar ? `/api/v1/images/${user?.avatar}` : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'"
-                  alt="Perfil" width="30" height="30" class="rounded-circle">
+                  alt="Perfil" width="30" height="30" class="object-fit-cover rounded-circle">
               </button>
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark bg-secondary">
                 <li>
                   <RouterLink class="dropdown-item" to="/profile">Mi perfil</RouterLink>
                 </li>
                 <li>
                   <hr class="dropdown-divider">
                 </li>
-                <li>
+                <li role="button">
                   <a class="dropdown-item" @click="logout">Cerrar sesión</a>
                 </li>
               </ul>
@@ -56,9 +56,15 @@ export default {
   methods: {
     logout() {
       localStorage.clear();
-      this.$router.push('/');
+      this.$router.push('/home');
       window.socket.disconnect();
     }
   }
 }
 </script>
+
+<style scoped>
+.object-fit-cover {
+  object-fit: cover;
+}
+</style>

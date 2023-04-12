@@ -108,10 +108,10 @@ const userCreateController = async (req, res) => {
         status: true,
         message: 'El usuario fue creado con éxito',
         user: { 
-            _id: requestedUser._id, 
-            username: requestedUser.username,
-            email: requestedUser.email,
-            avatar: requestedUser.avatar
+            _id: user._id, 
+            username: user.username,
+            email: user.email,
+            avatar: user.avatar
         },
         token: generateToken(user._id)
     });

@@ -1,26 +1,23 @@
 <template>
-  <div class="chat-drawer ps-1 py-2 pe-3 rounded-3">
-    <a @click="$event => $emit('click', chatId)"
-      class="text-decoration-none d-flex justify-content-between align-items-center">
-      <div class="d-flex flex-row flex-nowrap align-items-center overflow-hidden">
-        <div class="position-relative d-inline-block">
-          <img :src="image" alt="avatar" class="rounded-circle d-flex align-self-center me-3 shadow-1-strong">
-          <span v-if="type !== 'group'" class="dot" :class="active ? 'green' : 'gray'"></span>
+  <div class="chat-drawer rounded-3 p-2" role="button">
+    <div @click="handleClick" class="d-flex justify-content-between align-items-center">
+      <div class="d-flex overflow-hidden">
+        <div class="position-relative">
+          <img :src="image" alt="Avatar" class="rounded-circle me-3">
+          <span :class="dotClasses"></span>
         </div>
-        <div class="overflow-hidden text-nowrap">
+        <div class="overflow-hidden text-nowrap text-truncate" :class="{ 'text-muted': unseenMessagesCount === 0 }">
           <p class="h6 mb-0 text-light">{{ username }}</p>
-          <small class="text-primary mb-0 text-light">{{ lastMessage }}</small>
+          <small :class="{ 'mb-0': true, 'fw-bold': unseenMessagesCount !== 0, 'text-muted': unseenMessagesCount === 0 }">
+            {{ lastMessage }}
+          </small>
         </div>
       </div>
       <div>
-        <p class="small text-muted mb-1 text-end">
-          {{ lastMessageTime }}
-        </p>
-        <span :class="{ hidden: unseenMessagesCount === 0 }" class="badge rounded-pill bg-danger float-end">
-          {{ unseenMessagesCount }}
-        </span>
+        <p class="small text-muted text-end text-nowrap mb-1">{{ lastMessageTime }}</p>
+        <span :class="badgeClasses">{{ unseenMessagesCount }}</span>
       </div>
-    </a>
+    </div>
   </div>
 </template>
 
@@ -28,6 +25,7 @@
 export default {
   props: [
     'chatId',
+    'userId',
     'image',
     'username',
     'lastMessage',
@@ -38,11 +36,41 @@ export default {
   ],
   emits: [
     'click'
-  ]
+  ],
+  computed: {
+    dotClasses() {
+      return {
+        dot: this.type !== 'group',
+        green: this.active,
+        gray: !this.active
+      };
+    },
+    badgeClasses() {
+      return {
+        'badge rounded-pill bg-danger float-end': true,
+        'hidden': this.unseenMessagesCount === 0
+      };
+    }
+  },
+  methods: {
+    handleClick(event) {
+      this.$emit('click', this.chatId);
+    },
+    userLastMessage() {
+      //const user = JSON.parse(localStorage.getItem('user'));
+      //return user._id == this.userId ? 'Tú' : this.username
+    }
+  }
 }
 </script>
 
 <style scoped>
+img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+
 .dot {
   position: absolute;
   bottom: 0;
@@ -54,7 +82,7 @@ export default {
 }
 
 .green {
-  background-color: #00ff00;
+  background-color: #31a24c;
 }
 
 .gray {
@@ -63,27 +91,6 @@ export default {
 
 .chat-drawer:hover {
   background-color: #232323;
-  cursor: pointer;
-}
-
-.chat-drawer a div img {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-}
-
-.chat-drawer a div div {
-  text-overflow: ellipsis;
-}
-
-.chat-drawer adiv div small {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.chat-drawer a div div p {
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .hidden {

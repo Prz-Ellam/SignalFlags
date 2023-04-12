@@ -35,7 +35,9 @@ export default async function(io) {
             const sockets = await UserSocket.find({ user: { $in: members }});
             const socketIds = sockets.map(socket => socket._id);
     
-            io.to(socketIds).emit('pushNotification', {});
+            console.log(change.fullDocument._id);
+
+            io.to(socketIds).emit('pushNotification', change.fullDocument._id);
         }
     });
     
@@ -72,8 +74,12 @@ export default async function(io) {
         socket.emit('message', 'Welcome to SignalFlags');
     
         socket.on('disconnect', async () => {
+            console.log(`User ${ socket.id } disconnect`);
+
             await UserSocket.deleteOne({ _id: socket.id });
     
+            console.log('Desconecto');
+
             await Chat.updateMany({ members: socket.userId }, 
                 { 
                     $pull: {
@@ -94,7 +100,7 @@ export default async function(io) {
                 const sockets = await UserSocket.find({ user: { $in: allMembers }});
                 const socketIds = sockets.map(socket => socket._id);
     
-                io.to(socketIds).emit('userDisconnect', );
+                io.to(socketIds).emit('userDisconnect', {});
             }
         });
     });

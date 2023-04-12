@@ -1,13 +1,16 @@
 <template>
   <div class="autocomplete-container">
     <input
-      type="search"
+      type="text"
       name="search"
       autocomplete="off"
-      class="bg-secondary form-control shadow-none text-white rounded-4 mb-1"
+      class="bg-secondary form-control shadow-none rounded-4 mb-1"
       placeholder="Buscar personas..."
       v-model="search"
       
+      @input="handleInput"
+      @focus="handleFocus"
+      @blur="handleBlur"
       @keydown.down="onArrowDown"
       @keydown.up="onArrowUp"
       @keydown.enter="onEnter"
@@ -22,7 +25,7 @@
       <li
         v-for="(result, i) in results"
         :key="result._id"
-        @click="$event => { setResult(result); $emit('click', result._id) }"
+        @click="$event => { handleClick(result); }"
         class="autocomplete-result"
         :class="{ 'is-active': i === arrowCounter }"
       >
@@ -63,27 +66,12 @@ export default {
     items: {
       type: Array,
       required: true,
-      default: () => [],
+      default: [],
     },
   },
   emits: [
     'click'
   ],
-  watch: {
-      search: function(val, oldVal) {
-        if (val == '') {
-          this.isOpen = false;
-          return;
-        }
-
-        this.filterResults();
-        if (this.results.length > 0) {
-          this.isOpen = true
-        } else {
-          this.isOpen = false
-        }
-      }
-    },
   mounted() {
     document.addEventListener('click', this.handleClickOutside)
   },
@@ -91,9 +79,47 @@ export default {
     document.removeEventListener('click', this.handleClickOutside)
   },
   methods: {
-    setResult(result) {
-      this.search = result.username
-      this.isOpen = false
+    handleInput(event) {
+      const val = event.target.value;
+      if (val == '') {
+        this.isOpen = false;
+        return;
+      }
+
+      const found = this.items.find(item => item.username === val);
+      if (found) {
+        this.isOpen = false;
+        return;
+      }
+
+      this.filterResults();
+      if (this.results.length > 0) {
+        this.isOpen = true
+      } else {
+        this.isOpen = false;
+      }
+    },
+    handleFocus(event) {
+      if (this.search === '') {
+        this.isOpen = false;
+        return;
+      }
+
+      this.filterResults();
+      if (this.results.length > 0) {
+        this.isOpen = true
+      } else {
+        this.isOpen = false;
+      }
+    },
+    handleBlur(event) {
+      
+    },
+    handleClick(result) {
+      //this.search = result.username;
+      this.search = '';
+      this.isOpen = false;
+      this.$emit('click', result._id);
     },
     sendAlert(num) {
       console.log(num)
@@ -101,7 +127,7 @@ export default {
     handleClickOutside(event) {
       if (!this.$el.contains(event.target)) {
         this.arrowCounter = -1
-        this.isOpen = false
+        this.isOpen = false;
       }
     },
     filterResults() {
@@ -111,20 +137,21 @@ export default {
       return this.results;
     },
     onArrowDown() {
-      if (this.arrowCounter < this.results.length) {
+      if (this.arrowCounter < this.results.length - 1) {
         this.arrowCounter = this.arrowCounter + 1;
       }
     },
     onArrowUp() {
-      if (this.arrowCounter > 0) {
+      if (this.arrowCounter >= 0) {
         this.arrowCounter = this.arrowCounter - 1
       }
     },
-    onEnter() {
-      console.log('Enter');
+    onEnter(event) {
+      event.preventDefault();
       this.search = this.results[this.arrowCounter].username;
       this.arrowCounter = -1;
       this.isOpen = false;
+      console.log('isOpen false 140');
     },
   },
 }

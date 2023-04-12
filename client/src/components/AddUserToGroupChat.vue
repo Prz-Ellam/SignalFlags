@@ -12,7 +12,7 @@
           <form>
             <div class="modal-header">
               <h5 class="modal-title" id="modalGroup">
-                Agregar usuarios a el grupo:
+                Crear grupo
               </h5>
               <button
                 type="button"
@@ -82,10 +82,8 @@ export default {
   },
   async created() {
     const response2 = await userFindAllService();
-    console.log(response2);
     if (response2?.status) {
       this.users = response2.message;
-      console.log(response2.message);
     }
   },
   methods: {

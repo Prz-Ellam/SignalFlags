@@ -2,6 +2,7 @@ import { Types } from 'mongoose';
 import User from '../models/user.model.js';
 import Chat from '../models/chat.model.js';
 import Message from '../models/message.model.js';
+import UserSocket from '../models/userSocket.model.js';
 import { format } from 'date-fns';
 
 const ChatController = {};
@@ -25,12 +26,22 @@ export const chatAccessController = async (req, res) => {
     }
 
     try {
+        // Primero creamos el chat y lo guardamos
         const chat = new Chat({
             type: 'individual',
-            members: [userId, authUser._id]
+            members: [ userId, authUser._id ],
+            activeUsers: [ authUser._id ]
         });
 
         await chat.save();
+
+        // Verificamos si el usuario esta actualmente conectado
+        const existingSocket = await UserSocket.find({ user: userId });
+        if (existingSocket) {
+            chat.activeUsers.push(userId);
+            await chat.save();
+        }
+
         const populateChat = await Chat.findById(chat._id)
             .populate('members', '-password -__v')
             .select('-__v -groupAdmin -type');
@@ -215,7 +226,9 @@ export const findUserChatsController = async (req, res) => {
         const name = chat.name || chat.members.filter(member => member._id.toString() !== id).map(member => member.username).join(', ');
         const avatar = chat.avatar || chat.members.filter(member => member._id.toString() !== id)[0]?.avatar;
         const lastMessage = chat.latestMessage ? chat.latestMessage : { text: '', sender: {username: ''} };
-        const lastMessageTime = chat.latestMessage ? format(new Date(chat.latestMessage.createdAt), 'dd/MM/yy HH:mm').toLocaleString('es-MX', { timeZone: 'America/Monterrey' }) : '';
+        
+        // Cosas de la zona horaria
+        const lastMessageTime = chat.latestMessage ? format(new Date(new Date(chat.latestMessage.createdAt).getTime() - (3600 * 1000)), 'dd/MM/yy HH:mm') : '';
         
         const activeUser = chat.activeUsers.filter(activeUser => activeUser.toString() !== id);
         //console.log(chat.activeUsers);

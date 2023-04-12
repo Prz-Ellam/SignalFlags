@@ -1,10 +1,10 @@
 <template>
   <section class="container bg-accent my-4 rounded-3">
     <div class="row d-flex justify-content-center">
-      <form @submit.prevent="loginUser" novalidate class="p-5 col-lg-5 col-md-7">
+      <form @submit.prevent="submitLogin" novalidate class="p-5 col-lg-5 col-md-7">
         <RouterLink to="/" class="d-flex justify-content-center">
           <img
-            src="../assets/images/POI_SignalFalgs.png"
+            src="@/assets/images/POI_SignalFalgs.png"
             alt="Logo"
             class="w-25 img-fluid"
           >
@@ -79,7 +79,6 @@ import Swal from 'sweetalert2';
 import io from 'socket.io-client';
 import { useVuelidate } from '@vuelidate/core';
 import { required, email } from '@vuelidate/validators';
-import { userLoginService } from '@/services/user.service';
 import UserService from '@/services/user.service';
 
 export default {
@@ -104,16 +103,25 @@ export default {
     }
   },
   methods: {
-    async loginUser(event) {
+    async submitLogin(event) {
       this.v$.$touch();
 			if (this.v$.$error) {
-        Swal.fire({
-          text: 'Hola Mundo'
+        await Swal.fire({
+            icon: 'error',
+            title: '...Opps',
+            html: '<span class="text-light">Faltan parametros</span>',
+            confirmButtonColor: "#F23F43",
+            background: "#38393B",
+            customClass: {
+                title: 'text-light',
+                text: 'text-light',
+                confirmButton: 'btn btn-danger text-light shadow-none rounded-pill'
+            },
         });
 				return;
 			}
 
-      const response = await userLoginService({
+      const response = await UserService.login({
         email: this.email,
         password: this.password
       });
@@ -136,6 +144,19 @@ export default {
         window.socket = socket;
 
         this.$router.push('/');
+      }
+      else {
+        await Swal.fire({
+            icon: 'error',
+            title: response.message,
+            confirmButtonColor: "#F23F43",
+            background: "#38393B",
+            customClass: {
+                title: 'text-white',
+                text: 'text-white',
+                confirmButton: 'btn btn-danger text-white shadow-none rounded-pill'
+            },
+        });
       }
     }
   }

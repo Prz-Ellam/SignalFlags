@@ -6,7 +6,7 @@
     <div
       class="d-flex flex-md-row-reverse flex-column flex-grow-1 flex-shrink-1 overflow-auto"
     >
-      <section class="flex-grow-1 flex-shrink-1 overflow-auto">
+      <section class="flex-grow-1 flex-shrink-1 overflow-md-auto overflow-hidden">
         <RouterView />
       </section>
       <aside class="d-flex flex-grow-0 flex-shrink-1">

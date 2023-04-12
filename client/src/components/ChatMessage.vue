@@ -3,7 +3,7 @@
     :class="`d-flex my-3 align-items-center ${ ownMessage ? 'justify-content-end' : 'justify-content-start' }`">
     <img 
       v-if="!ownMessage" :src="`/api/v1/images/${ avatar }`" 
-      class="rounded-circle me-2" width="32" height="32" alt="A">
+      class="rounded-circle me-2 object-fit-cover" width="32" height="32" alt="A">
     <small 
       :class="`${ ownMessage ? 'bg-primary' : 'bg-secondary' } text-light p-2 rounded-pill overflow-auto`" 
       data-bs-toggle="tooltip" data-bs-placement="left"
@@ -25,4 +25,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped>
+.object-fit-cover {
+  object-fit: cover;
+}
+</style>

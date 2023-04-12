@@ -2,14 +2,15 @@
   <div class="bg-dark container-fluid h-100">
     <div class="row h-100">
       <section
-        class="col-md-4 col-sm-12 bg-dark h-100 d-flex align-items-center"
+        class="bg-dark col-md-4 col-sm-12 h-100 d-md-flex align-items-center"
+        :class="{ 'd-flex': isChatDrawerFocus, 'd-none': !isChatDrawerFocus }"
       >
         <div
           class="bg-accent d-flex flex-column w-100 rounded-3 p-3"
           style="height: 95%;"
         >
-          <div class="d-flex justify-content-between">
-            <div class="d-flex align-items-center">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
               <h2 class="text-center mb-0">Contactos</h2>
             </div>
             <div>
@@ -22,7 +23,7 @@
               </button>
             </div>
           </div>
-          <hr />
+          <hr>
           <div>
             <Autocomplete 
               :items="users"
@@ -38,6 +39,7 @@
                 chat.avatar instanceof Array ? chat.avatar[0] : chat.avatar
               }`"
               :username="chat.name"
+              :userId="chat.lastMessage.sender?._id"
               :lastMessage="
                 (user._id === chat.lastMessage.sender?._id
                   ? 'Tú: '
@@ -53,12 +55,19 @@
         </div>
       </section>
 
-      <section class="bg-dark col-sm-12 col-md h-100 d-flex align-items-center ps-0 pe-0 pe-md-2">
-        <section class="bg-accent d-flex flex-column col w-100 rounded-3 my-3" style="height: 95%">
+      <section 
+        class="bg-dark col-sm-12 col-md h-100 d-md-flex align-items-center px-3 ps-md-0 pe-md-3"
+        :class="{ 'd-flex': !isChatDrawerFocus, 'd-none': isChatDrawerFocus }"
+      >
+        <section class="bg-accent d-flex flex-column col w-100 rounded-3 p-md-0 my-3" 
+          style="height: 95%">
 
           <div class="d-flex justify-content-between align-items-center mt-3 px-3">
-
-            <div class="d-flex align-items-center ">
+            <div class="d-flex align-items-center">
+              <button class="btn border-0 ps-1 pe-2 d-md-none d-block" 
+                @click="isChatDrawerFocus = true">
+                <i class="bi fa-solid fa-chevron-left"></i>
+              </button>
               <img
                 v-if="selectedChat.avatar"
                 class="img-fluid rounded-circle actual-chat-user-image"
@@ -89,7 +98,7 @@
             <input
               type="text"
               id="message"
-              class="bg-secondary form-control border-0 shadow-none text-white rounded-4"
+              class="bg-secondary form-control border-0 shadow-none text-white "
               v-model="content"
               placeholder="Escribe un mensaje"
               aria-label="Enviar mensaje"
@@ -100,7 +109,9 @@
                 }
               "
             />
-            <button class="btn btn-dark" @click="sendMessage">Enviar</button>
+            <button class="btn btn-dark input-group-text" @click="sendMessage">
+              <i class="fa-solid fa-paper-plane-top"></i>Enviar
+            </button>
           </div>
         </section>
       </section>
@@ -142,12 +153,12 @@ export default {
       selectedChat: [],
       chats: [],
       messages: [],
-      users: []
+      users: [],
+      isChatDrawerFocus: true
     }
   },
   async created() {
     const response2 = await userFindAllWithoutChatService();
-    console.log(response2);
     if (response2?.status) {
       this.users = response2.message;
     }
@@ -160,25 +171,25 @@ export default {
     if (response?.status) {
       this.chats = response.message
     }
-
-    
   },
   mounted() {
     window.socket.on('message', (message) => {
       console.log(message)
     })
 
-    window.socket.on('pushNotification', async () => {
-      const response0 = await messageFindAllByChatService(this.actualChatId)
-      if (response0?.status) {
-        this.messages = response0.message
-        this.$nextTick(() => {
-          const messageBox = document.getElementById('message-box')
-          messageBox.scrollTo({
-            left: 0,
-            top: messageBox.scrollHeight,
+    window.socket.on('pushNotification', async (id) => {
+      if (this.actualChatId) {
+        const response0 = await messageFindAllByChatService(this.actualChatId);
+        if (response0?.status) {
+          this.messages = response0.message
+          this.$nextTick(() => {
+            const messageBox = document.getElementById('message-box')
+            messageBox.scrollTo({
+              left: 0,
+              top: messageBox.scrollHeight,
+            })
           })
-        })
+        }
       }
 
       const response = await chatFindAllByUserService(this.user._id)
@@ -186,7 +197,6 @@ export default {
         const chat2 = response.message.find(
           (chat) => chat._id === this.selectedChat?._id,
         )
-        console.log(chat2)
 
         this.chats = response.message
         const totalUnseenMessages = this.chats.reduce(
@@ -210,7 +220,6 @@ export default {
     },
     async sendAlert(chatId) {
       this.selectedChat = this.chats.find((chat) => chat._id === chatId)
-      console.log(this.selectedChat)
       const response = await messageFindAllByChatService(chatId)
       if (response?.status) {
         this.messages = response.message
@@ -227,6 +236,7 @@ export default {
       if (response2?.status) {
         this.chats = response2.message
       }
+      this.isChatDrawerFocus = false;
     },
     async sendMessage() {
       const response = await createMessage(
