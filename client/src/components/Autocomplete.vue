@@ -1,13 +1,11 @@
 <template>
-  <div class="autocomplete-container">
+  <div class="position-relative">
     <input
       type="text"
-      name="search"
       autocomplete="off"
-      class="bg-secondary form-control shadow-none rounded-4 mb-1"
+      class="bg-secondary form-control rounded-4 mb-1"
       placeholder="Buscar personas..."
       v-model="search"
-      
       @input="handleInput"
       @focus="handleFocus"
       @blur="handleBlur"
@@ -19,27 +17,19 @@
       class="autocomplete-results scrollbar bg-secondary rounded-3 position-absolute w-100"
       v-if="isOpen"
     >
-      <li v-if="isLoading" class="loading">
-        Loading results...
-      </li>
       <li
         v-for="(result, i) in results"
         :key="result._id"
-        @click="$event => { handleClick(result); }"
-        class="autocomplete-result"
-        :class="{ 'is-active': i === arrowCounter }"
+        :class="{ 'autocomplete-result': true, 'is-active': i === arrowCounter }"
+        @click="handleClick(result);"
       >
-        <div class="d-flex align-items-center">
-          <div class="text-start w-100 rounded-3">
-            <div class="p-1">
-              <img
-                class="img-fluid rounded-circle user-image"
-                :src="`/api/v1/images/${result.avatar}`"
-                alt="Perfil"
-              />
-              <span class="h6 ms-2 me-2">{{ result.username }}</span>
-            </div>
-          </div>
+        <div class="p-1">
+          <img
+            class="img-fluid rounded-circle user-image"
+            :src="`/api/v1/images/${result.avatar}`"
+            alt="Perfil"
+          />
+          <span class="h6 m-2">{{ result.username }}</span>
         </div>
       </li>
     </ul>
@@ -53,16 +43,10 @@ export default {
       search: '',
       results: [],
       isOpen: false,
-      arrowCounter: -1,
-      isLoading: false
+      arrowCounter: -1
     }
   },
   props: {
-    isAsync: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
     items: {
       type: Array,
       required: true,
@@ -80,24 +64,13 @@ export default {
   },
   methods: {
     handleInput(event) {
-      const val = event.target.value;
-      if (val == '') {
-        this.isOpen = false;
-        return;
-      }
-
-      const found = this.items.find(item => item.username === val);
-      if (found) {
+      if (this.search === '') {
         this.isOpen = false;
         return;
       }
 
       this.filterResults();
-      if (this.results.length > 0) {
-        this.isOpen = true
-      } else {
-        this.isOpen = false;
-      }
+      this.isOpen = this.results.length > 0 ? true : false;
     },
     handleFocus(event) {
       if (this.search === '') {
@@ -106,23 +79,15 @@ export default {
       }
 
       this.filterResults();
-      if (this.results.length > 0) {
-        this.isOpen = true
-      } else {
-        this.isOpen = false;
-      }
+      this.isOpen = this.results.length > 0 ? true : false;
     },
     handleBlur(event) {
       
     },
     handleClick(result) {
-      //this.search = result.username;
       this.search = '';
       this.isOpen = false;
       this.$emit('click', result._id);
-    },
-    sendAlert(num) {
-      console.log(num)
     },
     handleClickOutside(event) {
       if (!this.$el.contains(event.target)) {
@@ -136,32 +101,38 @@ export default {
       );
       return this.results;
     },
-    onArrowDown() {
+    onArrowDown(event) {
+      event.preventDefault();
       if (this.arrowCounter < this.results.length - 1) {
-        this.arrowCounter = this.arrowCounter + 1;
+        const autocompleteResults = document.querySelector('.autocomplete-results');
+        this.arrowCounter++;
+        this.search = this.results[this.arrowCounter]?.username ?? '';
+        if (this.arrowCounter >= 5)
+          autocompleteResults.scrollTop += 50;
       }
     },
-    onArrowUp() {
+    onArrowUp(event) {
+      event.preventDefault();
       if (this.arrowCounter >= 0) {
-        this.arrowCounter = this.arrowCounter - 1
+        const autocompleteResults = document.querySelector('.autocomplete-results');
+        this.arrowCounter--;
+        this.search = this.results[this.arrowCounter]?.username ?? '';
+        autocompleteResults.scrollTop -= 50;
       }
     },
     onEnter(event) {
       event.preventDefault();
-      this.search = this.results[this.arrowCounter].username;
+      //this.search = this.results[this.arrowCounter].username;
+      this.search = '';
+      this.$emit('click', this.results[this.arrowCounter]._id);
       this.arrowCounter = -1;
       this.isOpen = false;
-      console.log('isOpen false 140');
     },
   },
 }
 </script>
 
 <style scoped>
-.autocomplete-container {
-  position: relative;
-}
-
 .user-image {
   width: 32px;
   height: 32px;
@@ -194,7 +165,7 @@ export default {
 
 .autocomplete-results {
   padding: 0;
-  max-height: 300px;
+  max-height: 250px;
   overflow: auto;
   min-height: 50px;
   z-index: 10;

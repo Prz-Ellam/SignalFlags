@@ -37,7 +37,7 @@ export const chatAccessController = async (req, res) => {
 
         // Verificamos si el usuario esta actualmente conectado
         const existingSocket = await UserSocket.find({ user: userId });
-        if (existingSocket) {
+        if (existingSocket.length > 0) {
             chat.activeUsers.push(userId);
             await chat.save();
         }
@@ -62,7 +62,7 @@ export const chatAccessController = async (req, res) => {
 // chatCreateGroupController
 export const chatCreateController = async (req, res) => {
     const authUser = req.user;
-    const { members } = req.body;
+    const { name, avatar, members } = req.body;
 
     // TODO: Cuando se cree el chat validar si los usuarios involucrados estan conectados
 
@@ -87,12 +87,25 @@ export const chatCreateController = async (req, res) => {
         members.push(authUser._id);
 
         const groupChat = new Chat({
+            avatar,
+            name,
             type: 'group',
             members: members,
             groupAdmin: authUser._id
         });
 
         await groupChat.save();
+
+        const message = new Message({
+            text: 'Se creó el grupo',
+            sender: null,
+            chat: groupChat._id,
+            viewed_by: {
+                user: authUser._id
+            }
+        });
+
+        await message.save();
 
         res.status(201).json({
             status: true,

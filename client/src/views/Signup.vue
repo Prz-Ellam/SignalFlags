@@ -12,7 +12,7 @@
         <h1 class="text-center mb-4">Registrate</h1>
 
         <ProfilePicture 
-          @update="update"  
+          @update="update" 
         />
         <small class="d-block text-center text-danger mb-4" v-if="v$.avatar.$dirty && v$.avatar.required.$invalid">La foto de
           perfil es requerida</small>
@@ -154,7 +154,6 @@ export default {
   },
   methods: {
     update(image) {
-      console.log(image);
       this.avatar = image;
     },
     async submitSignup(event) {
@@ -187,8 +186,10 @@ export default {
       if (response?.status) {
         this.$store.dispatch('setToken', response.token);
         this.$store.dispatch('setUser', response.user);
-        localStorage.setItem('token', response.token);
         
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify(response.user));
+
         const token = response.token;
         const socket = io('/', { 
           auth: {

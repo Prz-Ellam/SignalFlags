@@ -1,8 +1,9 @@
 <template>
   <div class="bg-dark container-fluid h-100">
     <div class="row h-100">
+      
       <section
-        class="bg-dark col-md-4 col-sm-12 h-100 d-md-flex align-items-center"
+        class="col-md-4 col-sm-12 h-100 d-md-flex align-items-center"
         :class="{ 'd-flex': isChatDrawerFocus, 'd-none': !isChatDrawerFocus }"
       >
         <div
@@ -10,9 +11,7 @@
           style="height: 95%;"
         >
           <div class="d-flex align-items-center justify-content-between">
-            <div>
-              <h2 class="text-center mb-0">Contactos</h2>
-            </div>
+            <h2 class="text-center mb-0">Contactos</h2>
             <div>
               <button
                 class="btn border-0 mt-2 align-items-end"
@@ -56,10 +55,10 @@
       </section>
 
       <section 
-        class="bg-dark col-sm-12 col-md h-100 d-md-flex align-items-center px-3 ps-md-0 pe-md-3"
+        class="col-sm-12 col-md h-100 d-md-flex align-items-center px-3 ps-md-0 pe-md-3"
         :class="{ 'd-flex': !isChatDrawerFocus, 'd-none': isChatDrawerFocus }"
       >
-        <section class="bg-accent d-flex flex-column col w-100 rounded-3 p-md-0 my-3" 
+        <section class="bg-accent d-flex flex-column w-100 rounded-3 p-md-0 my-3" 
           style="height: 95%">
 
           <div class="d-flex justify-content-between align-items-center mt-3 px-3">
@@ -76,20 +75,28 @@
               <span class="h5 ms-3 mb-0">{{ selectedChat.name }}</span>
             </div>
             <div>
+              <button
+                class="btn border-0 position-relative fw-bold"
+                data-bs-toggle="modal"
+                data-bs-target="#modalAddUsers"
+              >
+                <i class="h4 ms-1 bi bi-pencil-square"></i>
+              </button>
               <button class="btn border-0 position-relative fw-bold">
                 <i class="h4 bi bi-camera-video"></i>
               </button>
             </div>
           </div>
-          <hr class="mx-3" />
+          <hr class="mx-3">
 
           <div class="overflow-auto p-2 h-100 chat" id="message-box">
             <ChatMessage
               v-for="message in messages"
               :key="message._id"
-              :ownMessage="message.sender._id === user._id"
+              :automaticMessage="message.sender === null"
+              :ownMessage="message.sender?._id === user._id"
               :content="message.text"
-              :avatar="message.sender.avatar"
+              :avatar="message.sender?.avatar"
             />
           </div>
           <hr class="mb-1 text-light" />
@@ -116,6 +123,7 @@
         </section>
       </section>
     </div>
+
     <AddUserToGroupChat />
   </div>
 </template>
@@ -126,6 +134,7 @@ import ChatMessage from '../components/ChatMessage.vue'
 import Autocomplete from '../components/Autocomplete.vue'
 import Buttons from '../components/Buttons.vue'
 import AddUserToGroupChat from '../components/AddUserToGroupChat.vue'
+import ChatDrawer from '../components/ChatDrawer.vue';
 
 import ChatService from '@/services/chat.service';
 

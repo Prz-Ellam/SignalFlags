@@ -17,6 +17,7 @@
           </label>
           <input
             v-model="email"
+            id="email"
             type="email"
             name="email"
             class="bg-secondary form-control rounded-4"
@@ -40,6 +41,7 @@
           </label>
           <input
             v-model="password"
+            id="password"
             type="password"
             name="password"
             class="bg-secondary form-control rounded-4"
@@ -108,7 +110,7 @@ export default {
 			if (this.v$.$error) {
         await Swal.fire({
             icon: 'error',
-            title: '...Opps',
+            title: '...Oops',
             html: '<span class="text-light">Faltan parametros</span>',
             confirmButtonColor: "#F23F43",
             background: "#38393B",
@@ -126,26 +128,7 @@ export default {
         password: this.password
       });
 
-      if (response?.status) {
-
-        this.$store.dispatch('setToken', response.token);
-        this.$store.dispatch('setUser', response.user);
-
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('user', JSON.stringify(response.user));
-
-        const token = response.token;
-        const socket = io('/', { 
-          auth: {
-            token
-          },
-          transports: [ 'websocket' ]
-        });
-        window.socket = socket;
-
-        this.$router.push('/');
-      }
-      else {
+      if (!response?.status) {
         await Swal.fire({
             icon: 'error',
             title: response.message,
@@ -157,7 +140,25 @@ export default {
                 confirmButton: 'btn btn-danger text-white shadow-none rounded-pill'
             },
         });
+        return;
       }
+
+      this.$store.dispatch('setToken', response.token);
+      this.$store.dispatch('setUser', response.user);
+
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('user', JSON.stringify(response.user));
+
+      const token = response.token;
+      const socket = io('/', { 
+        auth: {
+          token
+        },
+        transports: [ 'websocket' ]
+      });
+      window.socket = socket;
+
+      this.$router.push('/');
     }
   }
 };

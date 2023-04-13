@@ -34,7 +34,7 @@ export const chatAccessService = async (userId) => {
     }
 }
 
-export const chatCreateChatGroupService = async (members) => {
+export const chatCreateChatGroupService = async (chat) => {
     try {
         const configuration = {
             method: 'POST',
@@ -42,7 +42,7 @@ export const chatCreateChatGroupService = async (members) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            data: JSON.stringify({ members })
+            data: JSON.stringify(chat)
         }
         const response = await axios(configuration);
         return response.data;

@@ -6,44 +6,65 @@
       tabindex="-1"
       aria-labelledby="modalGroup"
       aria-hidden="true"
+      ref="addUserToGroupChatModal"
     >
       <div class="modal-dialog">
         <div class="modal-content bg-accent">
-          <form>
+          <form @submit.prevent="submitChat">
             <div class="modal-header">
               <h5 class="modal-title" id="modalGroup">
                 Crear grupo
               </h5>
               <button
                 type="button"
-                class="btn-close"
+                class="btn-close text-light"
                 data-bs-dismiss="modal"
                 aria-label="Close"
               ></button>
             </div>
             <div class="modal-body">
               <div class="mb-3">
+
+                <ProfilePicture 
+                  @update="update" 
+                />
+
+                <label for="name" role="button" class="form-label">
+                  Nombre del chat
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  id="name"
+                  class="bg-secondary form-control rounded-4"
+                  v-model="name"
+                >
+
                 <label for="message-text" class="col-form-label">
                   Escriba un nombre para agregar miembros al chat.
                 </label>
-                <div class="input-group">
-                  <Autocomplete 
-                    :items="users"
-                    @click="selectedUser"/>
-                </div>
-
-                <div 
-                  v-for="user in selectedUsers"
-                  class="d-flex align-items-center justify-content-between alert bg-dark my-1 py-2" 
-                  role="alert">
-                  <div>
-                    <img width="40" height="40" class="me-2 rounded-circle"
-                    style="object-fit: cover;"
-                    :src="`/api/v1/images/${ user.avatar }`" />
-                    <span>{{ user.username }}</span>
-                  </div>
-                  <div class="d-inline-flex bg-danger p-2 rounded-circle" role="button">
-                    <i class="fa-solid fa-trash"></i>
+                <Autocomplete 
+                  :items="users"
+                  @click="selectedUser"
+                />
+               
+                <div class="overflow-auto" style="max-height: 200px;">
+                  <div 
+                    v-for="user in selectedUsers"
+                    class="d-flex align-items-center justify-content-between alert bg-dark my-1 py-2" 
+                    role="alert">
+                    <div>
+                      <img width="40" height="40" class="me-2 rounded-circle"
+                      style="object-fit: cover;"
+                      :src="`/api/v1/images/${ user.avatar }`" />
+                      <span>{{ user.username }}</span>
+                    </div>
+                    <div class="d-inline-flex bg-danger p-2 rounded-circle" 
+                      role="button"
+                      @click=""
+                    >
+                      <i class="fa-solid fa-trash"></i>
+                    </div>
                   </div>
                 </div>
 
@@ -52,10 +73,11 @@
             </div>
             <div class="modal-footer">
               <button
-                class="btn btn-primary border-0 m-2 rounded-3"
-                type="button"
+                class="btn btn-primary text-light border-0 m-2 rounded-3"
+                type="submit"
+                data-bs-dismiss="modal"
               >
-                <span>Crear chat grupal</span>
+                Crear chat grupal
               </button>
             </div>
           </form>
@@ -66,16 +88,20 @@
 </template>
 
 <script>
-import Autocomplete from '../components/Autocomplete.vue'
+import Autocomplete from '../components/Autocomplete.vue';
+import ProfilePicture from '../components/ProfilePicture.vue';
 import { userFindAllService, userFindOneService } from '../services/user.service';
 import { chatCreateChatGroupService } from '../services/chat.service';
 
 export default {
   components: {
     Autocomplete,
+    ProfilePicture
   },
   data() {
     return {
+      avatar: '',
+      name: '',
       users: [],
       selectedUsers: []
     }
@@ -87,6 +113,20 @@ export default {
     }
   },
   methods: {
+    update(image) {
+      this.avatar = image;
+    },
+    async submitChat() {
+      const members = this.selectedUsers.map(({ _id }) => _id);
+      console.log(members);
+      await chatCreateChatGroupService({
+        avatar: this.avatar,
+        name: this.name,
+        members: members
+      });
+      
+      //this.$refs.addUserToGroupChatModal.hide();
+    },
     async selectedUser(userId) {
       const foundUser = this.selectedUsers.find(user => user._id === userId);
       if (!foundUser) {
@@ -103,4 +143,4 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped></style>

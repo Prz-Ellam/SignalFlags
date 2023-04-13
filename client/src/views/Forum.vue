@@ -189,6 +189,7 @@
                           </div>
                           <div class="col-5">
                             <hr />
+                            Inicio
                           </div>
                         </div>
 

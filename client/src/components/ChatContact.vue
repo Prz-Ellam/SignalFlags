@@ -6,11 +6,9 @@
           <img :src="image" alt="Avatar" class="rounded-circle me-3">
           <span :class="dotClasses"></span>
         </div>
-        <div class="overflow-hidden text-nowrap text-truncate" :class="{ 'text-muted': unseenMessagesCount === 0 }">
+        <div :class="{ 'text-nowrap text-truncate': true, 'text-muted': unseenMessagesCount === 0 }">
           <p class="h6 mb-0 text-light">{{ username }}</p>
-          <small :class="{ 'mb-0': true, 'fw-bold': unseenMessagesCount !== 0, 'text-muted': unseenMessagesCount === 0 }">
-            {{ lastMessage }}
-          </small>
+          <small :class="lastMessageClasses">{{ lastMessage }}</small>
         </div>
       </div>
       <div>
@@ -50,6 +48,13 @@ export default {
         'badge rounded-pill bg-danger float-end': true,
         'hidden': this.unseenMessagesCount === 0
       };
+    },
+    lastMessageClasses() {
+      return {
+        'mb-0': true,
+        'fw-bold': this.unseenMessagesCount !== 0,
+        'text-muted': this.unseenMessagesCount === 0
+      }
     }
   },
   methods: {
