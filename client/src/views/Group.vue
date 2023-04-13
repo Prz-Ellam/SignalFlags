@@ -5,9 +5,10 @@
         <div>
           <h3>Mis grupos</h3>
           <hr>
-          <div class="row" id="group-container">
+          <div class="row">
             <GroupCard 
               v-for="group in groups"
+              class="col-sm-6 col-md-4 col-lg-3"
               :bind="group._id"
               :name="group.name"
               :avatar="group.avatar"
@@ -148,37 +149,37 @@ export default {
         {
           _id: 1,
           name: '003 E2023 Programación orientada a la internet CLASE ORDINARIA',
-          avatar: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Syd_barrett.jpg'
+          avatar: 'https://www.intel.es/content/dam/www/central-libraries/us/en/images/language-icon-lvl-2-abstract-bg.png.rendition.intel.web.864.486.png'
         },
         {
           _id: 2,
           name: '003 E2023 Programación orientada a la internet CLASE ORDINARIA',
-          avatar: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Syd_barrett.jpg'
+          avatar: 'https://www.intel.es/content/dam/www/central-libraries/us/en/images/language-icon-lvl-2-abstract-bg.png.rendition.intel.web.864.486.png'
         },
         { 
           _id: 3,
           name: '003 E2023 Programación orientada a la internet CLASE ORDINARIA',
-          avatar: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Syd_barrett.jpg'
+          avatar: 'https://www.intel.es/content/dam/www/central-libraries/us/en/images/language-icon-lvl-2-abstract-bg.png.rendition.intel.web.864.486.png'
         },
         { 
           _id: 4,
           name: '003 E2023 Programación orientada a la internet CLASE ORDINARIA',
-          avatar: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Syd_barrett.jpg'
+          avatar: 'https://www.intel.es/content/dam/www/central-libraries/us/en/images/language-icon-lvl-2-abstract-bg.png.rendition.intel.web.864.486.png'
         },
         { 
           _id: 5,
           name: '003 E2023 Programación orientada a la internet CLASE ORDINARIA',
-          avatar: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Syd_barrett.jpg'
+          avatar: 'https://www.intel.es/content/dam/www/central-libraries/us/en/images/language-icon-lvl-2-abstract-bg.png.rendition.intel.web.864.486.png'
         },
         { 
           _id: 6,
           name: '003 E2023 Programación orientada a la internet CLASE ORDINARIA',
-          avatar: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Syd_barrett.jpg'
+          avatar: 'https://www.intel.es/content/dam/www/central-libraries/us/en/images/language-icon-lvl-2-abstract-bg.png.rendition.intel.web.864.486.png'
         },
         { 
           _id: 7,
           name: '003 E2023 Programación orientada a la internet CLASE ORDINARIA',
-          avatar: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Syd_barrett.jpg'
+          avatar: 'https://www.intel.es/content/dam/www/central-libraries/us/en/images/language-icon-lvl-2-abstract-bg.png.rendition.intel.web.864.486.png'
         }
       ]
     }

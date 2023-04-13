@@ -64,6 +64,12 @@ export default {
     return {
       chats: []
     }
+  },
+  created() {
+    //this.chats = ChatService.getByUser();
+  },
+  methods: {
+
   }
 }
 </script>
