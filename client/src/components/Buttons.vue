@@ -1,7 +1,7 @@
 <template>
   <div class="dropup-center dropup">
     <button class="btn border-0" data-bs-toggle="dropdown" aria-expanded="false" style="transform: rotateY(0deg) rotate(45deg);" >
-      <i class="h4 mb-0 me-1 bi bi-paperclip" style="color: #6d6f7d;"></i>
+      <i class="h4 mb-0 me-1 bi bi-paperclip"></i>
     </button>
     <ul
       class="dropdown-menu text-center border-0"
@@ -23,7 +23,7 @@
             </button>
           </div>
           <input
-            type="file" multiple="multiple"
+            type="file" multiprelativele="multiple"
             class="form-control position-absolute"
             name="chatFiles"
             id="chatFiles"

@@ -6,15 +6,15 @@
   </div>
   <div
     v-else 
-    :class="`d-flex my-3 align-items-center ${ ownMessage ? 'justify-content-end' : 'justify-content-start' }`">
+    :class="`d-flex my-3 ${ ownMessage ? 'justify-content-end' : 'justify-content-start' }`">
     <img 
       v-if="!ownMessage" :src="`/api/v1/images/${ avatar }`" 
       class="rounded-circle me-2 object-fit-cover" width="32" height="32" alt="Img">
     <small 
-      :class="`${ ownMessage ? 'bg-primary' : 'bg-secondary' } text-light p-2 rounded-pill overflow-auto`" 
-      data-bs-toggle="tooltip" data-bs-placement="left"
-      data-bs-title="26 de enero de 2023 a las 02:21"
-      ref="message"  
+      :class="`${ ownMessage ? 'bg-primary' : 'bg-secondary' } p-2 rounded-pill overflow-auto`" 
+      data-bs-toggle="tooltip" 
+      :data-bs-placement="ownMessage ? 'left' : 'right'"
+      :data-bs-title="new Date(date).toLocaleString('es-MX', 'America/Monterrey')"  
     >
       {{ content }}
     </small>
@@ -22,15 +22,20 @@
 </template>
 
 <script>
+import { Tooltip } from 'bootstrap'
+
 export default {
   mounted() {
-    
+    new Tooltip(document.body, {
+      selector: "[data-bs-toggle='tooltip']",
+    });
   },
 	props: [
     'ownMessage',
     'content',
     'avatar',
-    'automaticMessage'
+    'automaticMessage',
+    'date'
 	],
 	emits: [
 	],

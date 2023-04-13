@@ -35,4 +35,7 @@ userRouter.patch('/:id', authMiddleware, UserController.userUpdateController);
 // Busca todos los chats de un usuario
 userRouter.get('/:id/chats', validateIdMiddleware, authMiddleware, findUserChatsController);
 
+// Busca todas las tareas de un usuario
+userRouter.get('/:id/homeworks');
+
 export default userRouter;

@@ -9,4 +9,6 @@ groupRouter.delete('/:id');
 
 // Buscar todos los grupos de un usuario
 
+groupRouter.get('/:id/homeworks');
+
 export default groupRouter;

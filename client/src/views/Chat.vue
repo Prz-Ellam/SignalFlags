@@ -40,9 +40,12 @@
               :username="chat.name"
               :userId="chat.lastMessage.sender?._id"
               :lastMessage="
-                (user._id === chat.lastMessage.sender?._id
+                (chat.lastMessage.sender?._id) ?
+                ((user._id === chat.lastMessage.sender?._id
                   ? 'Tú: '
                   : chat.lastMessage.sender?.username + ': ') +
+                chat.lastMessage?.text)
+                :
                 chat.lastMessage?.text
               "
               :lastMessageTime="chat.lastMessageTime"
@@ -97,6 +100,7 @@
               :ownMessage="message.sender?._id === user._id"
               :content="message.text"
               :avatar="message.sender?.avatar"
+              :date="message.createdAt"
             />
           </div>
           <hr class="mb-1 text-light" />
@@ -105,7 +109,7 @@
             <input
               type="text"
               id="message"
-              class="bg-secondary form-control border-0 shadow-none text-white "
+              class="bg-secondary form-control border-0 shadow-none text-white"
               v-model="content"
               placeholder="Escribe un mensaje"
               aria-label="Enviar mensaje"

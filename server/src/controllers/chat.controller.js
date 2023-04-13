@@ -107,6 +107,14 @@ export const chatCreateController = async (req, res) => {
 
         await message.save();
 
+        const unseenMessageCount = await Message.find({ 
+            chat: groupChat._id, 'viewed_by.user': { $ne: authUser._id } }).length;
+
+        await Chat.findOneAndUpdate({ _id: groupChat._id }, { 
+            latestMessage: message._id,
+            unseenMessages: unseenMessageCount
+        });
+
         res.status(201).json({
             status: true,
             message: 'El chat se creó éxitosamente'

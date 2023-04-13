@@ -35,11 +35,9 @@
           <input v-model="username" type="text" name="username"
             class="bg-secondary form-control rounded-4">
           <small class="text-danger" v-if="v$.username.$dirty && v$.username.required.$invalid">El nombre de
-            usuario es
-            requerido</small>
+            usuario es requerido</small>
           <small class="text-danger" v-if="v$.username.$dirty && v$.username.minLength.$invalid">El nombre de
-            usuario debe
-            tener al menos 3 caracteres</small>
+            usuario debe tener al menos 3 caracteres</small>
         </div>
 
         <div class="mb-4">
@@ -180,9 +178,8 @@ export default {
         username: this.username,
         password: this.password,
         confirmPassword: this.confirmPassword
-      }
-      //await UserService.create(user);
-      const response = await createUser(user);
+      };
+      const response = await UserService.create(user);
       if (response?.status) {
         this.$store.dispatch('setToken', response.token);
         this.$store.dispatch('setUser', response.user);

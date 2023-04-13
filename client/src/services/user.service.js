@@ -20,7 +20,22 @@ class UserService {
     }
 
     static async create() {
-
+        try {
+            const configuration = {
+                method: 'POST',
+                url: '/api/v1/users',
+                headers: { 
+                'Content-Type': 'application/json'
+                },
+                data : JSON.stringify(user)
+            };
+    
+            const response = await axios(configuration);
+            return response.data;
+        }
+        catch (exception) {
+            return exception.response.data;
+        }
     }
 
     static async update() {

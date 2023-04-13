@@ -135,9 +135,9 @@ export default {
             confirmButtonColor: "#F23F43",
             background: "#38393B",
             customClass: {
-                title: 'text-white',
-                text: 'text-white',
-                confirmButton: 'btn btn-danger text-white shadow-none rounded-pill'
+              title: 'text-white',
+              text: 'text-white',
+              confirmButton: 'btn btn-danger text-white shadow-none rounded-pill'
             },
         });
         return;
