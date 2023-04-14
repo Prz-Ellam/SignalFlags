@@ -1,8 +1,6 @@
 <template>
-  <div>
     <div
       class="modal fade modal-lg pt-5"
-      id="AddUsuertoGroupChat"
       tabindex="-1"
       aria-labelledby="modalGroup"
       aria-hidden="true"
@@ -84,7 +82,6 @@
         </div>
       </div>
      </div>
-  </div>
 </template>
 
 <script>

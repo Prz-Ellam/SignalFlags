@@ -11,7 +11,7 @@
           <span class="h5 ms-3 mb-0">{{ selectedChat.name }}</span>
         </div>
         <div>
-          <button class="btn border-0 position-relative fw-bold" data-bs-toggle="modal" data-bs-target="#modalAddUsers">
+          <button class="btn border-0 position-relative fw-bold" data-bs-toggle="modal" data-bs-target="#exampleModal">
             <i class="h4 ms-1 bi bi-pencil-square"></i>
           </button>
           <button class="btn border-0 position-relative fw-bold">

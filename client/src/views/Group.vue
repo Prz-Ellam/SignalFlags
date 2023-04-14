@@ -17,112 +17,68 @@
         <h3>Unirse a un grupo</h3>
         <hr>
         <div class="row">
+          
           <div class="col-sm-6 col-md-4 col-lg-3">
-              <div
-                class="mb-5 rounded-3 box_button"
-                style="height: 240px;"
-              >
+            <div class="mb-4 text-white d-flex flex-column justify-content-center align-items-center shadow-sm rounded-3"
+              style="background-color: #38393b; height: 240px;"
+            >
+              <div class="d-flex align-items-center" style="height: 66%">
                 <img
-                  src="../assets/images/POI_SignalFalgs.png"
-                  width="150"
-                  height="150"
-                  class="rounded float-left"
-                  alt="..."
+                src="../assets/images/POI_SignalFalgs.png"
+                class="rounded group-img"
+                alt="..."
                 />
-                <h6 class="text-white pb-5 fw-bolder">Crea un grupo.</h6>
-                <button
-                  type="button"
-                  class="flex-fill bd-highlight btn btn-primary rounded-3"
-                  data-bs-toggle="modal"
-                  data-bs-target="#modalCreateGroup"
-                >
-                  Crear
-                </button>
+              </div>
+              <div class="d-flex align-items-start px-3" style="height: 33%">
+                <div>
+                  <h6 class="text-white">Crea un grupo.</h6>
+                    <button
+                      type="button"
+                      class="text-light rounded-pill flex-fill bd-highlight btn btn-primary rounded-3"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modalCreateGroup"
+                      >
+                      Crear
+                    </button>
+                </div>
               </div>
             </div>
-            <div class="col-sm-6 col-md-4 col-lg-3">
-              <div
-                class="mb-5 rounded-3 box_button"
-                style="height: 240px;"
-              >
+          </div>
+
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="mb-4 text-white d-flex flex-column justify-content-center align-items-center shadow-sm rounded-3"
+              style="background-color: #38393b; height: 240px;"
+            >
+              <div class="d-flex align-items-center" style="height: 50%">
                 <img
-                  src="../assets/images/POI_SignalFalgs.png"
-                  width="150"
-                  height="150"
-                  class="rounded float-left"
-                  alt="..."
+                src="../assets/images/POI_SignalFalgs.png"
+                class="rounded group-img"
+                alt="..."
                 />
-                <h6 class="text-white fw-bolder">Unete a un grupo privado.</h6>
-                <form @submit.prevent="joinGroup" novalidate>
+              </div>
+              <div class="d-flex align-items-center px-3" style="height: 50%">
+                <div>
+                  <h6 class="text-white">Unete a un grupo público</h6>
                   <input
                     type="text"
                     name="code"
                     id="code"
-                    class="bg-accent border-0 rounded-2 shadow-none text-white"
+                    class="py-0 form-control bg-accent border-0 mb-2 rounded-2 shadow-none text-white"
                     placeholder="código"
                   />
-                  <br />
-                  <br />
-                  <button
-                    type="submit"
-                    class="flex-fill bd-highlight btn btn-primary rounded-3"
-                  >
-                    Unirse
-                  </button>
-                </form>
+                    <button
+                      type="button"
+                      class="text-light rounded-pill flex-fill bd-highlight btn btn-primary rounded-3"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modalCreateGroup"
+                      >
+                      Crear
+                    </button>
+                </div>
               </div>
             </div>
+          </div>
 
-            <div class="col-sm-6 col-md-4 col-lg-3">
-              <div
-                class="mb-5 rounded-3 box_button"
-                style="height: 240px;"
-              >
-                <img
-                  src="../assets/images/POI_SignalFalgs.png"
-                  width="150"
-                  height="150"
-                  class="rounded mt-3"
-                  alt="..."
-                />
-                <h6 class="fw-bolder">Nombre grupo público</h6>
-                <label for="">Admin</label>
-              </div>
-            </div>
-
-            <div class="col-sm-6 col-md-4 col-lg-3">
-              <div
-                class="mb-5 rounded-3 box_button"
-                style="height: 240px;"
-              >
-                <img
-                  src="../assets/images/POI_SignalFalgs.png"
-                  width="150"
-                  height="150"
-                  class="rounded mt-3"
-                  alt="..."
-                />
-                <h6 class="fw-bolder">Nombre grupo público</h6>
-                <label for="">Admin</label>
-              </div>
-            </div>
-
-            <div class="col-sm-6 col-md-4 col-lg-3">
-              <div
-                class="mb-5 rounded-3 box_button"
-                style="height: 240px;"
-              >
-                <img
-                  src="../assets/images/POI_SignalFalgs.png"
-                  width="150"
-                  height="150"
-                  class="rounded mt-3"
-                  alt="..."
-                />
-                <h6 class="fw-bolder">Nombre grupo público</h6>
-                <label for="">Admin</label>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -184,14 +140,6 @@ export default {
 </script>
 
 <style>
-.text {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-}
-
 .group-img {
   width: 100px;
   height: 100px;

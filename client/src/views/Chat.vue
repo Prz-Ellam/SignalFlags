@@ -87,7 +87,8 @@
       </section> -->
     </div>
 
-    <AddUserToGroupChat />
+    <AddUserToGroupChat id="AddUsuertoGroupChat" />
+    <UpdateChatGroup />
   </section>
 </template>
 
@@ -99,6 +100,7 @@ import Buttons from '../components/Buttons.vue'
 import AddUserToGroupChat from '../components/AddUserToGroupChat.vue'
 import ChatList from '../components/ChatList.vue';
 import ChatBox from '../components/ChatBox.vue';
+import UpdateChatGroup from '../components/UpdateChatGroup.vue';
 
 import ChatService from '@/services/chat.service';
 
@@ -118,7 +120,8 @@ export default {
     AddUserToGroupChat,
     Buttons,
     ChatList,
-    ChatBox
+    ChatBox,
+    UpdateChatGroup
   },
   data() {
     return {

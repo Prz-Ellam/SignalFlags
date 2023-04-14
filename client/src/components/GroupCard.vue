@@ -23,6 +23,14 @@ export default {
 </script>
 
 <style scoped>
+.text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
 .box-button {
   background-color: #38393b;
   height: 240px;
