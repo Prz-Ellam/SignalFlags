@@ -219,7 +219,6 @@ export default {
   background-color: #6d6f7d;
 }
 
-
 .group-srcoll::-webkit-scrollbar {
   width: 8px;
   border-radius: 1em;

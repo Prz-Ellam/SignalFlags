@@ -59,7 +59,17 @@ export default {
   },
   methods: {
     handleClick(event) {
-      this.$emit('click', this.chatId);
+      this.$emit('click', {
+        chatId: this.chatId,
+        userId: this.userId,
+        avatar: this.image,
+        name: this.username,
+        lastMessage: this.lastMessage,
+        lastMessageTime: this.lastMessageTime,
+        unseenMessagesCount: this.unseenMessagesCount,
+        active: this.active,
+        type: this.type
+      });
     },
     userLastMessage() {
       //const user = JSON.parse(localStorage.getItem('user'));

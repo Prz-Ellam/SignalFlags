@@ -1,63 +1,22 @@
 <template>
   <div class="bg-dark container-fluid h-100">
     <div class="row h-100">
-      
-      <section
-        class="col-md-4 col-sm-12 h-100 d-md-flex align-items-center"
+      <ChatList 
+        class="col-md-4 col-sm-12 d-md-flex"
         :class="{ 'd-flex': isChatDrawerFocus, 'd-none': !isChatDrawerFocus }"
-      >
-        <div
-          class="bg-accent d-flex flex-column w-100 rounded-3 p-3"
-          style="height: 95%;"
-        >
-          <div class="d-flex align-items-center justify-content-between">
-            <h2 class="text-center mb-0">Contactos</h2>
-            <div>
-              <button
-                class="btn border-0 mt-2 align-items-end"
-                data-bs-toggle="modal"
-                data-bs-target="#AddUsuertoGroupChat"
-              >
-                <i class="h4 me-1 bi bi-pencil-square"></i>
-              </button>
-            </div>
-          </div>
-          <hr>
-          <div>
-            <Autocomplete 
-              :items="users"
-              @click="print"/>
-          </div>
-          <div class="overflow-auto chat">
-            <ChatContact
-              v-for="chat in chats"
-              :key="chat._id"
-              :chatId="chat._id"
-              :type="chat.type"
-              :image="`/api/v1/images/${
-                chat.avatar instanceof Array ? chat.avatar[0] : chat.avatar
-              }`"
-              :username="chat.name"
-              :userId="chat.lastMessage.sender?._id"
-              :lastMessage="
-                (chat.lastMessage.sender?._id) ?
-                ((user._id === chat.lastMessage.sender?._id
-                  ? 'Tú: '
-                  : chat.lastMessage.sender?.username + ': ') +
-                chat.lastMessage?.text)
-                :
-                chat.lastMessage?.text
-              "
-              :lastMessageTime="chat.lastMessageTime"
-              :unseenMessagesCount="chat.unseenMessagesCount"
-              :active="chat.active"
-              @click="sendAlert"
-            />
-          </div>
-        </div>
-      </section>
+        :chats="chats"
+        :users="users"
+        @onChatSelected="chatSelected"
+      />
 
-      <section 
+      <ChatBox 
+        class="col-sm-12 col-md d-md-flex"
+        :class="{ 'd-flex': !isChatDrawerFocus, 'd-none': isChatDrawerFocus }"
+        :selectedChat="selectedChat"
+        :messages="messages"
+        @onSendMessage="sendMessage"
+      />
+      <!-- <section 
         class="col-sm-12 col-md h-100 d-md-flex align-items-center px-3 ps-md-0 pe-md-3"
         :class="{ 'd-flex': !isChatDrawerFocus, 'd-none': isChatDrawerFocus }"
       >
@@ -125,7 +84,7 @@
             </button>
           </div>
         </section>
-      </section>
+      </section> -->
     </div>
 
     <AddUserToGroupChat />
@@ -138,7 +97,8 @@ import ChatMessage from '../components/ChatMessage.vue'
 import Autocomplete from '../components/Autocomplete.vue'
 import Buttons from '../components/Buttons.vue'
 import AddUserToGroupChat from '../components/AddUserToGroupChat.vue'
-import ChatDrawer from '../components/ChatDrawer.vue';
+import ChatList from '../components/ChatList.vue';
+import ChatBox from '../components/ChatBox.vue';
 
 import ChatService from '@/services/chat.service';
 
@@ -156,14 +116,16 @@ export default {
     ChatMessage,
     Autocomplete,
     AddUserToGroupChat,
-    Buttons
+    Buttons,
+    ChatList,
+    ChatBox
   },
   data() {
     return {
       user: {},
       content: '',
       actualChatId: '',
-      selectedChat: [],
+      selectedChat: {},
       chats: [],
       messages: [],
       users: [],
@@ -178,9 +140,7 @@ export default {
 
     this.user = JSON.parse(localStorage.getItem('user'));
 
-    this.chats = await ChatService.findByUser(this.user._id);
-
-    const response = await chatFindAllByUserService(this.user._id)
+    const response = await ChatService.findByUser(this.user._id);
     if (response?.status) {
       this.chats = response.message
     }
@@ -231,19 +191,20 @@ export default {
     async print(id) {
       await chatAccessService(id);
     },
-    async sendAlert(chatId) {
-      this.selectedChat = this.chats.find((chat) => chat._id === chatId)
-      const response = await messageFindAllByChatService(chatId)
+    async chatSelected(chat) {
+      this.selectedChat = chat;
+     
+      // this.selectedChat = this.chats.find((chat) => chat._id === chatId)
+      const response = await messageFindAllByChatService(this.selectedChat.chatId)
       if (response?.status) {
-        this.messages = response.message
-        this.actualChatId = chatId
-        this.$nextTick(() => {
-          const messageBox = document.getElementById('message-box')
-          messageBox.scrollTo({
-            left: 0,
-            top: messageBox.scrollHeight,
-          })
-        })
+         this.messages = response.message
+         this.$nextTick(() => {
+           const messageBox = document.getElementById('message-box')
+           messageBox.scrollTo({
+             left: 0,
+             top: messageBox.scrollHeight,
+           })
+         })
       }
       const response2 = await chatFindAllByUserService(this.user._id)
       if (response2?.status) {
@@ -251,14 +212,15 @@ export default {
       }
       this.isChatDrawerFocus = false;
     },
-    async sendMessage() {
+    async sendMessage(content) {
+      console.log(content);
       const response = await createMessage(
-        { text: this.content },
-        this.actualChatId,
+        { text: content.text },
+        content.chatId,
       )
       if (response?.status) {
-        this.content = ''
-        const response = await messageFindAllByChatService(this.actualChatId)
+        //this.content = ''
+        const response = await messageFindAllByChatService(content.chatId);
         if (response?.status) {
           this.messages = response.message
         }
@@ -275,62 +237,4 @@ export default {
 </script>
 
 <style scoped>
-.chat-drawer:hover {
-  background-color: #232323;
-  cursor: pointer;
-}
-
-.chat-drawer a div img {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-}
-
-.chat-drawer a div div {
-  text-overflow: ellipsis;
-}
-
-.chat-drawer adiv div small {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.chat-drawer a div div p {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.actual-chat-user-image {
-  width: 38px;
-  height: 38px;
-  object-fit: cover;
-}
-
-.visibility-hidden {
-  visibility: hidden;
-}
-
-.chat {
-  scrollbar-color: #ffb800 #6d6f7d !important;
-  scrollbar-width: thin !important;
-}
-
-.chat::-webkit-scrollbar {
-  width: 8px;
-  border-radius: 1em;
-  background-color: #6d6f7d;
-  border-radius: 1em;
-}
-
-.chat::-webkit-scrollbar-thumb {
-  border-radius: 1em;
-  background-color: #6d6f7d;
-  background: #ffb800;
-  border-radius: 1em;
-}
-
-.chat::-webkit-scrollbar-thumb:hover {
-  visibility: visible;
-  background: #ffb800;
-}
 </style>

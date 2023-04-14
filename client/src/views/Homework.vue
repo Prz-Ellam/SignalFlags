@@ -2,8 +2,8 @@
   <div class="bg-dark container-fluid h-100 overflow-auto">
     <div class="row h-100">
       <section class="col h-100 align-items-center p-3 text-center">
-        <div class=" box bg-accent group-srcoll rounded-3 ">
-          <ul class="nav nav-pills mb-3 pt-1 px-2 bg-accent rounded-1" id="pills-tab" role="tablist">
+        <div class="box bg-accent group-srcoll rounded-3 ">
+          <ul class="nav nav-pills mb-3 pt-1 px-2 bg-accent rounded-1" role="tablist">
             <li class="nav-item" role="presentation">
               <button class="nav-link active rounded-0 bg-accent" id="pills-asign_homework-tab" data-bs-toggle="pill"
                 data-bs-target="#pills-asign_homework" type="button" role="tab" aria-controls="pills-asign_homework"
