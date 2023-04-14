@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-dark container-fluid h-100">
+  <section class="bg-dark container-fluid h-100">
     <div class="row h-100">
       <ChatList 
         class="col-md-4 col-sm-12 d-md-flex"
@@ -88,7 +88,7 @@
     </div>
 
     <AddUserToGroupChat />
-  </div>
+  </section>
 </template>
 
 <script>

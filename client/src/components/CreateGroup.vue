@@ -20,7 +20,7 @@
                   </label>
                   <input
                     type="text bg-secondary"
-                    class="form-control shadow-none bg-secondary border-0 rounded-2 text-white"
+                    class="form-control shadow-none bg-secondary border-0 rounded-4 text-white"
                     id="recipient-name"
                     placeholder="Asigne un nombre a su grupo"
                     v-model="groupName"
@@ -38,7 +38,7 @@
                   </label>
                   <textarea
                     type="text bg-secondary"
-                    class="form-control shadow-none bg-secondary border-0 rounded-2 text-white"
+                    class="form-control shadow-none bg-secondary border-0 rounded-4 text-white"
                     id="recipient-description"
                     placeholder="De que tratará este grupo"
                     v-model="groupDescription">

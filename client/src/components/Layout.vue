@@ -17,21 +17,13 @@
 </template>
 
 <script>
-import Navbar from './Navbar.vue'
-import Sidebar from './Sidebar.vue'
-import Chat from '../views/Chat.vue'
-import Group from '../views/Group.vue'
-import Forum from '../views/Forum.vue'
-import Homework from '../views/Homework.vue'
+import Navbar from './Navbar.vue';
+import Sidebar from './Sidebar.vue';
 
 export default {
   components: {
     Navbar,
-    Sidebar,
-    Chat,
-    Group,
-    Forum,
-    Homework,
+    Sidebar
   }
 }
 </script>
