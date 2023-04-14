@@ -1,17 +1,10 @@
 <template>
-  <div>
-    <div
-      class="modal fade modal-lg pt-5"
-      id="modalCreateGroup"
-      tabindex="-1"
-      aria-labelledby="modalGroup"
-      aria-hidden="true"
-    >
+    <div class="modal fade modal-lg pt-5" tabindex="-1" aria-labelledby="ModalGroup" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content bg-accent">
           <form @submit.prevent="CreateGroup" novalidate>
             <div class="modal-header">
-              <h5 class="modal-title" id="modalGroup">{{ title }}</h5>
+              <h3 class="modal-title">Crear un grupo</h3>
               <button
                 type="button"
                 class="btn-close"
@@ -20,7 +13,7 @@
               ></button>
             </div>
             <div class="modal-body">
-              <div class="mb-3">
+              <div v-if="step === 0" class="mb-3">
                 <div>
                   <label for="recipient-name" class="col-form-label">
                     Nombre del grupo:
@@ -29,7 +22,7 @@
                     type="text bg-secondary"
                     class="form-control shadow-none bg-secondary border-0 rounded-2 text-white"
                     id="recipient-name"
-                    placeholder="Nombre del grupo."
+                    placeholder="Asigne un nombre a su grupo"
                     v-model="groupName"
                   />
                   <small
@@ -43,13 +36,13 @@
                   <label for="recipient-description" class="col-form-label">
                     Descripción:
                   </label>
-                  <input
+                  <textarea
                     type="text bg-secondary"
                     class="form-control shadow-none bg-secondary border-0 rounded-2 text-white"
                     id="recipient-description"
-                    placeholder="Descripción."
-                    v-model="groupDescription"
-                  />
+                    placeholder="De que tratará este grupo"
+                    v-model="groupDescription">
+                  </textarea>
                   <small
                     class="text-danger"
                     v-if="
@@ -68,36 +61,57 @@
                   <select
                     class="text-white bg-secondary form-control btn btn-default text-start"
                   >
-                    <option>Privado</option>
-                    <option>Publico</option>
+                    <option>Privado: Solo los administradores pueden agregar miembros</option>
+                    <option>Publico: Cualquiera puede unirse</option>
                   </select>
                 </div>
               </div>
+              <div v-else>
+                <label for="" class="mb-1">Comience a escribir nombres para agregarlos a su equipo</label>
+                <Autocomplete />
+              </div>
             </div>
-            <div class="modal-footer">
-              <button
-                type="submit"
-                class="btn btn-primary"
-                data-bs-target="#modalAddUsers"
-              >
-                Crear
-              </button>
+            <div v-if="step === 0" class="modal-footer">
               <button
                 type="button"
-                class="btn btn-secondary"
+                class="btn btn-secondary rounded-pill text-light"
                 data-bs-dismiss="modal"
               >
-                Close
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                class="btn btn-primary rounded-pill text-light"
+                data-bs-target="#modalAddUsers"
+              >
+                Continuar
+              </button>
+            </div>
+            <div v-else class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary rounded-pill text-light"
+                @click="step--"
+              >
+                Anterior
+              </button>
+              <button
+                type="submit"
+                class="btn btn-primary rounded-pill text-light"
+                data-bs-target="#modalAddUsers"
+              >
+                Finalizar
               </button>
             </div>
           </form>
         </div>
       </div>
     </div>
-  </div>
+  
 </template>
 
 <script>
+import Autocomplete from '@/components/Autocomplete.vue';
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 
@@ -105,8 +119,12 @@ export default {
   setup() {
     return { v$: useVuelidate() }
   },
+  components: {
+    Autocomplete
+  },
   data() {
     return {
+      step: 0,
       title: '',
       groupDescription: null,
       groupName: null,
@@ -128,7 +146,7 @@ export default {
       if (this.v$.$error) {
         return
       }
-      console.log('Good')
+      this.step++;
     },
   },
 }

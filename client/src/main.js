@@ -6,7 +6,10 @@ import router from './router/router';
 import io from 'socket.io-client';
 
 import './assets/main.scss';
-import '../node_modules/bootstrap/dist/js/bootstrap.bundle';
+
+import 'bootstrap-vue/dist/bootstrap-vue.min.css';
+
+import 'bootstrap';
 
 const token = localStorage.getItem('token');
 if (token) {

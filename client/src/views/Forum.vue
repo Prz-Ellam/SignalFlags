@@ -1,25 +1,21 @@
 <template>
-  <div class="d-flex flex-column h-100">
-    <div class="flex-grow-1 flex-shrink-1 overflow-auto">
-      <div class="bg-dark container-fluid h-100">
-        <div class="row h-100">
-          <section class="col h-100 align-items-center p-3 text-center">
-            <div class="bg-accent rounded-3 h-100">
-              <div class="pt-3 px-3 h-100 overflow-hidden">
-                <div class="d-flex align-items-center">
-                  <img
-                    class="img-fluid bg-primary rounded-2"
-                    width="50"
-                    height="50"
-                    src="../assets/images/POI_SignalFalgs.png"
-                    alt="..."
-                  />
-                  <span class="h5 ms-3 mb-0">Nombre Equipo</span>
-                  <ul
-                    class="nav nav-pills ms-3 mb-0 rounded-1"
-                    id="pills-tab"
-                    role="tablist"
-                  >
+  <section class="bg-dark container-fluid h-100 overflow-auto">    
+    <div class="col h-100 align-items-center p-3 text-center">
+      <div class="bg-accent py-3 px-3 rounded-3 h-100 overflow-hidden">
+        <div class="d-flex align-items-center">
+          <img
+            class="img-fluid bg-primary rounded-2"
+            width="50"
+            height="50"
+            src="../assets/images/POI_SignalFalgs.png"
+            alt="..."
+          >
+            <span class="h5 ms-3 mb-0">Nombre Equipo</span>
+              <ul
+                class="nav nav-pills ms-3 mb-0 rounded-1"
+                id="pills-tab"
+                role="tablist"
+              >
                     <li class="nav-item" role="presentation">
                       <button
                         class="nav-link active rounded-0 bg-accent"
@@ -66,7 +62,7 @@
                     <i class="ms-1 bi-person-plus-fill"></i>
                   </button>
                 </div>
-                <hr />
+                <hr>
                 <div class="tab-content h-100" id="pills-tabContent">
                   <div
                     class="tab-pane fade show active box2 group-srcoll"
@@ -323,40 +319,12 @@
                             aria-labelledby="pills-asign_homework-tab"
                             tabindex="0"
                           >
-                            <div id="homework_container">
-                              <div
-                                class="box_button rounded-4 container py-2 px-3 mb-3"
-                              >
-                                <img
-                                  src="../assets/images/POI_SignalFalgs.png"
-                                  width="50"
-                                  height="50"
-                                  class="rounded float-left"
-                                  alt="..."
-                                />
-                                <label for="" class="text-white">
-                                  Proyecto BDM entrega
-                                </label>
-                                <br />
-                                <label for="" class="text-white">Info</label>
-                              </div>
-                              <div
-                                class="box_button rounded-4 container py-2 px-3 mb-3"
-                              >
-                                <img
-                                  src="../assets/images/POI_SignalFalgs.png"
-                                  width="50"
-                                  height="50"
-                                  class="rounded float-left"
-                                  alt="..."
-                                />
-                                <label for="" class="text-white">
-                                  Proyecto BDM entrega
-                                </label>
-                                <br />
-                                <label for="" class="text-white">Info</label>
-                              </div>
-                            </div>
+                            <HomeworkCard 
+                                name="Proyecto BDM entrega"
+                                groupName="Bases de Datos Multimedia" 
+                                groupAvatar="http://localhost:5173/src/assets/images/POI_SignalFalgs.png"
+                                dueDate="12/12/12"  
+                              />
                           </div>
                           <div
                             class="tab-pane fade"
@@ -365,40 +333,14 @@
                             aria-labelledby="pills-completed-homework-tab"
                             tabindex="0"
                           >
-                            <div id="completed_container">
-                              <div
-                                class="box_button rounded-4 container py-2 px-3 mb-3"
-                              >
-                                <img
-                                  src="../assets/images/POI_SignalFalgs.png"
-                                  width="50"
-                                  height="50"
-                                  class="rounded float-left"
-                                  alt="..."
-                                />
-                                <label for="" class="text-white">
-                                  Proyecto POI entrega
-                                </label>
-                                <br />
-                                <label for="" class="text-white">Info</label>
-                              </div>
-                              <div
-                                class="box_button rounded-4 container py-2 px-3 mb-3"
-                              >
-                                <img
-                                  src="../assets/images/POI_SignalFalgs.png"
-                                  width="50"
-                                  height="50"
-                                  class="rounded float-left"
-                                  alt="..."
-                                />
-                                <label for="" class="text-white">
-                                  Proyecto POI entrega
-                                </label>
-                                <br />
-                                <label for="" class="text-white">Info</label>
-                              </div>
-                            </div>
+                            
+                            <HomeworkCard 
+                              name="Proyecto BDM entrega"
+                              groupName="Bases de Datos Multimedia" 
+                              groupAvatar="http://localhost:5173/src/assets/images/POI_SignalFalgs.png"
+                              dueDate="12/12/12"  
+                            />
+
                           </div>
                         </div>
                       </div>
@@ -407,25 +349,24 @@
                 </div>
               </div>
             </div>
-          </section>
-        </div>
-      </div>
-    </div>
+          
+        </section>
     <CreateHomework/>
     <AddUser />
-  </div>
 </template>
 
 <script>
 import CreateHomework from '@/components/CreateHomework.vue';
 import AddUser from '@/components/AddUser.vue';
 import Buttons from '@/components/Buttons.vue';
+import HomeworkCard from '@/components/HomeworkCard.vue';
 
 export default {
   components: {
     CreateHomework,
     AddUser,
-    Buttons
+    Buttons,
+    HomeworkCard
   },
 }
 </script>

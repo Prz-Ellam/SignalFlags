@@ -1,29 +1,26 @@
 <template>
-  <section class="bg-dark container-fluid h-100 overflow-auto">
-    <div class="col h-100 align-items-center p-3 text-center">
-      <div class="box bg-accent group-srcoll py-3 px-5 rounded-3">
-        <div>
-          <h3>Mis grupos</h3>
-          <hr>
-          <div class="row">
-            <GroupCard 
-              v-for="group in groups"
-              class="col-sm-6 col-md-4 col-lg-3"
-              :bind="group._id"
-              :name="group.name"
-              :avatar="group.avatar"
-            />
-          </div>
+  <section class="container-fluid h-100">
+    <div class="h-100 p-3">
+      <div class="text-center box bg-accent py-3 px-5 rounded-3">
+        <h3>Tus grupos</h3>
+        <hr>
+        <div class="row">
+          <GroupCard 
+            v-for="group in groups"
+            class="col-sm-6 col-md-4 col-lg-3"
+            :bind="group._id"
+            :name="group.name"
+            :avatar="group.avatar"
+          />
         </div>
-
-        <div>
-          <h3>Unirse a un grupo</h3>
-          <hr>
-          <div class="row" id="group-container">
-            <div class="col-sm-6 col-md-4 col-lg-3">
+       
+        <h3>Unirse a un grupo</h3>
+        <hr>
+        <div class="row">
+          <div class="col-sm-6 col-md-4 col-lg-3">
               <div
-                class="mb-5 mt-5 rounded-3 box_button"
-                style="height: 300px;"
+                class="mb-5 rounded-3 box_button"
+                style="height: 240px;"
               >
                 <img
                   src="../assets/images/POI_SignalFalgs.png"
@@ -45,8 +42,8 @@
             </div>
             <div class="col-sm-6 col-md-4 col-lg-3">
               <div
-                class="mb-5 mt-5 rounded-3 box_button"
-                style="height: 300px;"
+                class="mb-5 rounded-3 box_button"
+                style="height: 240px;"
               >
                 <img
                   src="../assets/images/POI_SignalFalgs.png"
@@ -78,8 +75,8 @@
 
             <div class="col-sm-6 col-md-4 col-lg-3">
               <div
-                class="mb-5 mt-5 rounded-3 box_button"
-                style="height: 250px;"
+                class="mb-5 rounded-3 box_button"
+                style="height: 240px;"
               >
                 <img
                   src="../assets/images/POI_SignalFalgs.png"
@@ -95,8 +92,8 @@
 
             <div class="col-sm-6 col-md-4 col-lg-3">
               <div
-                class="mb-5 mt-5 rounded-3 box_button"
-                style="height: 250px;"
+                class="mb-5 rounded-3 box_button"
+                style="height: 240px;"
               >
                 <img
                   src="../assets/images/POI_SignalFalgs.png"
@@ -112,8 +109,8 @@
 
             <div class="col-sm-6 col-md-4 col-lg-3">
               <div
-                class="mb-5 mt-5 rounded-3 box_button"
-                style="height: 250px;"
+                class="mb-5 rounded-3 box_button"
+                style="height: 240px;"
               >
                 <img
                   src="../assets/images/POI_SignalFalgs.png"
@@ -129,8 +126,7 @@
           </div>
         </div>
       </div>
-    </div>
-    <CreateGroup />
+    <CreateGroup id="modalCreateGroup" />
   </section>
 </template>
 
@@ -202,13 +198,6 @@ export default {
   object-fit: cover;
 }
 
-.box {
-  position: static;
-  overflow-y: scroll;
-  overflow-y: scroll;
-  height: 100%;
-}
-
 .box_button {
   background-color: #38393b;
   height: 240px; 
@@ -217,24 +206,5 @@ export default {
 
 .box_button:hover {
   background-color: #6d6f7d;
-}
-
-.group-srcoll::-webkit-scrollbar {
-  width: 8px;
-  border-radius: 1em;
-  background-color: #6d6f7d;
-  border-radius: 1em;
-}
-
-.group-srcoll::-webkit-scrollbar-thumb {
-  border-radius: 1em;
-  background-color: #6d6f7d;
-  background: #ffb800;
-  border-radius: 1em;
-}
-
-.group-srcoll::-webkit-scrollbar-thumb:hover {
-  visibility: visible;
-  background: #ffb800;
 }
 </style>

@@ -7,7 +7,7 @@
           <span :class="dotClasses"></span>
         </div>
         <div :class="{ 'text-nowrap text-truncate': true, 'text-muted': unseenMessagesCount === 0 }">
-          <p class="h6 mb-0 text-light">{{ username }}</p>
+          <p class="h6 mb-0 text-light text-truncate">{{ username }}</p>
           <small :class="lastMessageClasses">{{ lastMessage }}</small>
         </div>
       </div>

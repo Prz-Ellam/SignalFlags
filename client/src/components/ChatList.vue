@@ -97,26 +97,7 @@ export default {
 }
 
 .chat {
-  scrollbar-color: #ffb800 #6d6f7d !important;
   scrollbar-width: thin !important;
 }
 
-.chat::-webkit-scrollbar {
-  width: 8px;
-  border-radius: 1em;
-  background-color: #6d6f7d;
-  border-radius: 1em;
-}
-
-.chat::-webkit-scrollbar-thumb {
-  border-radius: 1em;
-  background-color: #6d6f7d;
-  background: #ffb800;
-  border-radius: 1em;
-}
-
-.chat::-webkit-scrollbar-thumb:hover {
-  visibility: visible;
-  background: #ffb800;
-}
 </style>
