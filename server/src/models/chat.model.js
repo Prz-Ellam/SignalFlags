@@ -20,6 +20,7 @@ const chatSchema = new Schema({
             ref: 'User'
         }
     ],
+    // TODO: admins
     groupAdmin: [
         {
             type: Schema.Types.ObjectId,
@@ -46,7 +47,8 @@ const chatSchema = new Schema({
     }
 },
 {
-    timestamps: true
+    timestamps: true,
+    versionKey: false
 });
 
 export default model('Chat', chatSchema);

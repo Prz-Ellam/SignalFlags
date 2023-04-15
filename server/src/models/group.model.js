@@ -12,24 +12,39 @@ const groupSchema = new Schema({
         minLength: 1,
         maxLenght: 255
     },
+    privacy: {
+        type: String,
+        required: true,
+        enum: [ 'public', 'private' ]
+    },
+    code: {
+        type: String
+    },
     avatar: {
         type: String
     },
+    members: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    ],
+    admins: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    ],
     subgroups: [
         {
             type: Schema.Types.ObjectId,
             ref: 'Group'
         }
-    ],
-    homeworks: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Homework'
-        }
     ]
 },
 {
-    timestamps: true
+    timestamps: true,
+    versionKey: false
 });
 
 export default model('Group', groupSchema);

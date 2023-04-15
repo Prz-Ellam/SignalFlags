@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 
 import Chat from '../models/chat.model.js';
 import Message from '../models/message.model.js';
+import Group from '../models/group.model.js';
 import UserSocket from '../models/userSocket.model.js';
 
 export default async function(io) {
@@ -26,6 +27,10 @@ export default async function(io) {
     ], { fullDocument: 'updateLookup' });
     
     const messageStream = Message.watch([
+        { $match: { "operationType": { $in: [ "insert", "update", "replace" ] } } }
+    ], { fullDocument: 'updateLookup' });
+
+    const groupStream = Group.watch([
         { $match: { "operationType": { $in: [ "insert", "update", "replace" ] } } }
     ], { fullDocument: 'updateLookup' });
     
@@ -53,6 +58,11 @@ export default async function(io) {
             io.to(socketIds).emit('message', change.fullDocument.text);
         }
     });
+
+    groupStream.on('change', async (change) => {
+        io.emit('groupNotification', {});
+    });
+
     
     io.on('connection', async (socket) => {
         console.log(`A new connection in the server ${ socket.id }`);

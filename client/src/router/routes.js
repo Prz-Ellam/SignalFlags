@@ -46,14 +46,14 @@ const routes = [
                 }
             },
             { 
-                path: '/homework-detail', 
+                path: '/homework-detail/:id', 
                 component: HomeworkDetail, 
                 meta: {
                     requiresAuth: true
                 }
             },
             { 
-                path: '/forum', 
+                path: '/forum/:id', 
                 component: Forum, 
                 meta: {
                     requiresAuth: true 

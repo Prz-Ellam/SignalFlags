@@ -45,7 +45,8 @@ const messageSchema = new Schema({
     }
 },
 {
-    timestamps: true
+    timestamps: true,
+    versionKey: false
 });
 
 export default model('Message', messageSchema);

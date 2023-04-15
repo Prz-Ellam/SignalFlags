@@ -11,6 +11,7 @@ import homeworkRouter from './routes/homework.routes.js';
 import imageRouter from './routes/image.routes.js';
 import chatRouter from './routes/chat.routes.js';
 import chatGroupRouter from './routes/chat-group.routes.js';
+import postRouter from './routes/post.routes.js';
 import { notFoundMiddleware } from './middlewares/not-found.middleware.js';
 import socket from './events/socket.js';
 
@@ -29,11 +30,12 @@ app.use('/api/v1/chats', chatRouter);
 app.use('/api/v1/chatGroups', chatGroupRouter);
 app.use('/api/v1/groups', groupRouter);
 app.use('/api/v1/homeworks', homeworkRouter);
+app.use('/api/v1/posts', postRouter);
 
 app.use(notFoundMiddleware);
 
 socket(io);
 
 httpServer.listen(app.get('port'), async () => {
-    console.log(`Server started in port ${ app.get('port') }`);
+    console.log(`Server started on port ${ app.get('port') }`);
 });

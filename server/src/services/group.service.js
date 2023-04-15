@@ -1,18 +1,30 @@
-export const createGroup = async (group) => {
+import Group from '../models/group.model.js';
 
-};
+class GroupService {
+    static exists = async (id) => {
+        const isGroupExisting = await Group.findById(id);
+        return !!isGroupExisting;
+    }
 
-export const updateGroup = async (group) => {
+    static create = async (name, description, privacy, avatar) => {
+        const group = new Group({
+            name,
+            description,
+            privacy,
+            avatar
+        });
+    
+        await group.save();
+        return group;
+    }
 
-};
+    static update = async () => {
 
-export const findById = async (id) => {
+    }
 
-};
+    static delete = async () => {
+        
+    }
+}
 
-/**
- * Obtiene todos los grupos de un usuario
- */
-export const findByUserId = async (userId) => {
-
-};
+export default GroupService;

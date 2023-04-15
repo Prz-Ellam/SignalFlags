@@ -80,9 +80,9 @@
                 Cancelar
               </button>
               <button
-                type="submit"
+                type="button"
                 class="btn btn-primary rounded-pill text-light"
-                data-bs-target="#modalAddUsers"
+                @click="NextStep"
               >
                 Continuar
               </button>
@@ -98,6 +98,7 @@
               <button
                 type="submit"
                 class="btn btn-primary rounded-pill text-light"
+                data-bs-dismiss="modal"
                 data-bs-target="#modalAddUsers"
               >
                 Finalizar
@@ -114,6 +115,7 @@
 import Autocomplete from '@/components/Autocomplete.vue';
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
+import GroupService from '../services/group.service';
 
 export default {
   setup() {
@@ -126,8 +128,8 @@ export default {
     return {
       step: 0,
       title: '',
-      groupDescription: null,
-      groupName: null,
+      groupDescription: '',
+      groupName: '',
     }
   },
   validations() {
@@ -141,12 +143,21 @@ export default {
     }
   },
   methods: {
-    CreateGroup(event) {
+    NextStep() {
+      this.step++;
+    },
+    async CreateGroup(event) {
       this.v$.$touch()
       if (this.v$.$error) {
         return
       }
-      this.step++;
+      
+      await GroupService.create({
+        name: this.groupName,
+        description: this.groupDescription,
+        privacy: 'public',
+        avatar: 'https://soyhorizonte.com/wp-content/uploads/2020/10/Javascript-by-SoyHorizonte.jpg'
+      })
     },
   },
 }

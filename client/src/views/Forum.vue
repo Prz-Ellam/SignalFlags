@@ -2,9 +2,10 @@
   <section class="bg-dark container-fluid h-100 overflow-auto">
     <div class="d-flex col h-100 align-items-center p-3 text-center">
       <div class="text-start w-25 bg-accent p-3 rounded-3 h-100 overflow-hidden me-2">
-        <img class="img-fluid bg-primary rounded-2 mb-2" width="75" height="75" src="../assets/images/POI_SignalFalgs.png"
-          alt="...">
-        <h2 class="h4 text-nowrap text-truncate">Programación Orientada a la Internet</h2>
+        <img class="img-fluid bg-primary rounded-2 mb-2" 
+          width="75" height="75" style="width: 75px; height: 75px; object-fit: cover" 
+          :src="group.avatar" alt="...">
+        <h2 class="h4 text-nowrap text-truncate">{{ group.name }}</h2>
         <hr>
         <p class="fw-bold mb-1">Subgrupos</p>
         <ul class="list-group">
@@ -17,7 +18,9 @@
       </div>
       <div class="w-75 bg-accent p-3 rounded-3 h-100 overflow-hidden">
         <div class="d-flex align-items-center">
-          <img class="img-fluid bg-primary rounded-2" width="50" height="50" src="../assets/images/POI_SignalFalgs.png"
+          <img class="img-fluid bg-primary rounded-2" width="50" height="50" 
+            style="width: 50px; height: 50px; object-fit: cover"
+            :src="group.avatar"
             alt="...">
           <span class="h5 ms-3 mb-0">General</span>
           <ul class="nav nav-pills ms-3 mb-0 rounded-1" id="pills-tab" role="tablist">
@@ -52,13 +55,15 @@
             <div class="py-2 px-3 w-100">
               <span class="h5">Bienvenido a Nombre del grupo</span>
               <p>Descripcion de grupo.</p>
-              <img src="../assets/images/POI_SignalFalgs.png" width="200" height="200"
-                class="img-fluid bg-primary rounded-circle m-3" alt="" />
+              <img :src="group.avatar" width="200" height="200"
+                class="img-fluid bg-primary rounded-circle m-3"
+                style="width: 200px; height: 200px; object-fit: cover"
+                alt="" />
               <div class="row" id="forum-container">
                 
                 <div class="d-flex mt-3 px-3">
                   <div class="d-flex align-items-start pt-3 mt-3">
-                    <img src="../assets/images/POI_SignalFalgs.png" width="50" height="50"
+                    <img :src="group.avatar" width="50" height="50"
                       class="img-fluid bg-primary rounded-circle" alt="" />
                   </div>
                   <div class="text-start bg-dark mx-3 my-4 w-100 rounded-3">
@@ -277,6 +282,8 @@ import Buttons from '@/components/Buttons.vue';
 import Homework from '@/views/Homework.vue';
 import HomeworkCard from '@/components/HomeworkCard.vue';
 
+import GroupService from '@/services/group.service';
+
 export default {
   components: {
     CreateHomework,
@@ -285,6 +292,17 @@ export default {
     HomeworkCard,
     Homework
   },
+  data() {
+    return {
+      groupId: '',
+      group: [],
+    }
+  },
+  async created() {
+    this.groupId = this.$route.params.id;
+    this.group = await GroupService.findById(this.groupId);
+    console.log(this.group);
+  }
 }
 </script>
 

@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const storage = multer.diskStorage({ //multers disk storage settings
+const storage = multer.diskStorage({
     destination: function (_req, _file, cb) {
         cb(null, path.join(__dirname, '../../../uploads'))
     },

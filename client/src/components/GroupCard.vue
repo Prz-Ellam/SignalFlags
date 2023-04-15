@@ -1,6 +1,6 @@
 <template>
   <div>
-    <RouterLink to="/forum"
+    <RouterLink :to="`/forum/${ groupId }`"
       class="box-button mb-4 text-white d-flex flex-column justify-content-center align-items-center shadow-sm rounded-3"
       role="button">
       <div class="d-flex align-items-center image-content">
@@ -16,6 +16,7 @@
 <script>
 export default {
   props: [
+    'groupId',
     'name',
     'avatar'
   ]

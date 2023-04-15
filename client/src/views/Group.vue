@@ -9,6 +9,7 @@
             v-for="group in groups"
             class="col-sm-6 col-md-4 col-lg-3"
             :bind="group._id"
+            :groupId="group._id"
             :name="group.name"
             :avatar="group.avatar"
           />
@@ -89,51 +90,22 @@
 <script>
 import CreateGroup from '../components/CreateGroup.vue';
 import GroupCard from '@/components/GroupCard.vue';
+import Swal from 'sweetalert2';
+import GroupService from '../services/group.service';
 
 export default {
   components: {
     CreateGroup,
     GroupCard
   },
+  async created() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    this.groups = await GroupService.findByUser(user._id);
+  
+  },
   data() {
     return {
-      groups: [ 
-        {
-          _id: 1,
-          name: '003 E2023 Programación orientada a la internet CLASE ORDINARIA',
-          avatar: 'https://www.intel.es/content/dam/www/central-libraries/us/en/images/language-icon-lvl-2-abstract-bg.png.rendition.intel.web.864.486.png'
-        },
-        {
-          _id: 2,
-          name: '003 E2023 Programación orientada a la internet CLASE ORDINARIA',
-          avatar: 'https://www.intel.es/content/dam/www/central-libraries/us/en/images/language-icon-lvl-2-abstract-bg.png.rendition.intel.web.864.486.png'
-        },
-        { 
-          _id: 3,
-          name: '003 E2023 Programación orientada a la internet CLASE ORDINARIA',
-          avatar: 'https://www.intel.es/content/dam/www/central-libraries/us/en/images/language-icon-lvl-2-abstract-bg.png.rendition.intel.web.864.486.png'
-        },
-        { 
-          _id: 4,
-          name: '003 E2023 Programación orientada a la internet CLASE ORDINARIA',
-          avatar: 'https://www.intel.es/content/dam/www/central-libraries/us/en/images/language-icon-lvl-2-abstract-bg.png.rendition.intel.web.864.486.png'
-        },
-        { 
-          _id: 5,
-          name: '003 E2023 Programación orientada a la internet CLASE ORDINARIA',
-          avatar: 'https://www.intel.es/content/dam/www/central-libraries/us/en/images/language-icon-lvl-2-abstract-bg.png.rendition.intel.web.864.486.png'
-        },
-        { 
-          _id: 6,
-          name: '003 E2023 Programación orientada a la internet CLASE ORDINARIA',
-          avatar: 'https://www.intel.es/content/dam/www/central-libraries/us/en/images/language-icon-lvl-2-abstract-bg.png.rendition.intel.web.864.486.png'
-        },
-        { 
-          _id: 7,
-          name: '003 E2023 Programación orientada a la internet CLASE ORDINARIA',
-          avatar: 'https://www.intel.es/content/dam/www/central-libraries/us/en/images/language-icon-lvl-2-abstract-bg.png.rendition.intel.web.864.486.png'
-        }
-      ]
+      groups: []
     }
   }
 }

@@ -20,6 +20,10 @@ if (token) {
         transports: [ 'websocket' ]
     });
     window.socket = socket;
+
+    socket.on('groupNotification', () => {
+        console.log('Hola Mundo');
+    });
 }
 
 axios.interceptors.request.use(

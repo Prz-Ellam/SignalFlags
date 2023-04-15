@@ -32,6 +32,7 @@
               
               <HomeworkCard v-for="homework in assignedHomeworks"
                 :key="homework._id"
+                :homeworkId="homework._id"
                 :name="homework.name"
                 :groupName="homework.groupName" 
                 :groupAvatar="homework.groupAvatar"
