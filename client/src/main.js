@@ -7,7 +7,7 @@ import io from 'socket.io-client';
 
 import './assets/main.scss';
 
-import 'bootstrap-vue/dist/bootstrap-vue.min.css';
+//import 'bootstrap-vue/dist/bootstrap-vue.min.css';
 
 import 'bootstrap';
 

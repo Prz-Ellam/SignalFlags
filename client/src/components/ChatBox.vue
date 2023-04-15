@@ -30,6 +30,23 @@
       </div>
       <hr class="mb-1 text-light" />
       <div class="input-group mb-1 p-2">
+        <div style="width: 800px;">
+          <div id="imagesContainer" class="d-flex ms-2 me-2" style="overflow-x: auto;overflow-y:hidden; list-style: none;">
+                  
+          </div> 
+        </div>
+        <div class="w-100">
+          <div id="filesContainer" class="d-flex mb-2" style="overflow-x: auto;overflow-y:hidden; list-style: none;">
+                  <div class="m-1 p-2 file-box ">
+                    <i class="bi bi-file-earmark-text"></i> 
+                    <span> Nombre del archivo </span> <span>.txt</span>
+                  </div>
+                  <div class=" m-1 p-2 file-box ">
+                    <i class="bi bi-file-earmark-text"></i> 
+                    <span> Nombre del archivo </span> <span>.txt</span>
+                  </div>
+          </div> 
+        </div>
         <Buttons />
         <input type="text" id="message" class="bg-secondary form-control border-0 shadow-none text-white"
           v-model="content" placeholder="Escribe un mensaje" aria-label="Enviar mensaje" aria-describedby="basic-addon2"
@@ -81,6 +98,10 @@ export default {
     async sendMessage() {
       this.$emit('onSendMessage', { text: this.content, chatId: this.selectedChat.chatId });
       this.content = '';
+      
+      document.getElementById('imagesContainer').innerHTML = '';
+      document.getElementById('chatImages').value = "";
+
     }
   }
 }
@@ -96,6 +117,15 @@ export default {
 .chat {
   scrollbar-color: #ffb800 #6d6f7d !important;
   scrollbar-width: thin !important;
+}
+
+
+.file-box {
+  background-color: #38393b;
+}
+
+.file-box:hover {
+  background-color: #6d6f7d;
 }
 
 </style>

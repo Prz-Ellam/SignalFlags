@@ -1,14 +1,21 @@
-import User from '../models/group.model.js';
+import Group from '../models/group.model.js';
 
-const groupCreateController = async (req, res) => {
+const createGroupController = async (req, res) => {
     const { name, description, privacity, avatar } = req.body;
+
+    const group = new Group({
+        name,
+        description,
+        avatar,
+        privacity
+    });
 }
 
-const userCreateSubGroupController = async (req, res) => {
+const CreateuserSubGroupController = async (req, res) => {
     
 };
 
-const groupUpdateController = async (req, res) => {
+const updateGroupController = async (req, res) => {
     
 };
 
@@ -16,9 +23,25 @@ const addUserToGroupController = async (req, res) => {
    
 };
 
+const findUserGroupsController = async (req, res) => {
+    
+};
+
+const findAllPublicGroupsController = async (req, res) => {
+    
+};
+
+
+const jointoPrivateGroupController = async (req, res) => {
+   
+};
+
 export default {
-    groupCreateController,
-    userCreateSubGroupController,
-    groupUpdateController,
-    addUserToGroupController
+    createGroupController,
+    CreateuserSubGroupController,
+    updateGroupController,
+    addUserToGroupController,
+    findUserGroupsController,
+    findAllPublicGroupsController,
+    jointoPrivateGroupController
 };
