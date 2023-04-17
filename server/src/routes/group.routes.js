@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { multerUpload, multerUpload2 } from '../configuration/multer.js';
 import GroupController from '../controllers/group.controller.js';
 import HomeworkController from '../controllers/homework.controller.js';
 import PostController from '../controllers/post.controller.js';
@@ -32,7 +33,7 @@ groupRouter.post('/', authMiddleware, validateCreateGroup, GroupController.creat
 
 // Asigna una imagen a un grupo
 // [POST] /api/v1/groups/:id/avatar
-groupRouter.post('/:id/avatar');
+groupRouter.post('/:id/avatar', authMiddleware, multerUpload.single('avatar'), GroupController.addAvatar);
 
 // Actualizar un grupo
 // [PUT] /api/v1/groups/:id
@@ -48,23 +49,36 @@ groupRouter.delete('/:id', GroupController.delete);
 
 // Buscar todos los miembros de un grupo
 // [GET] /api/v1/groups/:id/members
-groupRouter.get('/:id/members', GroupController.findMembers);
+groupRouter.get('/:id/members', authMiddleware, GroupController.findMembers);
 
 // Buscar todas las tareas de un grupo
 // [GET] /api/v1/groups/:id/homeworks
-groupRouter.get('/:id/homeworks', GroupController.findHomeworks);
+groupRouter.get('/:id/homeworks', authMiddleware, GroupController.findHomeworks);
 
 // Obtener todos los subgrupos de un grupo
 // [GET] /api/v1/groups/:id/subgroups
-groupRouter.get('/:id/subgroups', GroupController.findSubgroups);
+groupRouter.get('/:id/subgroups', authMiddleware, GroupController.findSubgroups);
 
 // Obtener todos los posts de un grupo
 // [GET] /api/v1/groups/:id/posts
-groupRouter.get('/:id/posts', GroupController.findPosts);
+groupRouter.get('/:id/posts', authMiddleware, GroupController.findPosts);
 
 // Crea un post
 // [POST] /api/v1/posts
-groupRouter.post('/:groupId/posts', authMiddleware, PostController.create);
+groupRouter.post('/:id/posts', authMiddleware, PostController.create);
+
+groupRouter.post('/:id/posts/upload', authMiddleware, multerUpload2.array('files'), 
+(req, res, next) => {
+    try {
+        req.body = JSON.parse(req.body.payload);
+        next();
+    }
+    catch (exception) {
+        return res.json('Error');
+    }
+}, 
+PostController.create);
+
 
 // Crea una tarea
 // [POST] /api/v1/homeworks

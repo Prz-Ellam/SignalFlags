@@ -23,6 +23,7 @@ await database();
 
 app.set('port', process.env.PORT || 3000);
 app.use(express.json());
+app.use('/uploads', express.static('../uploads/'));
 app.use('/api/v1/images', express.static('../uploads/'));
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/images', imageRouter);

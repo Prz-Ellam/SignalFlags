@@ -4,25 +4,102 @@ import Post from '../models/post.model.js';
 import Homework from '../models/homework.model.js';
 import GroupService from '../services/group.service.js';
 
+import { multerUpload } from '../configuration/multer.js';
+
 const groupCreateController = async (req, res) => {
-    // 200 - OK
-    // 401 - Unauthorized
-    
     const user = req.user;
-    const { name, description, privacy, avatar } = req.body;
+    const { name, description, privacy, avatar, userIds } = req.body;
+
+    for (const userId of userIds) {
+        const existingUser = User.findById(userId);
+        if (!existingUser) {
+            return res.status(404).json({
+                status: false,
+                message: `Usuario con id ${ userId } no encontrado`
+            });
+        }
+    }
+
+    if (!userIds.includes(user._id)) {
+        userIds.push(user._id);
+    }
 
     const group = new Group({
         name,
         description,
         privacy,
         avatar,
-        members: [ user._id ],
+        members: userIds,
         admins: [ user._id ]
     });
 
     await group.save();
 
     res.status(201).json(group);
+}
+
+const groupAddAvatarController = async (req, res) => {
+    const { id } = req.params;
+    const authUser = req.user;
+    const file = req.file;
+
+    try {
+        const group = await Group.findById(id);
+        if (!group) {
+            //multerUpload.multerAbort();
+            return res.status(404).json({
+                status: false,
+                message: 'Grupo no encontrado'
+            });
+        }
+
+        const isAuthUserAdmin = group.admins.includes(authUser._id);
+        if (!isAuthUserAdmin) {
+            //multerUpload.multerAbort();
+            return res.status(403).json({
+                status: false,
+                message: 'Permiso denegado'
+            });
+        }
+
+        if (!file) {
+            //multerUpload.multerAbort();
+            return res.status(400).json({
+                status: false,
+                message: 'No admitido'
+            });
+        }
+
+        const allowedExtensions = [ 'image/jpeg', 'image/jpg', 'image/png' ];
+        if (!allowedExtensions.includes(file.mimetype)) {
+            //multerUpload.multerAbort();
+            return res.status(400).json({
+                status: false,
+                message: 'No admitido'
+            });
+        }
+
+        if (file.size > 8 * 1024 * 1024) {
+            //multerUpload.multerAbort();
+            return res.status(400).json({
+                status: false,
+                message: 'No admitido'
+            });
+        }
+
+        group.avatar = `/uploads/${ file.filename }`;
+        await group.save();
+
+        res.json({
+            message: 'si'
+        });
+    }
+    catch (exception) {
+        return res.status(500).json({
+            status: false,
+            message: 'Ocurrio un error en el servidor'
+        });
+    }
 }
 
 const groupUpdateController = async (req, res) => {
@@ -83,6 +160,55 @@ const groupDeleteController = async (req, res) => {
     });
 }
 
+const groupAddMemberController = async (req, res) => {
+    const authUser = req.user;
+    const { groupId } = req.params;
+    const { userId } = req.body;
+
+    try {
+        const group = await Group.findById(groupId);
+        if (!group) {
+            return res.status(404).json({
+                status: false,
+                message: 'El grupo no fue encontrado'
+            });
+        }
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({
+                status: false,
+                message: 'El usuario no fue encontrado'
+            });
+        }
+
+        const isAuthUserAdmin = group.admins.includes(authUser._id);
+        if (!isAuthUserAdmin) {
+            return res.status(403).json({
+                status: false,
+                message: 'Permiso denegado'
+            });
+        }
+
+        const isUserAdded = group.members.includes(userId);
+        if (isUserAdded) {
+            return res.status(400).json({
+                status: false,
+                message: 'El usuario ya se encuentra en el grupo'
+            });
+        }
+
+        group.members.push(userId);
+        await group.save();
+    }
+    catch (exception) {
+        return res.status(500).json({
+            status: false,
+            message: 'Ocurrio un error en el servidor'
+        });
+    }
+}
+
 const addUserToGroupController = async (req, res) => {
    
 };
@@ -114,6 +240,21 @@ const groupFindMembers = async (req, res) => {
     const { id } = req.params;
     const authUser = req.user;
 
+    const groupFound = await Group.findById(id);
+    if (!groupFound) {
+        return res.status(404).json({
+            status: false,
+            message: 'Grupo no encontrado'
+        });
+    }
+
+    if (groupFound.privacy === 'private' && !groupFound.members.includes(authUser._id)) {
+        return res.status(403).json({
+            status: false,
+            message: 'Permiso denegado'
+        });
+    }
+
     const { members } = await Group.findById(id)
         .select('members')
         .populate('members', '-password');
@@ -125,11 +266,25 @@ const groupFindHomeworks = async (req, res) => {
     const { id } = req.params;
     const authUser = req.user;
 
-    const homeworks = await Homework.find({ group: id });
+    const groupFound = await Group.findById(id);
+    if (!groupFound) {
+        return res.status(404).json({
+            status: false,
+            message: 'Grupo no encontrado'
+        });
+    }
 
-    // const { homeworks } = await Group.findById(id)
-    //     .select('homeworks')
-    //     .populate('homeworks');
+    const isAuthUserMember = groupFound.members.includes(authUser._id);
+    if (!isAuthUserMember) {
+        return res.status(403).json({
+            status: false,
+            message: 'Permiso denegado'
+        });
+    }
+
+    const homeworks = await Homework.find({ group: id })
+        .populate('group', 'name avatar')
+        .select('-delivers');
 
     res.json(homeworks);
 }
@@ -138,9 +293,27 @@ const groupFindSubgroups = async (req, res) => {
     const { id } = req.params;
     const authUser = req.user;
 
+    const groupFound = await Group.findById(id);
+    if (!groupFound) {
+        return res.status(404).json({
+            status: false,
+            message: 'Grupo no encontrado'
+        });
+    }
+
+    const isAuthUserMember = groupFound.members.includes(authUser._id);
+    if (!isAuthUserMember) {
+        return res.status(403).json({
+            status: false,
+            message: 'Permiso denegado'
+        });
+    }
+
     // const { subgroups } = await Group.findById(id)
     //     .select('subgroups')
     //     .populate('subgroups');
+
+    const subgroups = [];
 
     res.json(subgroups);
 }
@@ -149,9 +322,27 @@ const groupFindPosts = async (req, res) => {
     const { id } = req.params;
     const authUser = req.user;
 
-    const posts = await Post.find({ group: id });
+    const groupFound = await Group.findById(id);
+    if (!groupFound) {
+        return res.status(404).json({
+            status: false,
+            message: 'Grupo no encontrado'
+        });
+    }
 
-    res.json(posts);
+    const isAuthUserMember = groupFound.members.includes(authUser._id);
+    if (!isAuthUserMember) {
+        return res.status(403).json({
+            status: false,
+            message: 'Permiso denegado'
+        });
+    }
+
+    const posts = await Post.find({ group: id })
+        .populate('user', '-password')
+        .select('-group');
+
+    return res.json(posts);
 }
 
 export default {
@@ -163,5 +354,6 @@ export default {
     findHomeworks: groupFindHomeworks,
     findSubgroups: groupFindSubgroups,
     findPosts: groupFindPosts,
+    addAvatar: groupAddAvatarController,
     addUserToGroupController
 };

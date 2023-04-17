@@ -15,6 +15,9 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:3000'
       },
+      '/uploads': {
+        target: 'http://localhost:3000'
+      },
       '/socket.io': {
         target: 'ws://localhost:3000',
         ws: true,

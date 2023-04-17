@@ -1,11 +1,12 @@
 import { Router } from 'express';
-import { multerUpload } from '../configuration/multer.js';
 import { findUserChatsController } from '../controllers/chat.controller.js';
 import UserController, { userFindAllNotChatController, userFindGroups } from '../controllers/user.controller.js';
 import { authMiddleware } from '../middlewares/auth.middleware.js';
 import { validateIdMiddleware } from '../middlewares/validate-id.middleware.js';
 import { validateCreateUser } from '../middlewares/validators/user.validator.js';
 const userRouter = Router();
+
+import HomeworkController from '../controllers/homework.controller.js';
 
 // Iniciar sesión
 // Cerrar sesión
@@ -19,16 +20,6 @@ const userRouter = Router();
 // Obtener un usuario basado en su id
 // Obtener todos los usuarios excepto el autenticado
 // Obtener todos los usuarios con los que no se tiene un chat
-userRouter.post('/momazo/d', multerUpload.array('files'), (req, res) => {
-    try {
-        res.json(JSON.parse(req.body.content));
-    }
-    catch (exception) {
-        res.json(null);
-    }
-});
-
-
 userRouter.post('/auth', UserController.login);
 
 userRouter.get('/without-chat', authMiddleware, userFindAllNotChatController);
@@ -46,7 +37,9 @@ userRouter.get('/:id/chats', validateIdMiddleware, authMiddleware, findUserChats
 
 // Busca todas las tareas de un usuario
 // [GET] /api/v1/users/:id/homeworks
-userRouter.get('/:id/homeworks');
+userRouter.get('/:id/homeworks', authMiddleware, HomeworkController.findByUser);
+userRouter.get('/:id/homeworks/pending', authMiddleware, HomeworkController.findPendingByUser);
+userRouter.get('/:id/homeworks/expired', authMiddleware, HomeworkController.findExpiredByUser);
 
 // Busca todos los grupos de un usuario
 userRouter.get('/:id/groups', userFindGroups);

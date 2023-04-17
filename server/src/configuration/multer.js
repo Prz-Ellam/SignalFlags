@@ -28,3 +28,13 @@ export const multerUpload = multer({
         fieldSize: 1024 * 1024
     }
 });
+
+export const multerUpload2 = multer({
+    storage: storage,
+    fileFilter: function (_req, file, callback) {
+        callback(null, true);
+    },
+    limits: {
+        fieldSize: 1024 * 1024
+    }
+});

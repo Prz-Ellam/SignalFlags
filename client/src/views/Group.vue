@@ -101,7 +101,18 @@ export default {
   async created() {
     const user = JSON.parse(localStorage.getItem('user'));
     this.groups = await GroupService.findByUser(user._id);
-  
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'bottom-right',
+      showConfirmButton: false,
+      timer: 5000,
+      
+    });
+
+    await Toast.fire({
+      //icon: 'success',
+      html: '<h1> Success </h1>'
+    })
   },
   data() {
     return {

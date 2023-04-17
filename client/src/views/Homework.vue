@@ -34,31 +34,33 @@
                 :key="homework._id"
                 :homeworkId="homework._id"
                 :name="homework.name"
-                :groupName="homework.groupName" 
-                :groupAvatar="homework.groupAvatar"
-                dueDate="12/12/12"
+                :groupName="homework.group.name" 
+                :groupAvatar="homework.group.avatar"
+                :dueDate="homework.dueDate"
               />
 
             </div>
             <div class="tab-pane fade" id="pills-expired-homework" role="tabpanel"
               aria-labelledby="pills-asign_homework-tab" tabindex="1">
               
-              <HomeworkCard v-for="homework in assignedHomeworks"
+              <HomeworkCard v-for="homework in expiredHomeworks"
                 :key="homework._id"
+                :homeworkId="homework._id"
                 :name="homework.name"
-                :groupName="homework.groupName" 
-                :groupAvatar="homework.groupAvatar"
-                dueDate="12/12/12"
+                :groupName="homework.group.name" 
+                :groupAvatar="homework.group.avatar"
+                :dueDate="homework.dueDate"
               />
             </div>
             <div class="tab-pane fade" id="pills-completed-homework" role="tabpanel"
               aria-labelledby="pills-completed-homework-tab" tabindex="2">
-              <HomeworkCard v-for="homework in assignedHomeworks"
+              <HomeworkCard v-for="homework in completeHomeworks"
                 :key="homework._id"
+                :homeworkId="homework._id"
                 :name="homework.name"
-                :groupName="homework.groupName" 
-                :groupAvatar="homework.groupAvatar"
-                dueDate="12/12/12"
+                :groupName="homework.group.name" 
+                :groupAvatar="homework.group.avatar"
+                :dueDate="homework.dueDate"
               />
             </div>
           </div>
@@ -69,6 +71,7 @@
 
 <script>
 import HomeworkCard from '../components/HomeworkCard.vue';
+import HomeworkService from '../services/homework.service';
 
 export default {
   components: {
@@ -76,56 +79,16 @@ export default {
   },
   data() {
     return {
-      assignedHomeworks: [{
-        _id: 1,
-        name: 'Tarea',
-        groupName: 'POI',
-        groupAvatar: 'http://localhost:5173/src/assets/images/POI_SignalFalgs.png'
-      },
-      {
-        _id: 2,
-        name: 'Tarea',
-        groupName: 'POI',
-        groupAvatar: 'http://localhost:5173/src/assets/images/POI_SignalFalgs.png'
-      },
-      {
-        _id: 3,
-        name: 'Tarea',
-        groupName: 'POI',
-        groupAvatar: 'http://localhost:5173/src/assets/images/POI_SignalFalgs.png'
-      },
-      {
-        _id: 4,
-        name: 'Tarea',
-        groupName: 'POI',
-        groupAvatar: 'http://localhost:5173/src/assets/images/POI_SignalFalgs.png'
-      },
-      {
-        _id: 5,
-        name: 'Tarea',
-        groupName: 'POI',
-        groupAvatar: 'http://localhost:5173/src/assets/images/POI_SignalFalgs.png'
-      },
-      {
-        _id: 6,
-        name: 'Tarea',
-        groupName: 'POI',
-        groupAvatar: 'http://localhost:5173/src/assets/images/POI_SignalFalgs.png'
-      },
-      {
-        _id: 7,
-        name: 'Tarea',
-        groupName: 'POI',
-        groupAvatar: 'http://localhost:5173/src/assets/images/POI_SignalFalgs.png'
-      },
-      {
-        _id: 8,
-        name: 'Tarea',
-        groupName: 'POI',
-        groupAvatar: 'http://localhost:5173/src/assets/images/POI_SignalFalgs.png'
-      }],
-      completeHomeworks: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+      assignedHomeworks: [],
+      expiredHomeworks: [],
+      completeHomeworks: []
     }
+  },
+  async created() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    this.assignedHomeworks = await HomeworkService.findByUserPending(user._id);
+    this.expiredHomeworks = await HomeworkService.findByUserExpired(user._id);
+    this.completeHomeworks = await HomeworkService.findByUser(user._id);
   }
 }
 </script>

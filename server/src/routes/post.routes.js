@@ -27,4 +27,8 @@ postRouter.delete('/:id');
 // [POST] /api/v1/posts/:id/reply
 postRouter.post('/:id/reply', authMiddleware, PostController.reply);
 
+// Eliminar una respuesta
+// [DELETE] /api/v1/posts/:id/reply
+postRouter.delete('/:postId/reply/:replyId');
+
 export default postRouter;

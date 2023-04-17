@@ -3,11 +3,11 @@
     <div class="col h-100 align-items-center p-3">
       <div class="h-100 bg-accent py-3 px-5 rounded-3">
         <div>
-          <h3>Segundo Avance</h3>
-          <p> Fecha de vencimiento: 05 de Mayo de 2023 a las 23:59</p>
+          <h3>{{ homework.name }}</h3>
+          <p> Fecha de vencimiento: {{ new Date(homework.dueDate).toLocaleString() }}</p>
 
           <small>Instrucciones</small>
-          <p>descripción de la tarea descripción de la tarea descripción de la tarea descripción de la tarea. </p>
+          <p>{{ homework.description }}</p>
           
           <input type="file" class="form-control mb-3">
           
@@ -26,7 +26,20 @@
 </template>
 
 <script> 
+import HomeworkService from '../services/homework.service';
 
+export default {
+  data() {
+    return {
+      homework: []
+    }
+  },
+  async created() {
+    const homeworkId = this.$route.params.id;
+    this.homework = await HomeworkService.findById(homeworkId);
+    console.log(this.homework);
+  }
+}
 </script>
 
 <style>

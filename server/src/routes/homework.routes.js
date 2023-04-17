@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import HomeworkController from '../controllers/homework.controller.js';
+import { authMiddleware } from '../middlewares/auth.middleware.js';
 const homeworkRouter = Router();
 
 /*
@@ -15,7 +16,7 @@ const homeworkRouter = Router();
 
 // Obtener una tarea
 // [GET] /api/v1/homeworks/:id
-homeworkRouter.get('/:id', HomeworkController.findOne);
+homeworkRouter.get('/:id', authMiddleware, HomeworkController.findOne);
 
 homeworkRouter.post('/');
 

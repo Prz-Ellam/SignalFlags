@@ -3,11 +3,12 @@ import Group from '../models/group.model.js';
 
 export const postCreateController = async (req, res) => {
     const user = req.user;
-    const { groupId } = req.params;
+    const { id } = req.params;
     const { content } = req.body;
+    const files = req.files ?? [];
 
     try {
-        const requestedGroup = await Group.findById(groupId);
+        const requestedGroup = await Group.findById(id);
         if (!requestedGroup) {
             return res.status(404).json({
                 status: false,
@@ -15,15 +16,32 @@ export const postCreateController = async (req, res) => {
             });
         }
 
+        const isAuthUserMember = requestedGroup.members.includes(user._id); 
+        if (!isAuthUserMember) {
+            return res.status(403).json({
+                status: false,
+                message: 'Permiso denegado'
+            });
+        }
+
+        const filesuris = files.map(file => ({ 
+            url: `/uploads/${ file.filename }`,
+            type: file.mimetype
+        })); 
+
         const post = new Post({
             content,
-            group: groupId,
-            user: user._id
+            group: id,
+            user: user._id,
+            attachments: filesuris
         });
-
         await post.save();
 
-        res.json(post);
+        res.status(201).json({
+            status: true,
+            message: 'Publicación creada',
+            postId: post._id
+        });
     }
     catch (exception) {
         return res.status(500).json({
@@ -42,7 +60,16 @@ export const postReplyController = async (req, res) => {
         if (!requestedPost) {
             return res.status(404).json({
                 status: false,
-                message: 'El grupo no existe'
+                message: 'La publicación no existe'
+            });
+        }
+
+        const requestedGroup = await Group.findById(requestedPost.group);
+        const isAuthUserMember = requestedGroup.members.includes(user._id); 
+        if (!isAuthUserMember) {
+            return res.status(403).json({
+                status: false,
+                message: 'Permiso denegado'
             });
         }
 
@@ -55,9 +82,9 @@ export const postReplyController = async (req, res) => {
             }
         }, { new: true });
 
-        res.json({
+        res.status(201).json({
             status: true,
-            message: 'Si'
+            message: 'Respuesta enviada'
         });
     }
     catch (exception) {

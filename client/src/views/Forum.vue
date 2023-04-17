@@ -9,11 +9,11 @@
         <hr>
         <p class="fw-bold mb-1">Subgrupos</p>
         <ul class="list-group">
-          <li role="button" class="bg-primary text-light py-1 rounded-0 border-0 list-group-item">General</li>
-          <li role="button" class="bg-accent text-light py-1 rounded-0 border-0 list-group-item">POI 001</li>
-          <li role="button" class="bg-accent text-light py-1 rounded-0 border-0 list-group-item">POI 002</li>
-          <li role="button" class="bg-accent text-light py-1 rounded-0 border-0 list-group-item">POI 003</li>
-          <li role="button" class="bg-accent text-light py-1 rounded-0 border-0 list-group-item">POI 004</li>
+          <li role="button" class="bg-accent text-light py-1 rounded-0 border-0 list-group-item">General</li>
+          <li v-for="subgroup in subgroups" role="button" 
+            class="bg-primary text-light py-1 rounded-0 border-0 list-group-item">
+            {{ subgroup.name }}
+          </li>
         </ul>
       </div>
       <div class="w-75 bg-accent p-3 rounded-3 h-100 overflow-hidden">
@@ -61,10 +61,52 @@
                 alt="" />
               <div class="row" id="forum-container">
                 
+                <div v-for="post in posts" class="d-flex mt-3 px-3">
+                  <div class="d-flex align-items-start pt-3 mt-3">
+                    <img :src="group.avatar" width="50" height="50"
+                      class="img-fluid bg-primary rounded-circle" alt=""
+                      style="width: 50px; height: 50px; object-fit: cover" />
+                  </div>
+                  <div class="text-start bg-dark mx-3 my-4 w-100 rounded-3">
+                    <div class="p-3">
+                      <span class="ms-1 mb-0">
+                        {{ post.user.username }}
+                      </span>
+                      <small class="ms-1 me-3">{{ post.createdAt }}</small>
+                      <p class="ms-1 me-3 m-1">{{ post.content }}</p>
+                      <div v-for="attachment in post.attachments">
+                        <img 
+                        v-if="/^(image\/(jpg|jpeg|png|gif))$/.exec(attachment.type)"
+                        :src="attachment.url"
+                        class="img-fluid"
+                        role="button"
+                        
+                        />
+                        <a v-else :href="attachment.url" target="_blank" download>
+                          {{ attachment.url }}
+                        </a>
+                      </div>
+                        
+                      </div>
+                    <div class="bg-secondary px-3 rounded-bottom">
+                      <input type="text" name="" id="" 
+                        class="form-control bg-secondary border-0 shadow-none"
+                        placeholder="Escribe algo..."
+                        style="outline: none !important; border: none !important">
+                      <hr class=" text-primary py-0 my-0" style="border-width: 3px !important">
+                      <button class="btn text-start" style="width: 100%;">
+                        <i class="h6 bi bi-arrow-90deg-up"></i>
+                        <span class="ms-3 mb-0">Responder</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
                 <div class="d-flex mt-3 px-3">
                   <div class="d-flex align-items-start pt-3 mt-3">
                     <img :src="group.avatar" width="50" height="50"
-                      class="img-fluid bg-primary rounded-circle" alt="" />
+                      class="img-fluid bg-primary rounded-circle" alt=""
+                      style="width: 50px; height: 50px; object-fit: cover" />
                   </div>
                   <div class="text-start bg-dark mx-3 my-4 w-100 rounded-3">
                     <div class="p-3">
@@ -117,7 +159,8 @@
                 <div class="d-flex mt-3 px-3">
                   <div class="d-flex align-items-start pt-3 mt-3">
                     <img src="../assets/images/POI_SignalFalgs.png" width="50" height="50"
-                      class="img-fluid bg-primary rounded-circle" alt="" />
+                      class="img-fluid bg-primary rounded-circle" alt=""
+                      style="width: 50px; height: 50px; object-fit: cover" />
                   </div>
                   <div class="text-start bg-dark mx-3 my-4 w-100 rounded-3">
                     <div class="p-3">
@@ -153,67 +196,6 @@
                   </div>
                 </div>
 
-                <div class="row">
-                  <div class="col-5">
-                    <hr />
-                  </div>
-                  <div class="col-2">
-                    <span>lunes 6:08pm</span>
-                  </div>
-                  <div class="col-5">
-                    <hr />
-                    Inicio
-                  </div>
-                </div>
-
-                <div class="d-flex mt-3 px-3">
-                  <div class="d-flex align-items-start pt-3 mt-3">
-                    <img src="../assets/images/POI_SignalFalgs.png" width="50" height="50"
-                      class="img-fluid bg-primary rounded-circle" alt="" />
-                  </div>
-                  <div class="text-start bg-dark m-4 w-100 rounded-3">
-                    <div class="p-3">
-                      <span class="h5 ms-3 me-3 mb-0">
-                        Saul Goodman
-                      </span>
-                      <span class="ms-1 me-3">lunes 6:08pm</span>
-                      <p class="ms-3 me-3 m-1">
-                        textotextotextotextotextotextotextotextotextotexto.
-                      </p>
-                    </div>
-                    <div class="d-flex bg-secondary px-3">
-                      <div class="d-flex align-items-start pt-3 mt-3">
-                        <img src="../assets/images/POI_SignalFalgs.png" width="40" height="40"
-                          class="img-fluid bg-primary rounded-circle" alt="" />
-                      </div>
-                      <div class="text-start rounded-3 pt-3 pb-3 w-100">
-                        <span class="h5 ms-3">Saul Goodman</span>
-                        <span class="ms-1 mb-0">lunes 6:08pm</span>
-                        <p class="ms-3 m-1">
-                          textotextotextotextotextotextotextotextotextotexto.
-                        </p>
-                      </div>
-                    </div>
-                    <div class="bg-secondary px-3 rounded-bottom">
-                      <button class="btn text-start" style="width: 100%;">
-                        <i class="h6 bi bi-arrow-90deg-up"></i>
-                        <span class="ms-3 mb-0">Responder</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-5">
-                    <hr />
-                  </div>
-                  <div class="col-2">
-                    <span>lunes 6:08pm</span>
-                  </div>
-                  <div class="col-5">
-                    <hr />
-                  </div>
-                </div>
               </div>
             </div>
             <div class="w-100 bottom-0 start-50 mb-3">
@@ -283,6 +265,8 @@ import Homework from '@/views/Homework.vue';
 import HomeworkCard from '@/components/HomeworkCard.vue';
 
 import GroupService from '@/services/group.service';
+import PostService from '@/services/post.service';
+import SubgroupService from '@/services/subgroup.service';
 
 export default {
   components: {
@@ -296,12 +280,16 @@ export default {
     return {
       groupId: '',
       group: [],
+      posts: [],
+      subgroups: []
     }
   },
   async created() {
     this.groupId = this.$route.params.id;
     this.group = await GroupService.findById(this.groupId);
-    console.log(this.group);
+    this.posts = await PostService.findByGroup(this.groupId);
+    this.subgroups = await SubgroupService.findByGroup(this.groupId);
+    console.log(this.posts);
   }
 }
 </script>
