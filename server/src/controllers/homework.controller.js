@@ -176,8 +176,6 @@ const homeworkFindByUserController = async (req, res) => {
         //const homeworks = await Homework.find({ 'group': { $in: userGroupsIds } });
         
         // Las completadas
-        const currentDate = new Date();
-        
         const homeworks = await Homework.find({
             group: { $in: userGroupsIds },
             delivers: { $elemMatch: { user: id } },
@@ -285,11 +283,97 @@ const homeworkFindByGroupController = async (req, res) => {
             });
         } 
 
-        const homeworks = await Homework.find({ group: groupId });
+        const homeworks = await Homework.find({ 
+            group: id, 
+            delivers: { $elemMatch: { user: authUser._id } },
+            //$expr: { $lt: [ '$delivers.date', '$dueDate' ] }
+        })
+            .populate('group', '-members -admins -subgroups -homeworks -posts')
+            .select('-delivers');
+
         return res.json({
             status: true,
             message: homeworks
         });
+    }
+    catch (exception) {
+        return res.status(500).json({
+            status: false,
+            message: 'Ocurrio un error en el servidor'
+        });
+    }
+}
+
+const homeworkPendingFindByGroupController = async (req, res) => {
+    const { id } = req.params;
+    const authUser = req.user;
+    try {
+        const requestedGroup = await Group.findById(id);
+        if (!requestedGroup) {
+            return res.status(404).json({
+                status: false,
+                message: 'El grupo no fue encontrado'
+            });
+        }
+
+        const isAuthUserMember = requestedGroup.members.includes(authUser._id);
+        if (!isAuthUserMember) {
+            return res.status(403).json({
+                status: false,
+                message: 'Permiso denegado'
+            });
+        } 
+
+        const currentDate = new Date();
+        const homeworks = await Homework.find({ 
+            group: id, 
+            dueDate: { $gt: currentDate },
+            'delivers.user': { $ne: authUser._id }
+            //$expr: { $lt: [ '$delivers.date', '$dueDate' ] }
+        })
+            .populate('group', '-members -admins -subgroups -homeworks -posts')
+            .select('-delivers');
+
+        return res.json(homeworks);
+    }
+    catch (exception) {
+        return res.status(500).json({
+            status: false,
+            message: 'Ocurrio un error en el servidor'
+        });
+    }
+}
+
+const homeworkExpiredFindByGroupController = async (req, res) => {
+    const { id } = req.params;
+    const authUser = req.user;
+    try {
+        const requestedGroup = await Group.findById(id);
+        if (!requestedGroup) {
+            return res.status(404).json({
+                status: false,
+                message: 'El grupo no fue encontrado'
+            });
+        }
+
+        const isAuthUserMember = requestedGroup.members.includes(authUser._id);
+        if (!isAuthUserMember) {
+            return res.status(403).json({
+                status: false,
+                message: 'Permiso denegado'
+            });
+        } 
+
+        const homeworks = await Homework.find({ 
+            group: id, 
+            dueDate: { $lt: currentDate },
+            'delivers.user': { $ne: authUser._id }
+            //$expr: { $lt: [ '$delivers.date', '$dueDate' ] }
+        })
+            .populate('group', '-members -admins -subgroups -homeworks -posts')
+            .select('-delivers');
+
+        return res.json(homeworks);
     }
     catch (exception) {
         return res.status(500).json({
@@ -307,5 +391,7 @@ export default {
     findByUser: homeworkFindByUserController,
     findPendingByUser: homeworkPendingFindByUserController,
     findExpiredByUser: homeworkExpiredFindByUserController,
-    findByGroup: homeworkFindByGroupController
+    findByGroup: homeworkFindByGroupController,
+    findPendingByGroup: homeworkPendingFindByGroupController,
+    findExpiredByGroup: homeworkExpiredFindByGroupController
 };

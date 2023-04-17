@@ -110,19 +110,53 @@ POST    /api/v1/chats/:id/messages
 
 
 - Groups
+
+Crea un grupo
 POST    /api/v1/groups
+
+Agrega una imagen a un grupo
 POST    /api/v1/groups/:id/avatar
+
+Actualiza la informacion de un grupo
 PUT     /api/v1/groups/:id
+
+Actualiza la imagen de un grupo
 PUT     /api/v1/groups/:id/avatar
+
+Elimina un grupo
 DELETE  /api/v1/groups/:id
+
 #POST    /api/v1/groups/:groupId/members/:userId
 #DELETE  /api/v1/groups/:groupId/members/:userId
+
+Obtiene un grupo
 GET     /api/v1/groups/:id
+
+Obtiene todos los grupos [No aparenta ser necesario]
 GET     /api/v1/groups
+
+Obtiene todos los miembros de un grupo
 GET     /api/v1/groups/:id/members
+
+Obtiene todos los subgrupos de un grupo
 GET     /api/v1/groups/:id/subgroups
+
+Obtiene todas las tareas de un grupo
 GET     /api/v1/groups/:id/homeworks
+
+Obtiene todas las publicaciones de un grupo
 GET     /api/v1/groups/:id/posts
+
+Crea una publicacion
+POST    /api/v1/groups/:id/posts
+
+Crea una publicacion con archivos
+POST    /api/v1/groups/:id/posts/uploads
+
+Crea una tarea
+POST    /api/v1/groups/:id/assignments
+
+
 
 
 - Assignments
@@ -132,6 +166,9 @@ DELETE  /api/v1/assignments/:id/finish
 
 
 - Posts
+PUT     /api/v1/posts/:id
+DELETE  /api/v1/posts/:id
+
 POST    /api/v1/posts/:id/reply
 DELETE  /api/v1/posts/:id/reply
 

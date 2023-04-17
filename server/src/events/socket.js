@@ -40,8 +40,6 @@ export default async function(io) {
             const sockets = await UserSocket.find({ user: { $in: members }});
             const socketIds = sockets.map(socket => socket._id);
     
-            console.log(change.fullDocument._id);
-
             io.to(socketIds).emit('pushNotification', change.fullDocument._id);
         }
     });

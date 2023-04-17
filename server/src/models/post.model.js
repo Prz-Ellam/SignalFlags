@@ -16,6 +16,9 @@ const postSchema = new Schema({
     },
     attachments: [
         {
+            name: {
+                type: String
+            },
             url: { 
                 type: String, 
                 required: true 
@@ -23,6 +26,9 @@ const postSchema = new Schema({
             type: { 
                 type: String,
                 required: true 
+            },
+            size: {
+                type: Number
             }
         }
     ],

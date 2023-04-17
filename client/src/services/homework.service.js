@@ -56,8 +56,55 @@ class HomeworkService {
         }
     }
 
-    static async findByGroup() {
+    static async findByGroup(groupId) {
+        try {
+            const configuration = {
+                method: 'GET',
+                url: `/api/v1/groups/${ groupId }/homeworks`,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+            const response = await axios(configuration);
+            return response.data;
+        }
+        catch (exception) {
+            return exception.response.data;
+        }
+    }
 
+    static async findByGroupPending(groupId) {
+        try {
+            const configuration = {
+                method: 'GET',
+                url: `/api/v1/groups/${ groupId }/homeworks/pending`,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+            const response = await axios(configuration);
+            return response.data;
+        }
+        catch (exception) {
+            return exception.response.data;
+        }
+    }
+
+    static async findByGroupExpired(groupId) {
+        try {
+            const configuration = {
+                method: 'GET',
+                url: `/api/v1/groups/${ groupId }/homeworks/expired`,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+            const response = await axios(configuration);
+            return response.data;
+        }
+        catch (exception) {
+            return exception.response.data;
+        }
     }
 
     static async findById(homeworkId) {

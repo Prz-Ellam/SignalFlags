@@ -26,7 +26,22 @@ const homeworkSchema = new Schema({
             },
             date: {
                 type: Date
-            }
+            },
+            attachments: [
+                {
+                    name: {
+                        type: String
+                    },
+                    url: { 
+                        type: String, 
+                        required: true 
+                    },
+                    type: { 
+                        type: String,
+                        required: true 
+                    }
+                }
+            ]
         }
     ]
 },

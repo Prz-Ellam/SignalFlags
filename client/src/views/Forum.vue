@@ -53,55 +53,20 @@
           <div class="tab-pane fade show active box2 group-srcoll" id="pills-posts" role="tabpanel"
             aria-labelledby="pills-posts-tab" tabindex="0">
             <div class="py-2 px-3 w-100">
-              <span class="h5">Bienvenido a Nombre del grupo</span>
-              <p>Descripcion de grupo.</p>
+              <span class="h5">Bienvenido a {{ group.name }}</span>
+              <p>{{ group.description }}</p>
               <img :src="group.avatar" width="200" height="200"
-                class="img-fluid bg-primary rounded-circle m-3"
+                class="rounded-circle"
                 style="width: 200px; height: 200px; object-fit: cover"
-                alt="" />
+                alt="Foto de grupo" />
               <div class="row" id="forum-container">
                 
-                <div v-for="post in posts" class="d-flex mt-3 px-3">
-                  <div class="d-flex align-items-start pt-3 mt-3">
-                    <img :src="group.avatar" width="50" height="50"
-                      class="img-fluid bg-primary rounded-circle" alt=""
-                      style="width: 50px; height: 50px; object-fit: cover" />
-                  </div>
-                  <div class="text-start bg-dark mx-3 my-4 w-100 rounded-3">
-                    <div class="p-3">
-                      <span class="ms-1 mb-0">
-                        {{ post.user.username }}
-                      </span>
-                      <small class="ms-1 me-3">{{ post.createdAt }}</small>
-                      <p class="ms-1 me-3 m-1">{{ post.content }}</p>
-                      <div v-for="attachment in post.attachments">
-                        <img 
-                        v-if="/^(image\/(jpg|jpeg|png|gif))$/.exec(attachment.type)"
-                        :src="attachment.url"
-                        class="img-fluid"
-                        role="button"
-                        
-                        />
-                        <a v-else :href="attachment.url" target="_blank" download>
-                          {{ attachment.url }}
-                        </a>
-                      </div>
-                        
-                      </div>
-                    <div class="bg-secondary px-3 rounded-bottom">
-                      <input type="text" name="" id="" 
-                        class="form-control bg-secondary border-0 shadow-none"
-                        placeholder="Escribe algo..."
-                        style="outline: none !important; border: none !important">
-                      <hr class=" text-primary py-0 my-0" style="border-width: 3px !important">
-                      <button class="btn text-start" style="width: 100%;">
-                        <i class="h6 bi bi-arrow-90deg-up"></i>
-                        <span class="ms-3 mb-0">Responder</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                <PostCard
+                  v-for="post in posts" 
+                  :post="post"
+                />
 
+<!--
                 <div class="d-flex mt-3 px-3">
                   <div class="d-flex align-items-start pt-3 mt-3">
                     <img :src="group.avatar" width="50" height="50"
@@ -195,7 +160,7 @@
                     </div>
                   </div>
                 </div>
-
+-->
               </div>
             </div>
             <div class="w-100 bottom-0 start-50 mb-3">
@@ -235,15 +200,29 @@
                 <div class="tab-content" id="pills-tabContent">
                   <div class="tab-pane fade show active" id="pills-asign_homework" role="tabpanel"
                     aria-labelledby="pills-asign_homework-tab" tabindex="0">
-                    <HomeworkCard name="Proyecto BDM entrega" groupName="Bases de Datos Multimedia"
-                      groupAvatar="http://localhost:5173/src/assets/images/POI_SignalFalgs.png" dueDate="12/12/12" />
+                    
+                    <HomeworkCard v-for="homework in assignedHomeworks"
+                      :key="homework._id"
+                      :homeworkId="homework._id"
+                      :name="homework.name"
+                      :groupName="homework.group.name" 
+                      :groupAvatar="homework.group.avatar"
+                      :dueDate="homework.dueDate"
+                    />
+
                   </div>
                   <div class="tab-pane fade" id="pills-completed-homework" role="tabpanel"
                     aria-labelledby="pills-completed-homework-tab" tabindex="0">
 
-                    <HomeworkCard name="Proyecto BDM entrega" groupName="Bases de Datos Multimedia"
-                      groupAvatar="http://localhost:5173/src/assets/images/POI_SignalFalgs.png" dueDate="12/12/12" />
-
+                    <HomeworkCard v-for="homework in completeHomeworks"
+                      :key="homework._id"
+                      :homeworkId="homework._id"
+                      :name="homework.name"
+                      :groupName="homework.group.name" 
+                      :groupAvatar="homework.group.avatar"
+                      :dueDate="homework.dueDate"
+                    />
+                    
                   </div>
                 </div>
               </div>
@@ -263,10 +242,12 @@ import AddUser from '@/components/AddUser.vue';
 import Buttons from '@/components/Buttons.vue';
 import Homework from '@/views/Homework.vue';
 import HomeworkCard from '@/components/HomeworkCard.vue';
+import PostCard from '@/components/PostCard.vue';
 
 import GroupService from '@/services/group.service';
 import PostService from '@/services/post.service';
 import SubgroupService from '@/services/subgroup.service';
+import HomeworkService from '../services/homework.service';
 
 export default {
   components: {
@@ -274,14 +255,18 @@ export default {
     AddUser,
     Buttons,
     HomeworkCard,
-    Homework
+    Homework,
+    PostCard
   },
   data() {
     return {
       groupId: '',
       group: [],
       posts: [],
-      subgroups: []
+      subgroups: [],
+      assignedHomeworks: [],
+      completeHomeworks: [],
+      expiredHomeworks: []
     }
   },
   async created() {
@@ -289,7 +274,10 @@ export default {
     this.group = await GroupService.findById(this.groupId);
     this.posts = await PostService.findByGroup(this.groupId);
     this.subgroups = await SubgroupService.findByGroup(this.groupId);
-    console.log(this.posts);
+    
+    this.assignedHomeworks = await HomeworkService.findByGroupPending(this.groupId);
+    this.completeHomeworks = await HomeworkService.findByGroup(this.groupId);
+    this.expiredHomeworks = await HomeworkService.findByGroupExpired(this.groupId);
   }
 }
 </script>
@@ -314,5 +302,9 @@ export default {
   overflow-y: scroll;
   overflow-x: unset;
   height: 80%;
+}
+
+.bg:hover {
+  background-color: #6d6f7d !important;
 }
 </style>

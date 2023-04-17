@@ -2,7 +2,8 @@
   <RouterLink :to="`/homework-detail/${homeworkId}`" class="d-block text-white h-100 bg p-3 container rounded-3 mb-3" role="button">
     <div class="d-flex align-items-center row">
       <div class="col-auto">
-        <img :src="groupAvatar" width="50" height="50" class="img-fluid" alt="...">
+        <img :src="groupAvatar" width="50" height="50" class="img-fluid rounded-1" 
+          alt="Imagen grupo">
       </div>
       <div class="col text-start text-nowrap text-truncate">
         <p class="mb-0 text-truncate">{{ name }}</p>

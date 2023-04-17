@@ -53,7 +53,9 @@ groupRouter.get('/:id/members', authMiddleware, GroupController.findMembers);
 
 // Buscar todas las tareas de un grupo
 // [GET] /api/v1/groups/:id/homeworks
-groupRouter.get('/:id/homeworks', authMiddleware, GroupController.findHomeworks);
+groupRouter.get('/:id/homeworks', authMiddleware, HomeworkController.findByGroup);
+groupRouter.get('/:id/homeworks/pending', authMiddleware, HomeworkController.findPendingByGroup);
+groupRouter.get('/:id/homeworks/expired', authMiddleware, HomeworkController.findExpiredByGroup);
 
 // Obtener todos los subgrupos de un grupo
 // [GET] /api/v1/groups/:id/subgroups
