@@ -1,6 +1,6 @@
 <template>
   <section class="h-100 d-md-flex align-items-center px-3 ps-md-0 pe-md-3">
-    <section class="bg-accent d-flex flex-column w-100 rounded-3 p-md-0 my-3" style="height: 95%">
+    <div class="bg-accent d-flex flex-column w-100 rounded-3 p-md-0 my-3" style="height: 95%">
       <div class="d-flex justify-content-between align-items-center mt-3 px-3">
         <div class="d-flex align-items-center">
           <button class="btn border-0 ps-1 pe-2 d-md-none d-block" @click="isChatDrawerFocus = true">
@@ -42,7 +42,7 @@
           <i class="fa-solid fa-paper-plane-top"></i>Enviar
         </button>
       </div>
-    </section>
+    </div>
   </section>
 </template>
 

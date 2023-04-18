@@ -19,13 +19,13 @@ class UserService {
         }
     }
 
-    static async create() {
+    static async create(user) {
         try {
             const configuration = {
                 method: 'POST',
                 url: '/api/v1/users',
                 headers: { 
-                'Content-Type': 'application/json'
+                    'Content-Type': 'application/json'
                 },
                 data : JSON.stringify(user)
             };
@@ -43,7 +43,21 @@ class UserService {
     }
 
     static async find() {
-
+        try {
+            const configuration = {
+                method: 'GET',
+                url: '/api/v1/users',
+                headers: { 
+                    'Content-Type': 'application/json'
+                }
+            };
+    
+            const response = await axios(configuration);
+            return response.data;
+        }
+        catch (exception) {
+            return exception.response.data;
+        }
     }
 
     static async findOne() {

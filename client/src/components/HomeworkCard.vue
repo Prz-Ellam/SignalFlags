@@ -1,5 +1,6 @@
 <template>
-  <RouterLink :to="`/homework-detail/${homeworkId}`" class="d-block text-white h-100 bg p-3 container rounded-3 mb-3" role="button">
+  <RouterLink :to="`/homework-detail/${homeworkId}`" 
+    class="d-block text-white bg p-3 container rounded-3 mb-3 shadow-sm" role="button">
     <div class="d-flex align-items-center row">
       <div class="col-auto">
         <img :src="groupAvatar" width="50" height="50" class="img-fluid rounded-1" 

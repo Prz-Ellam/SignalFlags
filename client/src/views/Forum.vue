@@ -1,7 +1,7 @@
 <template>
-  <section class="bg-dark container-fluid h-100 overflow-auto">
-    <div class="d-flex col h-100 align-items-center p-3 text-center">
-      <div class="text-start w-25 bg-accent p-3 rounded-3 h-100 overflow-hidden me-2">
+  <section class="container-fluid h-100">
+    <div class="h-100 p-3 d-flex col text-center">
+      <div class="bg-accent text-start w-25 p-3 rounded-3 h-100 me-2 overflow-hidden">
         <img class="img-fluid bg-primary rounded-2 mb-2" 
           width="75" height="75" style="width: 75px; height: 75px; object-fit: cover" 
           :src="group.avatar" alt="...">
@@ -16,7 +16,7 @@
           </li>
         </ul>
       </div>
-      <div class="w-75 bg-accent p-3 rounded-3 h-100 overflow-hidden">
+      <div class="d-flex flex-column w-75 bg-accent p-3 rounded-3 h-100 overflow-hidden">
         <div class="d-flex align-items-center">
           <img class="img-fluid bg-primary rounded-2" width="50" height="50" 
             style="width: 50px; height: 50px; object-fit: cover"
@@ -48,11 +48,11 @@
           </button>
         </div>
         <hr>
-        <div class="tab-content h-100" id="pills-tabContent">
+        <div class="tab-content h-100 overflow-hidden" id="pills-tabContent">
           <!-- Grupo -->
-          <div class="tab-pane fade show active box2 group-srcoll" id="pills-posts" role="tabpanel"
-            aria-labelledby="pills-posts-tab" tabindex="0">
-            <div class="py-2 px-3 w-100">
+          <div class="d-flex flex-column tab-pane fade h-100 overflow-hidden show active" id="pills-posts" role="tabpanel"
+          aria-labelledby="pills-posts-tab" tabindex="0">
+            <div class="overflow-auto h-100 py-2 px-3">
               <span class="h5">Bienvenido a {{ group.name }}</span>
               <p>{{ group.description }}</p>
               <img :src="group.avatar" width="200" height="200"
@@ -66,7 +66,7 @@
                   :post="post"
                 />
 
-<!--
+
                 <div class="d-flex mt-3 px-3">
                   <div class="d-flex align-items-start pt-3 mt-3">
                     <img :src="group.avatar" width="50" height="50"
@@ -160,24 +160,24 @@
                     </div>
                   </div>
                 </div>
--->
+
               </div>
             </div>
-            <div class="w-100 bottom-0 start-50 mb-3">
-              <div class="bg-secondary d-flex ms-3">
-                <div class="input-group m-3">
-                  <Buttons />
-                  <input class="form-control bg-secondary text-white shadow-none py-0" type="text"
-                    placeholder="Inicia una conversación..." />
-                  <button class="btn border-0 bg-yellow">
-                    <i class="bi bi-flag"></i>
-                  </button>
-                </div>
-              </div>
+           
+              
+            <div class="input-group p-2 my-1">
+              <Buttons />
+              <input class="form-control bg-secondary text-white shadow-none py-0" 
+                type="text" placeholder="Inicia una conversación..." />
+              <button class="btn border-0 bg-yellow">
+                <i class="bi bi-flag"></i>
+              </button>
             </div>
+              
+           
           </div>
           <!-- Tareas -->
-          <div class="tab-pane fade box3 group-srcoll" id="pills-homework" role="tabpanel"
+          <div class="tab-pane fade h-100 overflow-hidden" id="pills-homework" role="tabpanel"
             aria-labelledby="pills-homework-tab" tabindex="0">
             <div class="col h-100 align-items-center p-3 text-center">
               <div class="bg-accent rounded-3">
@@ -294,7 +294,7 @@ export default {
   position: static;
   overflow-y: scroll;
   overflow-x: unset;
-  height: 80%;
+  height: 100%;
 }
 
 .box3 {

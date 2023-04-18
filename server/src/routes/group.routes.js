@@ -25,7 +25,7 @@ GET     /api/v1/groups/:id/posts
 
 // Obtener un grupo por id
 // [GET] /api/v1/groups/:id
-groupRouter.get('/:id', GroupController.findOne);
+groupRouter.get('/:id', authMiddleware, GroupController.findOne);
 
 // Agregar un grupo
 // [POST] /api/v1/groups

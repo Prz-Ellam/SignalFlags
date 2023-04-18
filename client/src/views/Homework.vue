@@ -1,7 +1,7 @@
 <template>
   <section class="container-fluid h-100">
     <div class="h-100 p-3">
-      <div class="box bg-accent rounded-3 ">
+      <div class="box bg-accent rounded-3">
         <ul class="nav nav-pills mb-3 pt-1 px-2 bg-accent rounded-1" role="tablist">
           <li class="nav-item" role="presentation">
             <button class="nav-link active rounded-0 bg-accent" id="pills-asign_homework-tab" data-bs-toggle="pill"

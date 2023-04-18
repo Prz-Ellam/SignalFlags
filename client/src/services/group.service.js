@@ -7,7 +7,7 @@ class GroupService {
                 method: 'POST',
                 url: `/api/v1/groups`,
                 headers: { 
-                'Content-Type': 'application/json'
+                    'Content-Type': 'application/json'
                 },
                 data: JSON.stringify(group)
             };

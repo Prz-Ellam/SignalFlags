@@ -21,12 +21,12 @@ export const validateCreateGroup = async (req, res, next) => {
                 type: 'string',
                 enum: [ 'public', 'private' ]
             },
-            avatar: {
-                type: 'string'
+            userIds: {
+                type: 'array'
             }
         },
-        required: [ 'name', 'description', 'privacy', 'avatar' ],
-        additionalProperties: false,
+        required: [ 'name', 'description', 'privacy', 'userIds' ],
+        //additionalProperties: false,
         errorMessage: {
             required: 'Las propiedades son requeridas',
             additionalProperties: 'No propiedades addicionales'
