@@ -30,14 +30,15 @@ const homeworkSchema = new Schema({
             attachments: [
                 {
                     name: {
-                        type: String
+                        type: String,
+                        required: true
+                    },                    
+                    contentType: { 
+                        type: String,
+                        required: true 
                     },
                     url: { 
                         type: String, 
-                        required: true 
-                    },
-                    type: { 
-                        type: String,
                         required: true 
                     }
                 }

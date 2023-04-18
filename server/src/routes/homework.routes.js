@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import HomeworkController from '../controllers/homework.controller.js';
 import { authMiddleware } from '../middlewares/auth.middleware.js';
+import { multerUpload2 } from '../configuration/multer.js';
 const homeworkRouter = Router();
 
 /*
@@ -24,5 +25,7 @@ homeworkRouter.put('/:id/finish');
 
 homeworkRouter.put('/:id');
 homeworkRouter.delete('/:id');
+
+homeworkRouter.post('/:id/delivers', multerUpload2.array('files'), authMiddleware, HomeworkController.createDeliver);
 
 export default homeworkRouter;

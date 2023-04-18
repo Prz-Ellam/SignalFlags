@@ -86,5 +86,8 @@ PostController.create);
 // [POST] /api/v1/homeworks
 groupRouter.post('/:groupId/homeworks', authMiddleware, HomeworkController.create);
 
+// Crea un subgrupo
+// [POST] /api/v1/id/subgroups
+groupRouter.post('/:id/subgroups', authMiddleware, GroupController.createSubgroup);
 
 export default groupRouter;

@@ -4,6 +4,8 @@ import Post from '../models/post.model.js';
 import Homework from '../models/homework.model.js';
 import GroupService from '../services/group.service.js';
 
+import { Types } from 'mongoose';
+
 import { multerUpload } from '../configuration/multer.js';
 
 const groupCreateController = async (req, res) => {
@@ -160,6 +162,70 @@ const groupDeleteController = async (req, res) => {
     });
 }
 
+const groupCreateSubgroupController = async (req, res) => {
+    const { id } = req.params;
+    const { name, description, userIds } = req.body;
+    const user = req.user;
+    try {
+        const requestedGroup = await Group.findById(id);
+        if (!requestedGroup) {
+            return res.status(404).json({
+                status: false,
+                message: 'Grupo no encontrado'
+            });
+        }
+
+        if (requestedGroup.parent) {
+            return res.status(400).json({
+                status: false,
+                message: 'Los subgrupos no pueden tener otros subgrupos'
+            });
+        }
+
+        for (const userId of userIds) {
+            const existingUser = User.findById(userId);
+            if (!existingUser) {
+                return res.status(404).json({
+                    status: false,
+                    message: `Usuario con id ${ userId } no encontrado`
+                });
+            }
+
+            const isUserInGroup = await Group.findOne({ _id: id, members: userId });
+            if (!isUserInGroup) {
+                return res.status(404).json({
+                    status: false,
+                    message: `Usuario con id ${ userId } no pertenece al grupo`
+                });
+            }
+        }
+
+        // Solo un admin puede crear un subgrupo
+    
+        if (!userIds.includes(user._id)) {
+            userIds.push(user._id);
+        }
+    
+        const group = new Group({
+            name,
+            description,
+            privacy: 'private',
+            members: userIds,
+            admins: [ user._id ]
+        });
+    
+        await group.save();
+    
+        res.status(201).json(group);
+    }
+    catch (exception) {
+        return res.status(500).json({
+            status: false,
+            message: 'Ocurrio un error en el servidor'
+        });
+    }
+}
+
 const groupAddMemberController = async (req, res) => {
     const authUser = req.user;
     const { groupId } = req.params;
@@ -309,11 +375,7 @@ const groupFindSubgroups = async (req, res) => {
         });
     }
 
-    // const { subgroups } = await Group.findById(id)
-    //     .select('subgroups')
-    //     .populate('subgroups');
-
-    const subgroups = [];
+    const subgroups = await Group.find({ parent: id });
 
     res.json(subgroups);
 }
@@ -355,5 +417,6 @@ export default {
     findSubgroups: groupFindSubgroups,
     findPosts: groupFindPosts,
     addAvatar: groupAddAvatarController,
-    addUserToGroupController
+    addUserToGroupController,
+    createSubgroup: groupCreateSubgroupController
 };

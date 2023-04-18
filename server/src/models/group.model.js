@@ -23,6 +23,11 @@ const groupSchema = new Schema({
     avatar: {
         type: String
     },
+    parent: {
+        type: Schema.Types.ObjectId,
+        ref: 'Group',
+        default: null
+    },
     members: [
         {
             type: Schema.Types.ObjectId,

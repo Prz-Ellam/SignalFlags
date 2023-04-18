@@ -10,7 +10,13 @@
           <p>{{ homework.description }}</p>
           
           <input type="file" class="form-control mb-3">
-          
+
+          <a v-for="attachment in homework.delivers?.attachments" 
+            class="d-flex alert bg bg-dark text-light" role="button" 
+            :href="attachment.url" target="_blank" download>
+            <span><i class="h5 bi-file-earmark-text me-2"></i> {{ attachment.name }}</span>
+          </a>
+
           <button
             class="btn border-0 bg-primary"
           >

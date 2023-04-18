@@ -13,9 +13,9 @@
         <div v-for="attachment in post.attachments">
           <img v-if="/^(image\/(jpg|jpeg|png|gif))$/.exec(attachment.type)" :src="attachment.url" class="img-fluid"
             role="button" />
-          <a class="d-block alert bg bg-accent text-light" role="button" v-else 
+          <a class="d-flex alert bg bg-accent text-light" role="button" v-else 
             :href="attachment.url" target="_blank" download>
-            <i class="h5 bi-file-earmark me-2"></i> {{ attachment.url }}
+            <span><i class="h5 bi-file-earmark-text me-2"></i> {{ attachment.url }}</span>
           </a>
         </div>
       </div>
