@@ -3,6 +3,8 @@ import jwt from 'jsonwebtoken';
 import Chat from '../models/chat.model.js';
 import Message from '../models/message.model.js';
 import Group from '../models/group.model.js';
+import Homework from '../models/homework.model.js';
+import Post from '../models/post.model.js';
 import UserSocket from '../models/userSocket.model.js';
 
 export default async function(io) {
@@ -33,12 +35,22 @@ export default async function(io) {
     const groupStream = Group.watch([
         { $match: { "operationType": { $in: [ "insert", "update", "replace" ] } } }
     ], { fullDocument: 'updateLookup' });
+
+    const homeworkStream = Homework.watch([
+        { $match: { "operationType": { $in: [ "insert", "update", "replace" ] } } }
+    ], { fullDocument: 'updateLookup' });
+
+    const postStream = Post.watch([
+        { $match: { "operationType": { $in: [ "insert", "update", "replace" ] } } }
+    ], { fullDocument: 'updateLookup' });
     
     chatStream.on('change', async (change) => {
         if (change.operationType == 'insert' || change.operationType == 'update') {
             const members = change.fullDocument?.members;
             const sockets = await UserSocket.find({ user: { $in: members }});
             const socketIds = sockets.map(socket => socket._id);
+
+            console.log(change);
     
             io.to(socketIds).emit('pushNotification', change.fullDocument._id);
         }
@@ -49,16 +61,28 @@ export default async function(io) {
             const chatId = change.fullDocument?.chat;
             const chat = await Chat.findOne({ _id: chatId });
             const members = chat?.members;
-    
+
             const sockets = await UserSocket.find({ user: { $in: members }});
             const socketIds = sockets.map(socket => socket._id);
-    
+
             io.to(socketIds).emit('message', change.fullDocument.text);
         }
     });
 
     groupStream.on('change', async (change) => {
-        io.emit('groupNotification', {});
+        if (change.operationType === 'insert') {
+            const members = change.fullDocument?.members;
+
+            const sockets = await UserSocket.find({ user: { $in: members } });
+            const socketIds = sockets.map(socket => socket._id);
+            io.to(socketIds).emit('groupNotification', {});
+        }
+    });
+
+    homeworkStream.on('change', async (change) => {
+        if (change.operationType === 'insert') {
+
+        }
     });
 
     
@@ -86,8 +110,6 @@ export default async function(io) {
 
             await UserSocket.deleteOne({ _id: socket.id });
     
-            console.log('Desconecto');
-
             await Chat.updateMany({ members: socket.userId }, 
                 { 
                     $pull: {
