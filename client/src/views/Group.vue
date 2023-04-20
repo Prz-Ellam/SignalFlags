@@ -83,7 +83,7 @@
           </div>
         </div>
       </div>
-    <CreateGroup id="modalCreateGroup" />
+    <CreateGroup id="modalCreateGroup"/>
   </section>
 </template>
 
@@ -112,7 +112,15 @@ export default {
     await Toast.fire({
       //icon: 'success',
       html: '<h1> Success </h1>'
-    })
+    });
+
+    // Actualizar en tiempo real
+    window.socket.on('groupNotification', async () => {
+      this.groups = await GroupService.findByUser(user._id);
+    });
+  },
+  destroyed() {
+    window.socket.off('groupNotification');
   },
   data() {
     return {

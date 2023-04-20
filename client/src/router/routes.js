@@ -2,6 +2,7 @@ import Home from '@/views/Home.vue';
 import Login from '@/views/Login.vue';
 import Signup from '@/views/Signup.vue';
 import Chat from '@/views/Chat.vue';
+import Videocall from '@/views/Videocall.vue';
 import Homework from '@/views/Homework.vue';
 import HomeworkDetail from '@/views/HomeworkDetail.vue';
 import Group from '@/views/Group.vue';
@@ -30,6 +31,13 @@ const routes = [
                 meta: {
                     requiresAuth: true
                 } 
+            },
+            {
+                path: '/videocall/:userId',
+                component: Videocall,
+                meta: {
+                    requiresAuth: true
+                }
             },
             { 
                 path: '/group', 

@@ -35,6 +35,9 @@ export default {
   emits: [
     'click'
   ],
+  created() {
+    console.log(this.userId);
+  },
   computed: {
     dotClasses() {
       return {

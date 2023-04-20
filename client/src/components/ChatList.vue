@@ -28,7 +28,7 @@
             chat.avatar instanceof Array ? chat.avatar[0] : chat.avatar
           }`"
           :username="chat.name"
-          :userId="chat.lastMessage?.sender?._id"
+          :userId="chat.userId"
           :lastMessage="
             (chat.lastMessage.sender?._id) ?
             ((user._id === chat.lastMessage?.sender?._id

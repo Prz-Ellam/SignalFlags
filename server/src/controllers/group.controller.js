@@ -10,7 +10,7 @@ import { multerUpload } from '../configuration/multer.js';
 
 const groupCreateController = async (req, res) => {
     const user = req.user;
-    const { name, description, privacy, avatar, userIds } = req.body;
+    const { name, description, privacy, userIds } = req.body;
 
     for (const userId of userIds) {
         const existingUser = User.findById(userId);
@@ -30,7 +30,7 @@ const groupCreateController = async (req, res) => {
         name,
         description,
         privacy,
-        avatar,
+        avatar: '/src/assets/images/POI_SignalFalgs.png',
         members: userIds,
         admins: [ user._id ]
     });

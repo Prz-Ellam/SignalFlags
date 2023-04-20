@@ -2,7 +2,7 @@
   <section class="bg-dark container-fluid h-100">
     <div class="row h-100">
       <ChatList 
-        class="col-md-4 col-sm-12 d-md-flex"
+        class="col-sm-12 col-md-4 d-md-flex"
         :class="{ 'd-flex': isChatDrawerFocus, 'd-none': !isChatDrawerFocus }"
         :chats="chats"
         :users="users"
@@ -15,76 +15,8 @@
         :selectedChat="selectedChat"
         :messages="messages"
         @onSendMessage="sendMessage"
+        @onDeselectChat="() => isChatDrawerFocus = true"
       />
-      <!-- <section 
-        class="col-sm-12 col-md h-100 d-md-flex align-items-center px-3 ps-md-0 pe-md-3"
-        :class="{ 'd-flex': !isChatDrawerFocus, 'd-none': isChatDrawerFocus }"
-      >
-        <section class="bg-accent d-flex flex-column w-100 rounded-3 p-md-0 my-3" 
-          style="height: 95%">
-
-          <div class="d-flex justify-content-between align-items-center mt-3 px-3">
-            <div class="d-flex align-items-center">
-              <button class="btn border-0 ps-1 pe-2 d-md-none d-block" 
-                @click="isChatDrawerFocus = true">
-                <i class="bi fa-solid fa-chevron-left"></i>
-              </button>
-              <img
-                v-if="selectedChat.avatar"
-                class="img-fluid rounded-circle actual-chat-user-image"
-                :src="selectedChat.avatar ? '/api/v1/images/' + selectedChat.avatar : ''" 
-                alt="Perfil">
-              <span class="h5 ms-3 mb-0">{{ selectedChat.name }}</span>
-            </div>
-            <div>
-              <button
-                class="btn border-0 position-relative fw-bold"
-                data-bs-toggle="modal"
-                data-bs-target="#modalAddUsers"
-              >
-                <i class="h4 ms-1 bi bi-pencil-square"></i>
-              </button>
-              <button class="btn border-0 position-relative fw-bold">
-                <i class="h4 bi bi-camera-video"></i>
-              </button>
-            </div>
-          </div>
-          <hr class="mx-3">
-
-          <div class="overflow-auto p-2 h-100 chat" id="message-box">
-            <ChatMessage
-              v-for="message in messages"
-              :key="message._id"
-              :automaticMessage="message.sender === null"
-              :ownMessage="message.sender?._id === user._id"
-              :content="message.text"
-              :avatar="message.sender?.avatar"
-              :date="message.createdAt"
-            />
-          </div>
-          <hr class="mb-1 text-light" />
-          <div class="input-group mb-1 p-2">
-            <Buttons />
-            <input
-              type="text"
-              id="message"
-              class="bg-secondary form-control border-0 shadow-none text-white"
-              v-model="content"
-              placeholder="Escribe un mensaje"
-              aria-label="Enviar mensaje"
-              aria-describedby="basic-addon2"
-              @keydown="
-                (e) => {
-                  if (e.key == 'Enter') sendMessage()
-                }
-              "
-            />
-            <button class="btn btn-dark input-group-text" @click="sendMessage">
-              <i class="fa-solid fa-paper-plane-top"></i>Enviar
-            </button>
-          </div>
-        </section>
-      </section> -->
     </div>
 
     <AddUserToGroupChat id="AddUsuertoGroupChat" />
@@ -93,14 +25,14 @@
 </template>
 
 <script>
-import ChatContact from '../components/ChatContact.vue'
-import ChatMessage from '../components/ChatMessage.vue'
-import Autocomplete from '../components/Autocomplete.vue'
-import Buttons from '../components/Buttons.vue'
-import AddUserToGroupChat from '../components/AddUserToGroupChat.vue'
-import ChatList from '../components/ChatList.vue';
-import ChatBox from '../components/ChatBox.vue';
-import UpdateChatGroup from '../components/UpdateChatGroup.vue';
+import ChatContact from '@/components/ChatContact.vue'
+import ChatMessage from '@/components/ChatMessage.vue'
+import Autocomplete from '@/components/Autocomplete.vue'
+import Buttons from '@/components/Buttons.vue'
+import AddUserToGroupChat from '@/components/AddUserToGroupChat.vue'
+import ChatList from '@/components/ChatList.vue';
+import ChatBox from '@/components/ChatBox.vue';
+import UpdateChatGroup from '@/components/UpdateChatGroup.vue';
 
 import ChatService from '@/services/chat.service';
 
@@ -145,7 +77,7 @@ export default {
 
     const response = await ChatService.findByUser(this.user._id);
     if (response?.status) {
-      this.chats = response.message
+      this.chats = response.message;
     }
   },
   mounted() {
@@ -216,23 +148,24 @@ export default {
       this.isChatDrawerFocus = false;
     },
     async sendMessage(content) {
-      console.log(content);
       const response = await createMessage(
         { text: content.text },
         content.chatId,
-      )
+      );
       if (response?.status) {
         //this.content = ''
         const response = await messageFindAllByChatService(content.chatId);
         if (response?.status) {
-          this.messages = response.message
+          this.messages = response.message;
+          this.$nextTick(() => {
+            const messageBox = document.getElementById('message-box')
+            messageBox.scrollTo({
+              left: 0,
+              top: messageBox.scrollHeight,
+              behavior: 'smooth',
+            });
+          });
         }
-        const messageBox = document.getElementById('message-box')
-        messageBox.scrollTo({
-          left: 0,
-          top: messageBox.scrollHeight,
-          behavior: 'smooth',
-        })
       }
     },
   },

@@ -3,7 +3,7 @@
     <div class="bg-accent d-flex flex-column w-100 rounded-3 p-md-0 my-3" style="height: 95%">
       <div class="d-flex justify-content-between align-items-center mt-3 px-3">
         <div class="d-flex align-items-center">
-          <button class="btn border-0 ps-1 pe-2 d-md-none d-block" @click="isChatDrawerFocus = true">
+          <button class="btn border-0 ps-1 pe-2 d-md-none d-block" @click="deselectChat">
             <i class="bi fa-solid fa-chevron-left"></i>
           </button>
           <img v-if="selectedChat.avatar" class="img-fluid rounded-circle actual-chat-user-image"
@@ -14,9 +14,10 @@
           <button class="btn border-0 position-relative fw-bold" data-bs-toggle="modal" data-bs-target="#exampleModal">
             <i class="h4 ms-1 bi bi-pencil-square"></i>
           </button>
-          <button class="btn border-0 position-relative fw-bold">
+          <RouterLink :to="`/videocall/${ selectedChat?.userId }`" 
+            class="btn border-0 position-relative fw-bold">
             <i class="h4 bi bi-camera-video"></i>
-          </button>
+          </RouterLink>
         </div>
       </div>
       <hr class="mx-3">
@@ -47,9 +48,8 @@
 </template>
 
 <script>
-import ChatMessage from '../components/ChatMessage.vue'
-import Buttons from '../components/Buttons.vue'
-import { createMessage, messageFindAllByChatService } from '../services/message.service';
+import ChatMessage from '@/components/ChatMessage.vue'
+import Buttons from '@/components/Buttons.vue'
 
 export default {
   components: {
@@ -65,10 +65,12 @@ export default {
     }
   },
   emits: [
-    'onSendMessage'
+    'onSendMessage',
+    'onDeselectChat'
   ],
   created() {
     this.user = JSON.parse(localStorage.getItem('user'));
+    console.log(this.selectedChat);
   },
   data() {
     return {
@@ -78,6 +80,9 @@ export default {
     }
   },
   methods: {
+    deselectChat() {
+      this.$emit('onDeselectChat');
+    },
     async sendMessage() {
       this.$emit('onSendMessage', { text: this.content, chatId: this.selectedChat.chatId });
       this.content = '';

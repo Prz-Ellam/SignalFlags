@@ -21,8 +21,8 @@ if (token) {
     });
     window.socket = socket;
 
-    socket.on('groupNotification', () => {
-        console.log('Hola Mundo');
+    window.socket.on('videocall', () => {
+        alert('Alerta');
     });
 }
 

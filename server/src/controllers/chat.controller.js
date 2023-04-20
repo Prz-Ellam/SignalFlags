@@ -228,6 +228,8 @@ export const findUserChatsController = async (req, res) => {
         })
         .select('-__v -groupAdmin -active');
 
+    console.log(chats);
+
     const sortedChats = chats.sort((a, b) => {
         if (!a.latestMessage && !b.latestMessage) {
             return 0;
@@ -244,6 +246,7 @@ export const findUserChatsController = async (req, res) => {
     
     const chatList = await Promise.all(sortedChats.map(async chat => {
         const _id = chat.id;
+        const userId = chat.members.filter(member => member._id.toString() !== id).map(member => member._id)[0];
         const name = chat.name || chat.members.filter(member => member._id.toString() !== id).map(member => member.username).join(', ');
         const avatar = chat.avatar || chat.members.filter(member => member._id.toString() !== id)[0]?.avatar;
         const lastMessage = chat.latestMessage ? chat.latestMessage : { text: '', sender: {username: ''} };
@@ -273,6 +276,7 @@ export const findUserChatsController = async (req, res) => {
             _id,
             name,
             avatar,
+            userId,
             type: chat.type,
             lastMessage,
             lastMessageTime,
