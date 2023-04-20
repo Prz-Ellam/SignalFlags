@@ -102,7 +102,7 @@ export default {
           else{
             var imgCodified = URL.createObjectURL(file)
       
-            document.getElementById('imagesContainer').insertAdjacentHTML('beforeend', '<img style="width: 100px; height: 100px;  object-fit: cover;"  class=" imgBox m-2 rounded-3" src="'+imgCodified+'" />');
+            document.getElementById('imagesContainer').insertAdjacentHTML('beforeend', '<img style="width: 100px; height: 100px;  object-fit: cover;"  class=" imgBox m-2 rounded-3" src="'+imgCodified+'"  @click="deleteImg" />');
           }  
         }
          
@@ -167,8 +167,6 @@ export default {
 #upload-image {
   scale: 0.01;
 }
-
-
 
 .imgBox:hover {
   background-color: #6d6f7d;

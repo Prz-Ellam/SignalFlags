@@ -8,6 +8,7 @@ import Group from '@/views/Group.vue';
 import Layout from '@/components/Layout.vue';
 import Forum from '@/views/Forum.vue';
 import Profile from '@/views/Profile.vue';
+import Videocall from '../views/Videocall.vue';
 
 const routes = [
     {
@@ -62,6 +63,13 @@ const routes = [
             {
                 path: '/profile',
                 component: Profile,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/videocall',
+                component: Videocall,
                 meta: {
                     requiresAuth: true
                 }
