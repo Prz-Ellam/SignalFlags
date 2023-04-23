@@ -2,7 +2,7 @@
   <section class="bg-dark container-fluid h-100">
     <div class="row h-100">
       <ChatList 
-        class="col-sm-12 col-md-4 d-md-flex"
+        class="col-sm-12 col-md-5 col-lg-4 d-md-flex"
         :class="{ 'd-flex': isChatDrawerFocus, 'd-none': !isChatDrawerFocus }"
         :chats="chats"
         :users="users"
@@ -34,6 +34,7 @@ import ChatList from '@/components/ChatList.vue';
 import ChatBox from '@/components/ChatBox.vue';
 import UpdateChatGroup from '@/components/UpdateChatGroup.vue';
 
+import MessageService from '@/services/message.service';
 import ChatService from '@/services/chat.service';
 
 import { chatFindAllByUserService } from '../services/chat.service'
@@ -81,25 +82,24 @@ export default {
     }
   },
   mounted() {
-    window.socket.on('message', (message) => {
-      console.log(message)
-    })
-
-    window.socket.on('pushNotification', async (id) => {
-      if (this.actualChatId) {
-        const response0 = await messageFindAllByChatService(this.actualChatId);
-        if (response0?.status) {
-          this.messages = response0.message
+    window.socket.on('messageInsert', async (message) => {
+      if (this.selectedChat?.chatId) {
+        console.log('Message Insert');
+        const response = await MessageService.findByChat(this.selectedChat.chatId);
+        if (response?.status) {
+          this.messages = response.message;
           this.$nextTick(() => {
-            const messageBox = document.getElementById('message-box')
-            messageBox.scrollTo({
-              left: 0,
-              top: messageBox.scrollHeight,
-            })
-          })
+           const messageBox = document.getElementById('message-box')
+           messageBox.scrollTo({
+             left: 0,
+             top: messageBox.scrollHeight,
+           })
+         })
         }
       }
+    });
 
+    window.socket.on('pushNotification', async (id) => {
       const response = await chatFindAllByUserService(this.user._id)
       if (response?.status) {
         const chat2 = response.message.find(
@@ -118,9 +118,11 @@ export default {
       }
     })
   },
-  destroyed() {
+  beforeUnmount() {
     window.socket.off('message');
+    window.socket.off('messageInsert');
     window.socket.off('pushNotification');
+    window.socket.emit('leaveRooms');
   },
   methods: {
     async print(id) {
@@ -128,9 +130,11 @@ export default {
     },
     async chatSelected(chat) {
       this.selectedChat = chat;
+
+      window.socket.emit('selectChat', this.selectedChat.chatId);
      
       // this.selectedChat = this.chats.find((chat) => chat._id === chatId)
-      const response = await messageFindAllByChatService(this.selectedChat.chatId)
+      const response = await MessageService.findByChat(this.selectedChat.chatId)
       if (response?.status) {
          this.messages = response.message
          this.$nextTick(() => {
@@ -148,25 +152,7 @@ export default {
       this.isChatDrawerFocus = false;
     },
     async sendMessage(content) {
-      const response = await createMessage(
-        { text: content.text },
-        content.chatId,
-      );
-      if (response?.status) {
-        //this.content = ''
-        const response = await messageFindAllByChatService(content.chatId);
-        if (response?.status) {
-          this.messages = response.message;
-          this.$nextTick(() => {
-            const messageBox = document.getElementById('message-box')
-            messageBox.scrollTo({
-              left: 0,
-              top: messageBox.scrollHeight,
-              behavior: 'smooth',
-            });
-          });
-        }
-      }
+      await MessageService.create({ text: content.text }, content.chatId);
     },
   },
 }

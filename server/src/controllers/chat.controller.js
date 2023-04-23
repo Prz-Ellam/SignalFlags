@@ -228,8 +228,6 @@ export const findUserChatsController = async (req, res) => {
         })
         .select('-__v -groupAdmin -active');
 
-    console.log(chats);
-
     const sortedChats = chats.sort((a, b) => {
         if (!a.latestMessage && !b.latestMessage) {
             return 0;

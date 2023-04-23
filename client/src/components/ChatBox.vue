@@ -1,7 +1,7 @@
 <template>
   <section class="h-100 d-md-flex align-items-center px-3 ps-md-0 pe-md-3">
     <div class="bg-accent d-flex flex-column w-100 rounded-3 p-md-0 my-3" style="height: 95%">
-      <div class="d-flex justify-content-between align-items-center mt-3 px-3">
+      <div v-if="selectedChat.name" class="d-flex justify-content-between align-items-center mt-3 px-3">
         <div class="d-flex align-items-center">
           <button class="btn border-0 ps-1 pe-2 d-md-none d-block" @click="deselectChat">
             <i class="bi fa-solid fa-chevron-left"></i>
@@ -20,17 +20,16 @@
           </RouterLink>
         </div>
       </div>
-      <hr class="mx-3">
-
-      <div class="overflow-auto p-2 h-100 chat" id="message-box">
+      <hr v-if="selectedChat.name" class="mx-3">
+      <div v-if="selectedChat.name" class="overflow-auto p-2 h-100 chat" id="message-box">
         <ChatMessage v-for="message in messages" 
           :key="message._id" :automaticMessage="message.sender === null"
           :ownMessage="message.sender?._id === user._id" :content="message.text" 
           :avatar="message.sender?.avatar"
           :date="message.createdAt" />
       </div>
-      <hr class="mb-1 text-light" />
-      <div class="input-group mb-1 p-2">
+      <hr v-if="selectedChat.name" class="mb-1 text-light" />
+      <div v-if="selectedChat.name" class="input-group mb-1 p-2">
         <Buttons />
         <input type="text" id="message" class="bg-secondary form-control border-0 shadow-none text-white"
           v-model="content" placeholder="Escribe un mensaje" aria-label="Enviar mensaje" aria-describedby="basic-addon2"

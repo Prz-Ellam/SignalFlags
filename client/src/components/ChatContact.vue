@@ -36,7 +36,6 @@ export default {
     'click'
   ],
   created() {
-    console.log(this.userId);
   },
   computed: {
     dotClasses() {

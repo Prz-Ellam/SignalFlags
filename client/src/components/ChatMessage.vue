@@ -11,7 +11,7 @@
       v-if="!ownMessage" :src="`/api/v1/images/${ avatar }`" 
       class="rounded-circle me-2 object-fit-cover" width="32" height="32" alt="Img">
     <small 
-      :class="`${ ownMessage ? 'bg-primary' : 'bg-secondary' } p-2 rounded-pill overflow-auto`" 
+      :class="`${ ownMessage ? 'bg-primary' : 'bg-secondary' } p-2 rounded-4 overflow-auto`" 
       data-bs-toggle="tooltip" 
       :data-bs-placement="ownMessage ? 'left' : 'right'"
       :data-bs-title="new Date(date).toLocaleString('es-MX', 'America/Monterrey')"  
