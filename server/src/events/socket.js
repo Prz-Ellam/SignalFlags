@@ -122,6 +122,7 @@ export default async function(io) {
             }
             
             let type = (data.userId === call.offerUser.toString()) ? 'offer' : 'answer';
+            socket.join(call._id);
             socket.emit('createdOffer', { id: call._id, type });
         });
 
