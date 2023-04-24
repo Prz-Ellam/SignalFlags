@@ -21,6 +21,7 @@ import HomeworkController from '../controllers/homework.controller.js';
 // Obtener todos los usuarios excepto el autenticado
 // Obtener todos los usuarios con los que no se tiene un chat
 userRouter.post('/auth', UserController.login);
+userRouter.delete('/auth', authMiddleware, UserController.logout);
 
 userRouter.get('/without-chat', authMiddleware, userFindAllNotChatController);
 

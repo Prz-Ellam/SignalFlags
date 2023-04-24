@@ -87,6 +87,10 @@ export default {
       user: JSON.parse(localStorage.getItem('user'))
     }
   },
+  emits: [
+    'onClickFile',
+    'onClickGeolocalization'
+  ],
   methods: {
     async uploadImage(event) {
         const files = Array.from(event.target.files);
@@ -99,9 +103,28 @@ export default {
         }      
     },
     async uploadFile(event) {
+      this.$emit('onClickFile', event);
     },
-    getGeolocation(event) {
-
+    getGeolocation(id) {
+      const d = document, n = navigator;
+      const $id = d.getElementById(id), options = {
+        enableHighAccuracy:true,
+        timeout: 5000, //5 segundos
+        maximumAge:0 //cada que toma una lectura no tome la referencia de la anterior
+      };
+      
+      const success = position => {
+        let coords = position.coords
+        console.log(position);
+        //document.getElementById('message').value = `https://www.google.com/maps/@${coords.latitude},${coords.longitude},17z` 
+        const url = `https://www.google.com/maps/@${coords.latitude},${coords.longitude},17z`;
+        //<a href="https://www.google.com/maps/@${coords.latitude},${coords.longitude},20z" target="_blank" rel="noopener"></a>
+        this.$emit('onClickGeolocalization', url);
+      }
+      const error = (error) => {
+        console.log(`Error ${error.code}: ${error.message}`)
+      }
+      n.geolocation.getCurrentPosition(success, error)
     }
   }
 }

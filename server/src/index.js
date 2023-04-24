@@ -37,6 +37,8 @@ app.use(notFoundMiddleware);
 
 socket(io);
 
+export default io;
+
 httpServer.listen(app.get('port'), async () => {
     console.log(`Server started on port ${ app.get('port') }`);
 });

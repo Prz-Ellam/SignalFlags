@@ -5,6 +5,15 @@ import axios from 'axios';
 import router from './router/router';
 import io from 'socket.io-client';
 
+import AOS from 'aos';
+import 'aos/dist/aos.css'; // importa los estilos CSS de AOS
+AOS.init({
+    duration: 1000,
+    easing: "ease-in-out",
+    once: true,
+    mirror: false
+  });
+
 import './assets/main.scss';
 
 import 'bootstrap-vue/dist/bootstrap-vue.min.css';

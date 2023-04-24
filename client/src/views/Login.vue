@@ -19,17 +19,14 @@
             v-model="email"
             id="email"
             type="email"
-            name="email"
             class="bg-secondary form-control rounded-4"
             placeholder="example@domain.com"
           >
-          <small 
-            class="text-danger" 
+          <small class="text-danger" 
             v-if="v$.email.$dirty && v$.email.required.$invalid">
             El correo electrónico es requerido
           </small>
-          <small 
-            class="text-danger" 
+          <small class="text-danger" 
             v-if="v$.email.$dirty && v$.email.email.$invalid">
             El correo electrónico no tiene el formato correcto
           </small>
@@ -43,11 +40,9 @@
             v-model="password"
             id="password"
             type="password"
-            name="password"
             class="bg-secondary form-control rounded-4"
           >
-          <small 
-            class="text-danger" 
+          <small class="text-danger" 
             v-if="v$.password.$dirty && v$.password.required.$invalid">
             La contraseña es requerida
           </small>
@@ -65,12 +60,6 @@
             ¡Registrate aquí!
           </RouterLink>
         </div>
-        <hr>
-        <a 
-          href="#" 
-          class="d-block text-center text-primary mt-3">
-          ¿Olvidaste tu contraseña?
-        </a>
       </form>
     </div>
   </section>

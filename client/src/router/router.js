@@ -13,8 +13,13 @@ router.beforeEach((to, from, next) => {
     if (requiresAuth && !token) {
         next('/home');
     }
+    else if (!requiresAuth && token) {
+        next('/');
+    }
+    else {
+        next();
+    }
 
-    next();
 });
 
 export default router;

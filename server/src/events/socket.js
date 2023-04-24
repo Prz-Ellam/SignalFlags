@@ -228,19 +228,20 @@ export default async function(io) {
             console.log(`User ${ socket.id } disconnect`);
 
             await UserSocket.deleteOne({ _id: socket.id });
-    
-            await Chat.updateMany({ members: socket.userId }, 
-                { 
-                    $pull: {
-                        activeUsers: socket.userId
-                    }
-                });
+
     
             const activeSockets = await UserSocket.find({ user: socket.userId });
             const activeSocketsCount = activeSockets.length;
     
             // Si hay 0 significa que el usuario se desconecto
             if (activeSocketsCount == 0) {
+                await Chat.updateMany({ members: socket.userId }, 
+                    { 
+                        $pull: {
+                            activeUsers: socket.userId
+                        }
+                    });
+
                 const chats = await Chat.find({ members: socket.userId });
                 const allMembers = chats.reduce((acc, chat) => {
                     return acc.concat(chat.members);

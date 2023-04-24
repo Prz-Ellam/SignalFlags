@@ -11,6 +11,13 @@ export const chatAccessController = async (req, res) => {
     const { userId } = req.body;
     const authUser = req.user;
 
+    if (userId === authUser._id.toString()) {
+        return res.status(400).json({
+            status: false,
+            message: 'Chat no valido'
+        });
+    }
+
     const requestedChat = await Chat.find({
         type: 'individual',
         $and: [
@@ -287,4 +294,28 @@ export const findUserChatsController = async (req, res) => {
         status: true,
         message: chatList
     });
+}
+
+export const chatFindUsersController = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const selectedChat = await Chat.findById(id);
+        if (!selectedChat) {
+            return res.status(404).json({
+                status: false,
+                message: 'Chat no encontrado'
+            });
+        }
+
+        const { members } = await Chat.findById(id)
+            .populate('members', '-password -__v');
+
+        res.json(members);
+    }
+    catch (exception) {
+        return res.status(500).json({
+            status: false,
+            message: 'Ocurrio un error en el servidor'
+        });
+    }
 }

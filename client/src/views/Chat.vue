@@ -14,7 +14,6 @@
         :class="{ 'd-flex': !isChatDrawerFocus, 'd-none': isChatDrawerFocus }"
         :selectedChat="selectedChat"
         :messages="messages"
-        @onSendMessage="sendMessage"
         @onDeselectChat="() => isChatDrawerFocus = true"
       />
     </div>
@@ -38,10 +37,6 @@ import MessageService from '@/services/message.service';
 import ChatService from '@/services/chat.service';
 
 import { chatFindAllByUserService } from '../services/chat.service'
-import {
-  createMessage,
-  messageFindAllByChatService,
-} from '../services/message.service'
 import { userFindAllWithoutChatService } from '../services/user.service'
 import { chatAccessService } from '../services/chat.service';
 
@@ -84,7 +79,6 @@ export default {
   mounted() {
     window.socket.on('messageInsert', async (message) => {
       if (this.selectedChat?.chatId) {
-        console.log('Message Insert');
         const response = await MessageService.findByChat(this.selectedChat.chatId);
         if (response?.status) {
           this.messages = response.message;
@@ -150,13 +144,7 @@ export default {
         this.chats = response2.message
       }
       this.isChatDrawerFocus = false;
-    },
-    async sendMessage(content) {
-      await MessageService.create({ text: content.text }, content.chatId);
-    },
+    }
   },
 }
 </script>
-
-<style scoped>
-</style>

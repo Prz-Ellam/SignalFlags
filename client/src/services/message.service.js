@@ -19,6 +19,24 @@ class MessageService {
         }
     }
 
+    static async createUploads(message, chatId) {
+        try {
+            const configuration = {
+                method: 'POST',
+                url: `/api/v1/chats/${ chatId }/messages/uploads`,
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+                data: message
+            }
+            const response = await axios(configuration);
+            return response.data;
+        }
+        catch (exception) {
+            return exception.response.data;
+        }
+    }
+
     static async update() {
 
     }

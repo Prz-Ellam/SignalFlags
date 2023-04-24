@@ -9,6 +9,8 @@ import UserService from '../services/user.service.js';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { generateToken } from '../configuration/generate-token.js';
+import UserSocket from '../models/userSocket.model.js';
+import io from '../index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -43,6 +45,31 @@ const userLoginController = async (req, res) => {
         },
         token: token
     });
+}
+
+const userLogoutController = async (req, res) => {
+    const authUser = req.user;
+    //try {
+        const sockets = await UserSocket.find({ user: authUser._id });
+    
+        console.log(io.sockets.sockets);
+        sockets.forEach(function(socket) {
+            var nsocket = io.sockets.sockets.get(socket._id.toString());
+            console.log(socket._id.toString());
+            if (nsocket) {
+                console.log(`Desconectar ${socket._id}`);
+                nsocket.disconnect();
+            }
+        });
+
+        res.json({});
+    //}
+    // catch (exception) {
+    //     return res.status(500).json({
+    //         status: false,
+    //         message: 'Ocurrio un error en el servidor'
+    //     });
+    // }
 }
 
 export const userCreateController = async (req, res) => {
@@ -225,6 +252,7 @@ export const userFindGroups = async (req, res) => {
 
 export default {
     login: userLoginController,
+    logout: userLogoutController,
     create: userCreateController,
     update: userUpdateController,
     findOne: findOneUserController,

@@ -17,6 +17,9 @@ const messageSchema = new Schema({
     },
     attachments: [
         {
+            name: {
+                type: String
+            },
             url: { 
                 type: String, 
                 required: true 
@@ -24,7 +27,7 @@ const messageSchema = new Schema({
             type: { 
                 type: String,
                 required: true 
-            }
+            },
         }
     ],
     viewed_by: [

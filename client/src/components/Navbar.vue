@@ -48,6 +48,8 @@
 </template>
 
 <script>
+import UserService from '@/services/user.service';
+
 export default {
   data() {
     return {
@@ -55,10 +57,11 @@ export default {
     }
   },
   methods: {
-    logout() {
+    async logout() {
+      await UserService.logout();
       localStorage.clear();
       this.$router.push('/home');
-      window.socket.disconnect();
+      //window.socket.disconnect();
     }
   }
 }

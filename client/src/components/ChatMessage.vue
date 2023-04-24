@@ -6,17 +6,24 @@
   </div>
   <div
     v-else 
-    :class="`d-flex my-3 ${ ownMessage ? 'justify-content-end' : 'justify-content-start' }`">
+    :class="{ 'd-flex my-3': true, 'justify-content-end': ownMessage, 'justify-content-start': !ownMessage }">
     <img 
       v-if="!ownMessage" :src="`/api/v1/images/${ avatar }`" 
       class="rounded-circle me-2 object-fit-cover" width="32" height="32" alt="Img">
     <small 
-      :class="`${ ownMessage ? 'bg-primary' : 'bg-secondary' } p-2 rounded-4 overflow-auto`" 
+      :class="{ 'p-2 rounded-4 overflow-auto': true, 'bg-primary': ownMessage, 'bg-secondary': !ownMessage }" 
       data-bs-toggle="tooltip" 
       :data-bs-placement="ownMessage ? 'left' : 'right'"
       :data-bs-title="new Date(date).toLocaleString('es-MX', 'America/Monterrey')"  
     >
       {{ content }}
+      <a v-for="attachment in message.attachments"
+        class="d-block text-light fw-bold mt-2" role="button"
+        :href="attachment.url" target="_blank" download>
+        <img v-if="[ 'image/jpeg', 'image/jpg', 'image/gif', 'image/png' ].includes(attachment.type)" 
+          :src="attachment.url" alt="" class="img-fluid" width="200">
+        <span v-else class="fw-bold">{{ attachment.name }}</span>
+      </a>
     </small>
   </div>
 </template>
@@ -35,7 +42,8 @@ export default {
     'content',
     'avatar',
     'automaticMessage',
-    'date'
+    'date',
+    'message'
 	],
 	emits: [
 	],

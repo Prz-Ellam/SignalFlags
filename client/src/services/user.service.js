@@ -19,6 +19,23 @@ class UserService {
         }
     }
 
+    static async logout() {
+        try {
+            const configuration = {
+                method: 'DELETE',
+                url: '/api/v1/users/auth',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+            const response = await axios(configuration);
+            return response.data;
+        }
+        catch (exception) {
+            return exception.response.data;
+        }
+    }
+
     static async create(user) {
         try {
             const configuration = {
