@@ -5,8 +5,20 @@ import axios from 'axios';
 import router from './router/router';
 import io from 'socket.io-client';
 
+import AOS from 'aos';
+import 'aos/dist/aos.css'; // importa los estilos CSS de AOS
+AOS.init({
+    duration: 1000,
+    easing: "ease-in-out",
+    once: true,
+    mirror: false
+  });
+
 import './assets/main.scss';
-import '../node_modules/bootstrap/dist/js/bootstrap.bundle';
+
+import 'bootstrap-vue/dist/bootstrap-vue.min.css';
+
+import 'bootstrap';
 
 const token = localStorage.getItem('token');
 if (token) {
@@ -17,6 +29,10 @@ if (token) {
         transports: [ 'websocket' ]
     });
     window.socket = socket;
+
+    window.socket.on('videocall', () => {
+        alert('Alerta');
+    });
 }
 
 axios.interceptors.request.use(

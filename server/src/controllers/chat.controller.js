@@ -2,11 +2,21 @@ import { Types } from 'mongoose';
 import User from '../models/user.model.js';
 import Chat from '../models/chat.model.js';
 import Message from '../models/message.model.js';
+import UserSocket from '../models/userSocket.model.js';
 import { format } from 'date-fns';
+
+const ChatController = {};
 
 export const chatAccessController = async (req, res) => {
     const { userId } = req.body;
     const authUser = req.user;
+
+    if (userId === authUser._id.toString()) {
+        return res.status(400).json({
+            status: false,
+            message: 'Chat no valido'
+        });
+    }
 
     const requestedChat = await Chat.find({
         type: 'individual',
@@ -23,12 +33,22 @@ export const chatAccessController = async (req, res) => {
     }
 
     try {
+        // Primero creamos el chat y lo guardamos
         const chat = new Chat({
             type: 'individual',
-            members: [userId, authUser._id]
+            members: [ userId, authUser._id ],
+            activeUsers: [ authUser._id ]
         });
 
         await chat.save();
+
+        // Verificamos si el usuario esta actualmente conectado
+        const existingSocket = await UserSocket.find({ user: userId });
+        if (existingSocket.length > 0) {
+            chat.activeUsers.push(userId);
+            await chat.save();
+        }
+
         const populateChat = await Chat.findById(chat._id)
             .populate('members', '-password -__v')
             .select('-__v -groupAdmin -type');
@@ -49,7 +69,7 @@ export const chatAccessController = async (req, res) => {
 // chatCreateGroupController
 export const chatCreateController = async (req, res) => {
     const authUser = req.user;
-    const { members } = req.body;
+    const { name, avatar, members } = req.body;
 
     // TODO: Cuando se cree el chat validar si los usuarios involucrados estan conectados
 
@@ -74,12 +94,33 @@ export const chatCreateController = async (req, res) => {
         members.push(authUser._id);
 
         const groupChat = new Chat({
+            avatar,
+            name,
             type: 'group',
             members: members,
             groupAdmin: authUser._id
         });
 
         await groupChat.save();
+
+        const message = new Message({
+            text: 'Se creó el grupo',
+            sender: null,
+            chat: groupChat._id,
+            viewed_by: {
+                user: authUser._id
+            }
+        });
+
+        await message.save();
+
+        const unseenMessageCount = await Message.find({ 
+            chat: groupChat._id, 'viewed_by.user': { $ne: authUser._id } }).length;
+
+        await Chat.findOneAndUpdate({ _id: groupChat._id }, { 
+            latestMessage: message._id,
+            unseenMessages: unseenMessageCount
+        });
 
         res.status(201).json({
             status: true,
@@ -210,10 +251,13 @@ export const findUserChatsController = async (req, res) => {
     
     const chatList = await Promise.all(sortedChats.map(async chat => {
         const _id = chat.id;
+        const userId = chat.members.filter(member => member._id.toString() !== id).map(member => member._id)[0];
         const name = chat.name || chat.members.filter(member => member._id.toString() !== id).map(member => member.username).join(', ');
         const avatar = chat.avatar || chat.members.filter(member => member._id.toString() !== id)[0]?.avatar;
         const lastMessage = chat.latestMessage ? chat.latestMessage : { text: '', sender: {username: ''} };
-        const lastMessageTime = chat.latestMessage ? format(new Date(chat.latestMessage.createdAt), 'dd/MM/yy HH:mm').toLocaleString('es-MX', { timeZone: 'America/Monterrey' }) : '';
+        
+        // Cosas de la zona horaria
+        const lastMessageTime = chat.latestMessage ? format(new Date(new Date(chat.latestMessage.createdAt).getTime() - (3600 * 1000)), 'dd/MM/yy HH:mm') : '';
         
         const activeUser = chat.activeUsers.filter(activeUser => activeUser.toString() !== id);
         //console.log(chat.activeUsers);
@@ -237,6 +281,7 @@ export const findUserChatsController = async (req, res) => {
             _id,
             name,
             avatar,
+            userId,
             type: chat.type,
             lastMessage,
             lastMessageTime,
@@ -249,4 +294,28 @@ export const findUserChatsController = async (req, res) => {
         status: true,
         message: chatList
     });
+}
+
+export const chatFindUsersController = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const selectedChat = await Chat.findById(id);
+        if (!selectedChat) {
+            return res.status(404).json({
+                status: false,
+                message: 'Chat no encontrado'
+            });
+        }
+
+        const { members } = await Chat.findById(id)
+            .populate('members', '-password -__v');
+
+        res.json(members);
+    }
+    catch (exception) {
+        return res.status(500).json({
+            status: false,
+            message: 'Ocurrio un error en el servidor'
+        });
+    }
 }

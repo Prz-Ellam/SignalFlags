@@ -4,31 +4,23 @@ import addFormats from 'ajv-formats';
 import { errorsToObject } from '../../utilities/errors-to-object';
 
 export const validateCreateHomework = (req, res, next) => {
-    const homeworkSchema = {
+    const postSchema = {
         type: 'object',
         properties: {
-            name: {
+            content: {
                 type: 'string',
                 minLength: 1,
                 maxLength: 50
-            },
-            description: {
-                type: 'string',
-                minLength: 1,
-                maxLength: 255
-            },
-            dueDate: {
-                type: 'string'
             }
         },
-        required: [ 'name', 'description', 'dueDate' ],
+        required: [ 'content' ],
         additionalProperties: false
     }
 
     const ajv = new Ajv({ allErrors: true, $data: true });
     addFormats(ajv);
     addErrors(ajv);
-    const isValid = ajv.validate(homeworkSchema, req.body);
+    const isValid = ajv.validate(postSchema, req.body);
 
     if (!isValid)
         return res.status(422).json({

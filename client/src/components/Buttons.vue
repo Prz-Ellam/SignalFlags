@@ -1,13 +1,13 @@
 <template>
   <div class="dropup-center dropup">
     <button class="btn border-0" data-bs-toggle="dropdown" aria-expanded="false" style="transform: rotateY(0deg) rotate(45deg);" >
-      <i class="h4 mb-0 me-1 bi bi-paperclip" style="color: #6d6f7d;"></i>
+      <i class="h4 mb-0 me-1 bi bi-paperclip"></i>
     </button>
     <ul
       class="dropdown-menu text-center border-0"
       style="background-color: transparent;"
     >
-      <li class="m-2">
+      <li class="my-2">
         <div class="form-group text-center">
           <div class="position-relative">
             <label
@@ -23,7 +23,7 @@
             </button>
           </div>
           <input
-            type="file" multiple="multiple"
+            type="file" multiprelativele="multiple"
             class="form-control position-absolute"
             name="chatFiles"
             id="chatFiles"
@@ -32,7 +32,7 @@
           />
         </div>
       </li>
-      <li class="m-2">
+      <li class="my-2">
         <div class="form-group text-center">
           <div class="position-relative">
             <label
@@ -50,7 +50,7 @@
           </div>
         </div>
       </li>
-      <li class="m-2">
+      <!-- <li class="my-2">
         <div class="form-group text-center">
           <div class="position-relative">
             <label
@@ -75,7 +75,7 @@
             @change="uploadImage"
           />
         </div>
-      </li>
+      </li> -->
     </ul>
   </div>
 </template>
@@ -87,6 +87,10 @@ export default {
       user: JSON.parse(localStorage.getItem('user'))
     }
   },
+  emits: [
+    'onClickFile',
+    'onClickGeolocalization'
+  ],
   methods: {
     async uploadImage(event) {
         const files = Array.from(event.target.files);
@@ -99,9 +103,27 @@ export default {
         }      
     },
     async uploadFile(event) {
+      this.$emit('onClickFile', event);
     },
-    getGeolocation(event) {
-
+    getGeolocation(id) {
+      const d = document, n = navigator;
+      const $id = d.getElementById(id), options = {
+        enableHighAccuracy:true,
+        timeout: 5000, //5 segundos
+        maximumAge:0 //cada que toma una lectura no tome la referencia de la anterior
+      };
+      
+      const success = position => {
+        let coords = position.coords
+        console.log(position);
+        //document.getElementById('message').value = `https://www.google.com/maps/@${coords.latitude},${coords.longitude},17z` 
+        const url = `https://www.google.com/maps/@${coords.latitude},${coords.longitude},17z`;
+        this.$emit('onClickGeolocalization', url);
+      }
+      const error = (error) => {
+        console.log(`Error ${error.code}: ${error.message}`)
+      }
+      n.geolocation.getCurrentPosition(success, error)
     }
   }
 }

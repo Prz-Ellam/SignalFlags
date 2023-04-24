@@ -8,8 +8,7 @@ const messageSchema = new Schema({
     },
     sender: {
         type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
+        ref: 'User'
     },
     chat: {
         type: Schema.Types.ObjectId,
@@ -18,6 +17,9 @@ const messageSchema = new Schema({
     },
     attachments: [
         {
+            name: {
+                type: String
+            },
             url: { 
                 type: String, 
                 required: true 
@@ -25,7 +27,7 @@ const messageSchema = new Schema({
             type: { 
                 type: String,
                 required: true 
-            }
+            },
         }
     ],
     viewed_by: [
@@ -46,7 +48,8 @@ const messageSchema = new Schema({
     }
 },
 {
-    timestamps: true
+    timestamps: true,
+    versionKey: false
 });
 
 export default model('Message', messageSchema);

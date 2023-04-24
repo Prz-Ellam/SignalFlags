@@ -1,218 +1,149 @@
 <template>
-  <div class="bg-dark container-fluid h-100 overflow-auto">
-    <section class="col h-100 align-items-center p-3 text-center">
-      <div class="box bg-accent group-srcoll py-3 px-5 rounded-3">
-        <div>
-          <h3>Mis grupos</h3>
-          <hr>
-          <div class="row" id="group-container">
-            <div
-              v-for="i in groups"
-              class="col-sm-6 col-md-4 col-lg-3"
-            >
-              <RouterLink
-                to="/forum"
-                class="mb-4 text-white d-flex flex-column justify-content-center align-items-center shadow-sm rounded-3 box_button"
-                style="height: 240px; min-width: 200px;"
-                role="button"
-              >
-                <div class="d-flex align-items-center" style="height: 66%;">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/d/d3/Syd_barrett.jpg"
-                    alt="Foto de grupo"
-                    class="rounded group-img"
-                  />
-                </div>
-                <div class="d-flex align-items-start px-3" style="height: 33%;">
-                  <h6 class="text">
-                    003 E2023 Programación orientada a la internet CLASE
-                    ORDINARIA
-                  </h6>
-                </div>
-              </RouterLink>
-            </div>
-          </div>
+  <section class="container-fluid h-100">
+    <div class="h-100 p-3">
+      <div class="text-center box bg-accent py-3 px-5 rounded-3">
+        <h3>Tus grupos</h3>
+        <hr>
+        <div class="row">
+          <GroupCard 
+            v-for="group in groups"
+            class="col-sm-6 col-md-4 col-lg-3"
+            :bind="group._id"
+            :groupId="group._id"
+            :name="group.name"
+            :avatar="group.avatar"
+          />
         </div>
-
-        <div>
-          <h3>Unirse a un grupo</h3>
-          <hr>
-          <div class="row" id="group-container">
-            <div class="col-md-3">
-              <div
-                class="mb-5 mt-5 rounded-3 box_button"
-                style="height: 300px;"
-              >
+       
+        <h3>Unirse a un grupo</h3>
+        <hr>
+        <div class="row">
+          
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="mb-4 text-white d-flex flex-column justify-content-center align-items-center shadow-sm rounded-3"
+              style="background-color: #38393b; height: 240px;"
+            >
+              <div class="d-flex align-items-center" style="height: 66%">
                 <img
-                  src="../assets/images/POI_SignalFalgs.png"
-                  width="150"
-                  height="150"
-                  class="rounded float-left"
-                  alt="..."
+                src="../assets/images/POI_SignalFalgs.png"
+                class="rounded group-img"
+                alt="..."
                 />
-                <h6 class="text-white pb-5 fw-bolder">Crea un grupo.</h6>
-                <button
-                  type="button"
-                  class="flex-fill bd-highlight btn btn-primary rounded-3"
-                  data-bs-toggle="modal"
-                  data-bs-target="#modalCreateGroup"
-                >
-                  Crear
-                </button>
+              </div>
+              <div class="d-flex align-items-start px-3" style="height: 33%">
+                <div>
+                  <h6 class="text-white">Crea un grupo.</h6>
+                    <button
+                      type="button"
+                      class="text-light rounded-pill flex-fill bd-highlight btn btn-primary rounded-3"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modalCreateGroup"
+                      >
+                      Crear
+                    </button>
+                </div>
               </div>
             </div>
-            <div class="col-md-3">
-              <div
-                class="mb-5 mt-5 rounded-3 box_button"
-                style="height: 300px;"
-              >
+          </div>
+
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="mb-4 text-white d-flex flex-column justify-content-center align-items-center shadow-sm rounded-3"
+              style="background-color: #38393b; height: 240px;"
+            >
+              <div class="d-flex align-items-center" style="height: 50%">
                 <img
-                  src="../assets/images/POI_SignalFalgs.png"
-                  width="150"
-                  height="150"
-                  class="rounded float-left"
-                  alt="..."
+                src="../assets/images/POI_SignalFalgs.png"
+                class="rounded group-img"
+                alt="..."
                 />
-                <h6 class="text-white fw-bolder">Unete a un grupo privado.</h6>
-                <form @submit.prevent="joinGroup" novalidate>
+              </div>
+              <div class="d-flex align-items-center px-3" style="height: 50%">
+                <div>
+                  <h6 class="text-white">Unete a un grupo público</h6>
                   <input
                     type="text"
                     name="code"
                     id="code"
-                    class="bg-accent border-0 rounded-2 shadow-none text-white"
+                    class="py-0 form-control bg-accent border-0 mb-2 rounded-2 shadow-none text-white"
                     placeholder="código"
                   />
-                  <br />
-                  <br />
-                  <button
-                    type="submit"
-                    class="flex-fill bd-highlight btn btn-primary rounded-3"
-                  >
-                    Unirse
-                  </button>
-                </form>
-              </div>
-            </div>
-
-            <div class="col-md-3">
-              <div
-                class="mb-5 mt-5 rounded-3 box_button"
-                style="height: 250px;"
-              >
-                <img
-                  src="../assets/images/POI_SignalFalgs.png"
-                  width="150"
-                  height="150"
-                  class="rounded mt-3"
-                  alt="..."
-                />
-                <h6 class="fw-bolder">Nombre grupo público</h6>
-                <label for="">Admin</label>
-              </div>
-            </div>
-
-            <div class="col-md-3">
-              <div
-                class="mb-5 mt-5 rounded-3 box_button"
-                style="height: 250px;"
-              >
-                <img
-                  src="../assets/images/POI_SignalFalgs.png"
-                  width="150"
-                  height="150"
-                  class="rounded mt-3"
-                  alt="..."
-                />
-                <h6 class="fw-bolder">Nombre grupo público</h6>
-                <label for="">Admin</label>
-              </div>
-            </div>
-
-            <div class="col-md-3">
-              <div
-                class="mb-5 mt-5 rounded-3 box_button"
-                style="height: 250px;"
-              >
-                <img
-                  src="../assets/images/POI_SignalFalgs.png"
-                  width="150"
-                  height="150"
-                  class="rounded mt-3"
-                  alt="..."
-                />
-                <h6 class="fw-bolder">Nombre grupo público</h6>
-                <label for="">Admin</label>
+                    <button
+                      type="button"
+                      class="text-light rounded-pill flex-fill bd-highlight btn btn-primary rounded-3"
+                      data-bs-toggle="modal"
+                      data-bs-target="#modalCreateGroup"
+                      >
+                      Crear
+                    </button>
+                </div>
               </div>
             </div>
           </div>
+
+          </div>
         </div>
       </div>
-    </section>
-    <CreateGroup/>
-  </div>
+    <CreateGroup id="modalCreateGroup"/>
+  </section>
 </template>
 
 <script>
-import CreateGroup from '../components/CreateGroup.vue'
+import CreateGroup from '../components/CreateGroup.vue';
+import GroupCard from '@/components/GroupCard.vue';
+import Swal from 'sweetalert2';
+import GroupService from '../services/group.service';
 
 export default {
   components: {
     CreateGroup,
+    GroupCard
+  },
+  async created() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    this.groups = await GroupService.findByUser(user._id);
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'bottom-right',
+      showConfirmButton: false,
+      timer: 5000,
+      
+    });
+
+    await Toast.fire({
+      //icon: 'success',
+      html: '<h1> Success </h1>'
+    });
+
+    // Actualizar en tiempo real
+    window.socket.on('groupNotification', async () => {
+      this.groups = await GroupService.findByUser(user._id);
+    });
+  },
+  destroyed() {
+    window.socket.off('groupNotification');
   },
   data() {
     return {
-      groups: [ 1, 2, 3, 4, 5, 6, 7, 8 ]
+      groups: []
     }
   }
 }
 </script>
 
 <style>
-.text {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-}
-
 .group-img {
   width: 100px;
   height: 100px;
   object-fit: cover;
 }
 
-.box {
-  position: static;
-  overflow-y: scroll;
-  overflow-y: scroll;
-  height: 100%;
-}
-
 .box_button {
   background-color: #38393b;
+  height: 240px; 
+  min-width: 200px;
 }
 
 .box_button:hover {
   background-color: #6d6f7d;
-}
-
-.group-srcoll::-webkit-scrollbar {
-  width: 8px;
-  border-radius: 1em;
-  background-color: #6d6f7d;
-  border-radius: 1em;
-}
-
-.group-srcoll::-webkit-scrollbar-thumb {
-  border-radius: 1em;
-  background-color: #6d6f7d;
-  background: #ffb800;
-  border-radius: 1em;
-}
-
-.group-srcoll::-webkit-scrollbar-thumb:hover {
-  visibility: visible;
-  background: #ffb800;
 }
 </style>

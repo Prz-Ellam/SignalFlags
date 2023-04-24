@@ -11,7 +11,7 @@ const userSchema = new Schema({
         required: true,
         unique: true,
         minLength: 3,
-        maxLength: 50
+        maxLength: 20
     },
     email: {
         type: String,
@@ -23,6 +23,10 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    score: {
+        type: Number,
+        default: 0
+    },
     active: {
         type: Boolean,
         required: true,
@@ -30,7 +34,8 @@ const userSchema = new Schema({
     }
 },
 {
-    timestamps: true
+    timestamps: true,
+    versionKey: false
 });
 
 export default model('User', userSchema);

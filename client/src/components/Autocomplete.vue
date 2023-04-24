@@ -1,13 +1,14 @@
 <template>
-  <div class="autocomplete-container">
+  <div class="position-relative">
     <input
-      type="search"
-      name="search"
+      type="text"
       autocomplete="off"
-      class="bg-secondary form-control shadow-none text-white rounded-4 mb-1"
+      class="bg-secondary form-control rounded-4 mb-1"
       placeholder="Buscar personas..."
       v-model="search"
-      
+      @input="handleInput"
+      @focus="handleFocus"
+      @blur="handleBlur"
       @keydown.down="onArrowDown"
       @keydown.up="onArrowUp"
       @keydown.enter="onEnter"
@@ -16,27 +17,19 @@
       class="autocomplete-results scrollbar bg-secondary rounded-3 position-absolute w-100"
       v-if="isOpen"
     >
-      <li v-if="isLoading" class="loading">
-        Loading results...
-      </li>
       <li
         v-for="(result, i) in results"
         :key="result._id"
-        @click="$event => { setResult(result); $emit('click', result._id) }"
-        class="autocomplete-result"
-        :class="{ 'is-active': i === arrowCounter }"
+        :class="{ 'autocomplete-result': true, 'is-active': i === arrowCounter }"
+        @click="handleClick(result);"
       >
-        <div class="d-flex align-items-center">
-          <div class="text-start w-100 rounded-3">
-            <div class="p-1">
-              <img
-                class="img-fluid rounded-circle user-image"
-                :src="`/api/v1/images/${result.avatar}`"
-                alt="Perfil"
-              />
-              <span class="h6 ms-2 me-2">{{ result.username }}</span>
-            </div>
-          </div>
+        <div class="p-1">
+          <img
+            class="img-fluid rounded-circle user-image"
+            :src="`/api/v1/images/${result.avatar}`"
+            alt="Perfil"
+          />
+          <span class="h6 m-2">{{ result.username }}</span>
         </div>
       </li>
     </ul>
@@ -50,40 +43,19 @@ export default {
       search: '',
       results: [],
       isOpen: false,
-      arrowCounter: -1,
-      isLoading: false
+      arrowCounter: -1
     }
   },
   props: {
-    isAsync: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
     items: {
       type: Array,
       required: true,
-      default: () => [],
+      default: [],
     },
   },
   emits: [
     'click'
   ],
-  watch: {
-      search: function(val, oldVal) {
-        if (val == '') {
-          this.isOpen = false;
-          return;
-        }
-
-        this.filterResults();
-        if (this.results.length > 0) {
-          this.isOpen = true
-        } else {
-          this.isOpen = false
-        }
-      }
-    },
   mounted() {
     document.addEventListener('click', this.handleClickOutside)
   },
@@ -91,17 +63,36 @@ export default {
     document.removeEventListener('click', this.handleClickOutside)
   },
   methods: {
-    setResult(result) {
-      this.search = result.username
-      this.isOpen = false
+    handleInput(event) {
+      if (this.search === '') {
+        this.isOpen = false;
+        return;
+      }
+
+      this.filterResults();
+      this.isOpen = this.results.length > 0 ? true : false;
     },
-    sendAlert(num) {
-      console.log(num)
+    handleFocus(event) {
+      if (this.search === '') {
+        this.isOpen = false;
+        return;
+      }
+
+      this.filterResults();
+      this.isOpen = this.results.length > 0 ? true : false;
+    },
+    handleBlur(event) {
+      
+    },
+    handleClick(result) {
+      this.search = '';
+      this.isOpen = false;
+      this.$emit('click', result._id);
     },
     handleClickOutside(event) {
       if (!this.$el.contains(event.target)) {
         this.arrowCounter = -1
-        this.isOpen = false
+        this.isOpen = false;
       }
     },
     filterResults() {
@@ -110,19 +101,30 @@ export default {
       );
       return this.results;
     },
-    onArrowDown() {
-      if (this.arrowCounter < this.results.length) {
-        this.arrowCounter = this.arrowCounter + 1;
+    onArrowDown(event) {
+      event.preventDefault();
+      if (this.arrowCounter < this.results.length - 1) {
+        const autocompleteResults = document.querySelector('.autocomplete-results');
+        this.arrowCounter++;
+        this.search = this.results[this.arrowCounter]?.username ?? '';
+        if (this.arrowCounter >= 5)
+          autocompleteResults.scrollTop += 50;
       }
     },
-    onArrowUp() {
-      if (this.arrowCounter > 0) {
-        this.arrowCounter = this.arrowCounter - 1
+    onArrowUp(event) {
+      event.preventDefault();
+      if (this.arrowCounter >= 0) {
+        const autocompleteResults = document.querySelector('.autocomplete-results');
+        this.arrowCounter--;
+        this.search = this.results[this.arrowCounter]?.username ?? '';
+        autocompleteResults.scrollTop -= 50;
       }
     },
-    onEnter() {
-      console.log('Enter');
-      this.search = this.results[this.arrowCounter].username;
+    onEnter(event) {
+      event.preventDefault();
+      //this.search = this.results[this.arrowCounter].username;
+      this.search = '';
+      this.$emit('click', this.results[this.arrowCounter]._id);
       this.arrowCounter = -1;
       this.isOpen = false;
     },
@@ -131,10 +133,6 @@ export default {
 </script>
 
 <style scoped>
-.autocomplete-container {
-  position: relative;
-}
-
 .user-image {
   width: 32px;
   height: 32px;
@@ -167,7 +165,7 @@ export default {
 
 .autocomplete-results {
   padding: 0;
-  max-height: 300px;
+  max-height: 250px;
   overflow: auto;
   min-height: 50px;
   z-index: 10;

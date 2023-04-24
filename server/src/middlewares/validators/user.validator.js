@@ -1,7 +1,4 @@
-import Ajv from 'ajv';
-import addErrors from 'ajv-errors';
-import addFormats from 'ajv-formats';
-import { errorsToObject } from '../../utilities/errors-to-object.js';
+import ajv from '../../configuration/json-schema.js';
 
 export const validateCreateUser = async (req, res, next) => {
     const userSchema = {
@@ -65,14 +62,11 @@ export const validateCreateUser = async (req, res, next) => {
         additionalProperties: false
     };
 
-    const ajv = new Ajv({ allErrors: true, $data: true });
-    addFormats(ajv);
-    addErrors(ajv);
     const isValid = ajv.validate(userSchema, req.body);
-
     if (!isValid)
         return res.status(422).json({
-            'status': isValid, message: errorsToObject(ajv.errors)
+            'status': isValid, 
+            message: ajv.errorsToObject()
         });
 
     next();

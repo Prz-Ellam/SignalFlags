@@ -12,7 +12,8 @@ const userSocketSchema = new Schema({
     }
 },
 {
-    timestamps: true
+    timestamps: true,
+    versionKey: false
 });
 
 export default model('UserSocket', userSocketSchema);

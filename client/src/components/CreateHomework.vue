@@ -1,69 +1,65 @@
 <template>
-<div>
-  <div class="modal fade modal-lg pt-5" id="createHomeworkModal" tabindex="-1" aria-labelledby="modalGroup" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content  bg-accent">
-        <form @submit.prevent="CreateHomework" novalidate>
+  <div>
+    <div class="modal fade modal-lg pt-5" id="createHomeworkModal" tabindex="-1" aria-labelledby="modalGroup"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content  bg-accent">
+          <form @submit.prevent="CreateHomework" novalidate>
             <div class="modal-header">
-            <h5 class="modal-title" id="modalGroup"> Crear tarea. </h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <h5 class="modal-title" id="modalGroup">Crear tarea</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="mb-3">
-                    <div>
-                        <label for="homeworkName" class="col-form-label">Nombre de la tarea:</label>
-                        <input type="text bg-secondary" class="form-control shadow-none bg-secondary border-0 rounded-2 text-white" id="homeworkName" placeholder="Nombre del grupo." v-model="homeworkName">
-                        <small
-                        class="text-danger"
-                        v-if="
-                        v$.homeworkName.$dirty &&
-                        v$.homeworkName.required.$invalid"
-                    >
-                        Se requiere una descripción.
-                    </small>
-                    </div>
-                    <div>
-                        <label for="homeworkDescription" class="col-form-label">Descripción:</label>
-                        <input type="text bg-secondary" class="form-control shadow-none bg-secondary border-0 rounded-2 text-white" id="homeworkDescription" placeholder="Descripción." v-model="homeworkDescription">
-                        <small
-                        class="text-danger"
-                        v-if="
-                        v$.homeworkDescription.$dirty &&
-                        v$.homeworkDescription.required.$invalid"
-                    >
-                        Se requiere una descripción.
-                    </small>
-                    </div>
-                    <div>
-                        <label for="homeworkDate" class="col-form-label">Fecha de entrega:</label>
-                        <input type="date" name="homeworkDate" id="homeworkDate" class="form-control bg-secondary" v-model="homeworkDate">
-                        <small
-                        class="text-danger"
-                        v-if="
-                        v$.homeworkDate.$dirty &&
-                        v$.homeworkDate.required.$invalid"
-                        >
-                        Se requiere la fecha.
-                        </small>    
-                    </div>              
-                
+              <div class="mb-3">
+                <div>
+                  <label for="homeworkName" class="col-form-label">Nombre de la tarea:</label>
+                  <input type="text bg-secondary"
+                    class="form-control shadow-none bg-secondary border-0 rounded-2 text-white" id="homeworkName"
+                    placeholder="Nombre del grupo." v-model="homeworkName">
+                  <small class="text-danger" v-if="
+                    v$.homeworkName.$dirty &&
+                    v$.homeworkName.required.$invalid">
+                    Se requiere una descripción.
+                  </small>
                 </div>
+                <div>
+                  <label for="homeworkDescription" class="col-form-label">Descripción:</label>
+                  <textarea type="text bg-secondary"
+                    class="form-control shadow-none bg-secondary border-0 rounded-2 text-white" id="homeworkDescription"
+                    placeholder="Descripción." v-model="homeworkDescription"></textarea>
+                  <small class="text-danger" v-if="
+                    v$.homeworkDescription.$dirty &&
+                    v$.homeworkDescription.required.$invalid">
+                    Se requiere una descripción.
+                  </small>
+                </div>
+                <div>
+                  <label for="homeworkDate" class="col-form-label">Fecha de entrega:</label>
+                  <input type="date" name="homeworkDate" id="homeworkDate" class="form-control bg-secondary"
+                    v-model="homeworkDate">
+                  <small class="text-danger" v-if="
+                    v$.homeworkDate.$dirty &&
+                    v$.homeworkDate.required.$invalid">
+                    Se requiere la fecha.
+                  </small>
+                </div>
+
+              </div>
             </div>
             <div class="modal-footer">
-            <button type="submit" class="btn btn-primary"  >Crear</button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
+              <button type="submit" class="btn btn-primary">Crear</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
-  
 </template>
 
-<script> 
+<script>
 import { useVuelidate } from '@vuelidate/core';
-import { required, email, minLength, maxLength, minValue, maxValue} from '@vuelidate/validators';
+import { required, minLength, maxLength, minValue, maxValue } from '@vuelidate/validators';
 
 export default {
   setup() {
@@ -71,9 +67,9 @@ export default {
   },
   data() {
     return {
-      homeworkName: null,
-      homeworkDescription: null,
-      homeworkDate: null
+      homeworkName: '',
+      homeworkDescription: '',
+      homeworkDate: ''
     }
   },
   validations() {
@@ -104,7 +100,7 @@ export default {
 </script>
 
 <style>
-caja{
-    padding: 4px;
+caja {
+  padding: 4px;
 }
 </style>

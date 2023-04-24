@@ -2,10 +2,15 @@ import bcrypt from 'bcrypt';
 import fs from 'fs';
 import User from '../models/user.model.js';
 import Chat from '../models/chat.model.js';
+import Group from '../models/group.model.js';
+
+import UserService from '../services/user.service.js';
 
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { generateToken } from '../configuration/generate-token.js';
+import UserSocket from '../models/userSocket.model.js';
+import io from '../index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -42,21 +47,44 @@ const userLoginController = async (req, res) => {
     });
 }
 
-const userCreateController = async (req, res) => {
+const userLogoutController = async (req, res) => {
+    const authUser = req.user;
+    //try {
+        const sockets = await UserSocket.find({ user: authUser._id });
+    
+        console.log(io.sockets.sockets);
+        sockets.forEach(function(socket) {
+            var nsocket = io.sockets.sockets.get(socket._id.toString());
+            console.log(socket._id.toString());
+            if (nsocket) {
+                console.log(`Desconectar ${socket._id}`);
+                nsocket.disconnect();
+            }
+        });
+
+        res.json({});
+    //}
+    // catch (exception) {
+    //     return res.status(500).json({
+    //         status: false,
+    //         message: 'Ocurrio un error en el servidor'
+    //     });
+    // }
+}
+
+export const userCreateController = async (req, res) => {
     const { avatar, email, username, password } = req.body;
 
-    // Validar que nadie mas tenga el nombre de usuario
-    const existingUsernameUser = await User.findOne({ username });
-    if (existingUsernameUser) {
+    const isUsernameTaken = await UserService.isUsernameTaken(username);
+    if (isUsernameTaken) {
         return res.status(409).json({
             status: false,
-            message: 'El nombre de usuario esta siendo utilizado por alguien más'
+            message: 'El nombre de usuario está siendo utilizado por alguien más'
         });
     }
     
-    // Validar que nadie mas tenga el correo electróncio
-    const existingEmailUser = await User.findOne({ email });
-    if (existingEmailUser) {
+    const isEmailTaken = await UserService.isEmailTaken(email);
+    if (isEmailTaken) {
         return res.status(409).json({
             status: false,
             message: 'El correo electrónico esta siendo utilizado por alguien más'
@@ -74,8 +102,8 @@ const userCreateController = async (req, res) => {
         });
     }
 
-    const existingAvatarUser = await User.findOne({ avatar });
-    if (existingAvatarUser) {
+    const isAvatarTaken = await UserService.isAvatarTaken(avatar);
+    if (isAvatarTaken) {
         return res.status(409).json({
             status: false,
             message: 'La foto de perfil no es valida'
@@ -83,17 +111,19 @@ const userCreateController = async (req, res) => {
     }
 
     // TODO: Validar que sea una foto
-
-    const hashedPassword = await bcrypt.hash(password, 12);
-    const user = new User({
-        avatar,
-        email,
-        username,
-        password: hashedPassword
-    });
-
     try {
-        await user.save();
+        const user = await UserService.create(avatar, email, username, password);
+        return res.status(201).json({
+            status: true,
+            message: 'El usuario fue creado con éxito',
+            user: { 
+                _id: user._id, 
+                username: user.username,
+                email: user.email,
+                avatar: user.avatar
+            },
+            token: generateToken(user._id)
+        });
     }
     catch (ex) {
         return res.status(500).json({
@@ -101,12 +131,6 @@ const userCreateController = async (req, res) => {
             message: 'Hubo un error en el servidor'
         });
     }
-
-    res.status(201).json({
-        status: true,
-        message: 'El usuario fue creado con éxito',
-        token: generateToken(user._id)
-    });
 };
 
 const userUpdateController = async (req, res) => {
@@ -121,17 +145,16 @@ const userUpdateController = async (req, res) => {
         });
     }
 
-    const existingUsernameUser = await User.findOne({ username, _id: { $ne: id } });
-    if (existingUsernameUser) {
+    const isUsernameTaken = await UserService.isUsernameTakenExcludingUser(username, id);
+    if (isUsernameTaken) {
         return res.status(409).json({
             status: false,
             message: 'El nombre de usuario esta siendo utilizado por alguien más'
         });
     }
 
-    // Validar que el email no lo tenga nadie mas
-    const existingEmailUser = await User.findOne({ email, _id: { $ne: id } });
-    if (existingEmailUser) {
+    const isEmailTaken = await UserService.isEmailTakenExcludingUser(email, id);
+    if (isEmailTaken) {
         return res.status(409).json({
             status: false,
             message: 'El correo electrónico esta siendo utilizado por alguien más'
@@ -210,10 +233,29 @@ export const userFindAllNotChatController = async (req, res) => {
     });
 }
 
+export const userFindGroups = async (req, res) => {
+    const { id } = req.params;
+
+    const requestedUser = await User.findById(id);
+    if (!requestedUser) {
+        return res.status(404).json({
+            status: false,
+            message: 'Usuario no encontrado'
+        });
+    }
+
+    const groups = await Group.find({ members: { $in: id }, parent: null })
+        .select('-members -admins -subgroups -homeworks -posts');
+
+    res.json(groups);
+}
+
 export default {
-    userLoginController,
-    userCreateController,
-    userUpdateController,
-    findOneUserController,
-    findAllUsersController
+    login: userLoginController,
+    logout: userLogoutController,
+    create: userCreateController,
+    update: userUpdateController,
+    findOne: findOneUserController,
+    findAllUsersController,
+    userFindGroups
 };

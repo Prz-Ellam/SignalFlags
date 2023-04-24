@@ -1,10 +1,15 @@
 import Chat from '../models/chat.model.js';
 import Message from '../models/message.model.js';
 
+const MessageController = {};
+
 export const messageCreateController = async (req, res) => {
     const { chatId } = req.params;
     const { text } = req.body;
     const authUser = req.user;
+    const files = req.files ?? [];
+
+    console.log(files);
 
     // Buscar si el usuario pertenece al chat
     const requestedChat = await Chat.findOne({ _id: chatId, members: authUser._id });
@@ -16,8 +21,15 @@ export const messageCreateController = async (req, res) => {
     }
     
     try {
+        const filesuris = files.map(file => ({ 
+            name: file.originalname,
+            url: `/uploads/${ file.filename }`,
+            type: file.mimetype
+        }));
+
         const message = new Message({
             text,
+            attachments: filesuris,
             sender: authUser._id,
             chat: chatId,
             viewed_by: {

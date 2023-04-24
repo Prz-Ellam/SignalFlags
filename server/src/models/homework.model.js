@@ -11,7 +11,7 @@ const homeworkSchema = new Schema({
         trim: true
     },
     dueDate: {
-        type: String
+        type: Date
     },
     group: {
         type: Schema.Types.ObjectId,
@@ -24,14 +24,31 @@ const homeworkSchema = new Schema({
                 type: Schema.Types.ObjectId,
                 ref: 'User'
             },
-            deliverDate: {
-                type: String
-            }
+            date: {
+                type: Date
+            },
+            attachments: [
+                {
+                    name: {
+                        type: String,
+                        required: true
+                    },                    
+                    contentType: { 
+                        type: String,
+                        required: true 
+                    },
+                    url: { 
+                        type: String, 
+                        required: true 
+                    }
+                }
+            ]
         }
     ]
 },
 {
-    timestamps: true
+    timestamps: true,
+    versionKey: false
 });
 
 export default model('Homework', homeworkSchema);

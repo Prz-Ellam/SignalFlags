@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const storage = multer.diskStorage({ //multers disk storage settings
+const storage = multer.diskStorage({
     destination: function (_req, _file, cb) {
         cb(null, path.join(__dirname, '../../../uploads'))
     },
@@ -22,6 +22,16 @@ export const multerUpload = multer({
         if (!allowedExtension.includes(ext)) {
             return callback(null, false);
         }
+        callback(null, true);
+    },
+    limits: {
+        fieldSize: 1024 * 1024
+    }
+});
+
+export const multerUpload2 = multer({
+    storage: storage,
+    fileFilter: function (_req, file, callback) {
         callback(null, true);
     },
     limits: {
