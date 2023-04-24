@@ -165,6 +165,24 @@ export default {
       this.$emit('onDeselectChat');
     },
     async sendMessage() {
+      if (this.content.length < 1 && this.files.length < 1) {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-right',
+          iconColor: 'danger',
+          customClass: {
+            popup: 'bg-dark'
+          },
+          showConfirmButton: false,
+          timer: 1500
+        });
+        await Toast.fire({
+          icon: 'error',
+          title: 'Mensaje vacio'
+        });
+        return;
+      }
+
       if (this.content.length > 512) {
         const Toast = Swal.mixin({
           toast: true,
