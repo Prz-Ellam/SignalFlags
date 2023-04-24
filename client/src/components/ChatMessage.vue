@@ -10,7 +10,8 @@
     <img 
       v-if="!ownMessage" :src="`/api/v1/images/${ avatar }`" 
       class="rounded-circle me-2 object-fit-cover" width="32" height="32" alt="Img">
-    <small 
+    <small
+      v-if="!/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/.test(content)" 
       :class="{ 'p-2 rounded-4 overflow-auto': true, 'bg-primary': ownMessage, 'bg-secondary': !ownMessage }" 
       data-bs-toggle="tooltip" 
       :data-bs-placement="ownMessage ? 'left' : 'right'"
@@ -25,6 +26,23 @@
         <span v-else class="fw-bold">{{ attachment.name }}</span>
       </a>
     </small>
+    <a
+      v-else
+      :class="{ 'p-2 rounded-4 overflow-auto text-light': true, 'bg-primary': ownMessage, 'bg-secondary': !ownMessage }" 
+      data-bs-toggle="tooltip"
+      :href="content" target="_blank"
+      :data-bs-placement="ownMessage ? 'left' : 'right'"
+      :data-bs-title="new Date(date).toLocaleString('es-MX', 'America/Monterrey')"  
+    >
+      {{ content }}
+      <a v-for="attachment in message.attachments"
+        class="d-block text-light fw-bold mt-2" role="button"
+        :href="attachment.url" target="_blank" download>
+        <img v-if="[ 'image/jpeg', 'image/jpg', 'image/gif', 'image/png' ].includes(attachment.type)" 
+          :src="attachment.url" alt="" class="img-fluid" width="200">
+        <span v-else class="fw-bold">{{ attachment.name }}</span>
+      </a>
+    </a>
   </div>
 </template>
 

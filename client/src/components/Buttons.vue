@@ -7,7 +7,7 @@
       class="dropdown-menu text-center border-0"
       style="background-color: transparent;"
     >
-      <li class="m-2">
+      <li class="my-2">
         <div class="form-group text-center">
           <div class="position-relative">
             <label
@@ -32,7 +32,7 @@
           />
         </div>
       </li>
-      <li class="m-2">
+      <li class="my-2">
         <div class="form-group text-center">
           <div class="position-relative">
             <label
@@ -50,7 +50,7 @@
           </div>
         </div>
       </li>
-      <li class="m-2">
+      <!-- <li class="my-2">
         <div class="form-group text-center">
           <div class="position-relative">
             <label
@@ -75,7 +75,7 @@
             @change="uploadImage"
           />
         </div>
-      </li>
+      </li> -->
     </ul>
   </div>
 </template>
@@ -118,7 +118,6 @@ export default {
         console.log(position);
         //document.getElementById('message').value = `https://www.google.com/maps/@${coords.latitude},${coords.longitude},17z` 
         const url = `https://www.google.com/maps/@${coords.latitude},${coords.longitude},17z`;
-        //<a href="https://www.google.com/maps/@${coords.latitude},${coords.longitude},20z" target="_blank" rel="noopener"></a>
         this.$emit('onClickGeolocalization', url);
       }
       const error = (error) => {

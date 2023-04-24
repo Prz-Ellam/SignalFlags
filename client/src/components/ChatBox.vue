@@ -142,15 +142,43 @@ export default {
     onClickGeolocalization(url) {
       this.content = url;
     },
-    onUploadFiles(event) {
+    async onUploadFiles(event) {
       const newFiles = Array.from(event.target.files);
-      if (this.files.length + newFiles.length > 10) {
-        console.log('Solo 10 archivos por mensaje');
+      if (this.files.length + newFiles.length > 5) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-right',
+            iconColor: 'danger',
+            customClass: {
+              popup: 'bg-dark'
+            },
+            showConfirmButton: false,
+            timer: 1500
+          });
+          await Toast.fire({
+            icon: 'error',
+            title: 'Solo 5 archivos por mensaje'
+          });
+          return;
       }
       
       for (const file of newFiles) {
         if (file.size > 8 * 1024 * 1024) {
-          console.log('Es muy pesado');
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-right',
+            iconColor: 'danger',
+            customClass: {
+              popup: 'bg-dark'
+            },
+            showConfirmButton: false,
+            timer: 1500
+          });
+          await Toast.fire({
+            icon: 'error',
+            title: 'Archivo muy pesado'
+          });
+          return;
         }
       }
 
