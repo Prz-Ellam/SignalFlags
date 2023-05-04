@@ -115,110 +115,15 @@ export default async function(io) {
         });
     
         //socket.emit('message', 'Welcome to SignalFlags');
-
-        // Seleccionar un chat
-        socket.on('selectChat', (chatId) => {
-            // Unirse a la sala del chat correspondiente
-            socket.leaveAll();
-            socket.join(socket.id);
+        socket.on('join-call', (chatId, userId) => {
             socket.join(chatId);
-            console.log(socket.rooms);
-        });
-
-        socket.on('leaveRooms', () => {
-            socket.leaveAll();
-            socket.join(socket.id);
+            socket.to(chatId).emit('user-connected', userId);
         });
 
 
 
 
-
-        socket.on('prepareOffer', async (data) => {
-            let call = await Call.findOne({
-                $or: [
-                    { offerUser: data.offerUser, answerUser: data.answerUser },
-                    { offerUser: data.answerUser, answerUser: data.offerUser }
-                ]
-            });
-
-            if (!call) {
-                call = await Call.create({
-                    offerUser: data.offerUser,
-                    answerUser: data.answerUser
-                });
-            }
-            
-            let type = (data.userId === call.offerUser.toString()) ? 'offer' : 'answer';
-            socket.join(call._id);
-            socket.emit('createdOffer', { id: call._id, type });
-        });
-
-        socket.on('setOffer', async data => {
-            const call = await Call.findByIdAndUpdate(data.callId, {
-                offer: data.offer
-            },
-            {
-                new: true
-            });
-
-            const sockets = await UserSocket.find({ user: call?.answerUser });
-            const socketIds = sockets.map(socket => socket._id);
-            // Llama al otro usuario
-            if (socketIds.length > 0) {
-                io.to(socketIds).emit('videocall', {});
-            }
-        });
-
-        socket.on('setAnswer', async data => {
-            const call = await Call.findByIdAndUpdate(data.callId, {
-                answer: data.answer
-            },
-            {
-                new: true
-            });
-
-            const sockets = await UserSocket.find({ user: call.offerUser });
-            const socketIds = sockets.map(socket => socket._id);
-            if (socketIds.length > 0) {
-                io.to(socketIds).emit('getAnswer', { answer: call.answer });
-            }
-        });
-
-        socket.on('setOfferCandidate', async data => {
-            await Call.findByIdAndUpdate(data.callId, {
-                $addToSet: {
-                    offerCandidates: data.candidate
-                }
-            });
-        });
-
-        socket.on('setAnswerCandidate', async data => {
-            const call = await Call.findByIdAndUpdate(data.callId, {
-                $addToSet: {
-                    offerCandidates: data.candidate
-                }
-            },
-            {
-                new: true
-            });
-            const sockets = await UserSocket.find({ user: call.offerUser });
-            const socketIds = sockets.map(socket => socket._id);
-            io.to(socketIds).emit('getAnswerCandidate', data.candidate);
-        });
-
-        socket.on('getOffer', async (id) => {
-            const call = await Call.findById(id);
-            if (!call) return null;
-            socket.emit('getOffer', call.offer);
-        });
-
-        socket.on('getOfferCandidates', async (id) => {
-            const call = await Call.findById(id);
-            if (!call) return [];
-            socket.emit('getOfferCandidates', call.offerCandidates);
-        });
-    
+        
 
 
 
