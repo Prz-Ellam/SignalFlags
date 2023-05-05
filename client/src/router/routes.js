@@ -33,7 +33,7 @@ const routes = [
                 } 
             },
             {
-                path: '/videocall/:userId',
+                path: '/videocall/:id',
                 component: Videocall,
                 meta: {
                     requiresAuth: true

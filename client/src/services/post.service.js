@@ -4,8 +4,8 @@ class PostService {
     static async create(post, groupId) {
         try {
             const configuration = {
-                method: 'GET',
-                url: `/api/v1/groups/${ groupId }/post`,
+                method: 'POST',
+                url: `/api/v1/groups/${ groupId }/posts`,
                 headers: {
                     'Content-Type': 'application/json'
                 },

@@ -78,7 +78,7 @@ export default {
     this.homework = await HomeworkService.findById(homeworkId);
     console.log(this.homework);
 
-    for (const attachment of this.homework.delivers.attachments) {
+    for (const attachment of this.homework?.delivers?.attachments) {
       fetch(attachment.url)
         .then(response => response.blob())
         .then(blob => {

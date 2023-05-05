@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import Chat from '../models/chat.model.js';
 import Message from '../models/message.model.js';
 
@@ -27,8 +28,16 @@ export const messageCreateController = async (req, res) => {
             type: file.mimetype
         }));
 
+        const algorithm = 'aes-192-cbc'; //algorithm to use
+        const secret = 'your-secret-key';
+        const key = crypto.scryptSync(secret, 'salt', 24); //create key
+
+        const iv = Buffer.from('1234567890123456');
+        const cipher = crypto.createCipheriv(algorithm, key, iv);
+        const encrypted = cipher.update(text, 'utf8', 'hex') + cipher.final('hex'); // encrypted text
+
         const message = new Message({
-            text,
+            text: encrypted,
             attachments: filesuris,
             sender: authUser._id,
             chat: chatId,
@@ -75,6 +84,22 @@ export const messagefindAllByChatController = async (req, res) => {
     const messages = await Message.find({ chat: chatId })
         .populate('sender', '-__v -password -active')
         .select('-__v -viewed_by.id -active');
+
+    console.log(messages);
+    var algorithm = "aes-192-cbc"; //algorithm to use
+    const secret = 'your-secret-key';
+    const key = crypto.scryptSync(secret, 'salt', 24);
+    messages.forEach(message => {
+        try {
+            const decipher = crypto.createDecipheriv(algorithm, key, Buffer.from('1234567890123456'));
+            var decrypted = decipher.update(message.text, 'hex', 'utf8') + decipher.final('utf8'); //deciphered text
+            message.text = decrypted;
+        }
+        catch(exception) {
+
+        }
+    });
+
     res.json({
         status: true,
         message: messages

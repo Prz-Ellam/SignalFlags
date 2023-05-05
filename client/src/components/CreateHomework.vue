@@ -35,7 +35,7 @@
                 </div>
                 <div>
                   <label for="homeworkDate" class="col-form-label">Fecha de entrega:</label>
-                  <input type="date" name="homeworkDate" id="homeworkDate" class="form-control bg-secondary"
+                  <input type="datetime-local" name="homeworkDate" id="homeworkDate" class="form-control bg-secondary"
                     v-model="homeworkDate">
                   <small class="text-danger" v-if="
                     v$.homeworkDate.$dirty &&
@@ -58,6 +58,7 @@
 </template>
 
 <script>
+import HomeworkService from '../services/homework.service';
 import { useVuelidate } from '@vuelidate/core';
 import { required, minLength, maxLength, minValue, maxValue } from '@vuelidate/validators';
 
@@ -88,12 +89,19 @@ export default {
     }
   },
   methods: {
-    CreateHomework(event) {
+    async CreateHomework(event) {
       this.v$.$touch()
       if (this.v$.$error) {
         return
       }
-      console.log('Good')
+      const id = this.$route.params.id;
+
+      const homework = {
+        name: this.homeworkName,
+        description: this.homeworkDescription,
+        dueDate: this.homeworkDate
+      }
+      const res = await HomeworkService.create(id, homework);
     },
   }
 }

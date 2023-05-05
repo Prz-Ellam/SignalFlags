@@ -30,34 +30,21 @@
                   <Autocomplete />
                 </div>
                 <div id="AddedusersContainer">
-                  <div class="d-flex mt-2">
+                  <div v-for="member in members" class="d-flex mt-2">
                     <div class="text-start w-100 rounded-3 bg-dark">
                       <div class="p-3">
                         <img
                           class="rounded-circle chat user-image"
-                          src="https://i.kym-cdn.com/photos/images/facebook/001/884/907/c86.jpg"
+                          :src="`/api/v1/images/${ member.avatar }`"
                           alt="Perfil"
                         />
                         <span class="h5 ms-2 me-2">
-                          Nombre de usuario agregado
+                          {{ member.username }}
                         </span>
                       </div>
                     </div>
                   </div>
-                  <div class="d-flex mt-2">
-                    <div class="text-start w-100 rounded-3 bg-dark">
-                      <div class="p-3">
-                        <img
-                          class="rounded-circle chat user-image"
-                          src="https://i.kym-cdn.com/photos/images/facebook/001/884/907/c86.jpg"
-                          alt="Perfil"
-                        />
-                        <span class="h5 ms-2 me-2">
-                          Nombre de usuario agregado
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+                  
                 </div>
               </div>
               <div class="mb-3"></div>
@@ -78,12 +65,24 @@
 </template>
 
 <script>
-import Autocomplete from '../components/Autocomplete.vue'
+import Autocomplete from '../components/Autocomplete.vue';
+import GroupService from '../services/group.service';
 
 export default {
   components: {
     Autocomplete,
   },
+  data() {
+    return {
+      members: []
+    }
+  },
+  async created() {
+    const id = this.$route.params.id;
+    const members = await GroupService.findMembers(id);
+    console.log(members);
+    this.members = members;
+  }
 }
 </script>
 

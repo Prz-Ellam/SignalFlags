@@ -19,7 +19,7 @@
           </a>
         </div>
       </div>
-      <div class="bg-secondary px-3 rounded-bottom">
+      <!--div class="bg-secondary px-3 rounded-bottom">
         <input type="text" class="form-control bg-secondary border-0 shadow-none" 
           placeholder="Escribe algo...">
         <hr class=" text-primary py-0 my-0" style="border-width: 3px !important">
@@ -27,7 +27,7 @@
           <i class="h6 bi bi-arrow-90deg-up"></i>
           <span class="ms-3 mb-0">Responder</span>
         </button>
-      </div>
+      </div-->
     </div>
   </div>
 </template>

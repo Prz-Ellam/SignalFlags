@@ -45,7 +45,7 @@ export default async function(io) {
         { $match: { "operationType": { $in: [ "insert", "update", "replace" ] } } }
     ], { fullDocument: 'updateLookup' });
 
-    const postStream = Post.watch([
+    const postObserver = Post.watch([
         { $match: { "operationType": { $in: [ "insert", "update", "replace" ] } } }
     ], { fullDocument: 'updateLookup' });
     
@@ -97,6 +97,19 @@ export default async function(io) {
         }
     });
 
+    postObserver.on('change', async (change) => {
+        if (change.operationType === 'insert') {
+            //console.log(change.fullDocument);
+            const groupId = change.fullDocument?.group.toString();
+
+            const { members } = await Group.findById(groupId);
+            
+            const sockets = await UserSocket.find({ user: { $in: members } });
+            const socketIds = sockets.map(socket => socket._id);
+            io.to(socketIds).emit('postNotification', {});
+        }
+    });
+
     
     io.on('connection', async (socket) => {
         console.log(`A new connection in the server ${ socket.id }`);
@@ -112,6 +125,19 @@ export default async function(io) {
             $addToSet: {
                 activeUsers: socket.userId
             }
+        });
+
+        socket.on('selectChat', (chatId) => {
+            // Unirse a la sala del chat correspondiente
+            socket.leaveAll();
+            socket.join(socket.id);
+            socket.join(chatId);
+            console.log(socket.rooms);
+        });
+
+        socket.on('leaveRooms', () => {
+            socket.leaveAll();
+            socket.join(socket.id);
         });
     
         //socket.emit('message', 'Welcome to SignalFlags');

@@ -16,7 +16,7 @@
             class="btn border-0 position-relative fw-bold">
             <i class="h4 bi bi-people"></i>
           </a>
-          <RouterLink v-if="selectedChat.type === 'individual'" :to="`/videocall/${ selectedChat?.userId }`" 
+          <RouterLink :to="`/videocall/${ selectedChat?.chatId }`" 
             class="btn border-0 position-relative fw-bold">
             <i class="h4 bi bi-camera-video"></i>
           </RouterLink>

@@ -63,6 +63,24 @@ class GroupService {
             return exception.response.data;
         }
     }
+
+    static async findMembers(id) {
+        try {
+            const configuration = {
+                method: 'GET',
+                url: `/api/v1/groups/${ id }/members`,
+                headers: { 
+                'Content-Type': 'application/json'
+                }
+            };
+    
+            const response = await axios(configuration);
+            return response.data;
+        }
+        catch (exception) {
+            return exception.response.data;
+        } 
+    }
 }
 
 export default GroupService;
