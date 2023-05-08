@@ -233,6 +233,7 @@
     </div>
   </section>
   <CreateHomework />
+  <CreateSubGroup id="ModalSubGroup"/>
   <AddUser />
 </template>
 
@@ -243,6 +244,7 @@ import Buttons from '@/components/Buttons.vue';
 import Homework from '@/views/Homework.vue';
 import HomeworkCard from '@/components/HomeworkCard.vue';
 import PostCard from '@/components/PostCard.vue';
+import CreateSubGroup from '../components/CreateSubGroup.vue';
 
 import GroupService from '@/services/group.service';
 import PostService from '@/services/post.service';
@@ -256,7 +258,8 @@ export default {
     Buttons,
     HomeworkCard,
     Homework,
-    PostCard
+    PostCard,
+    CreateSubGroup
   },
   data() {
     return {

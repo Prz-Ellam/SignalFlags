@@ -1,17 +1,15 @@
 <template>
-  <div class="bg-dark container-fluid h-100">
-    <section class="col p-3" style="height: 90%">
-      <div class="h-100 bg-accent rounded-3 position-relative">
-        <video id="otherVideo" autoplay playsinline class="rounded userCamera">
-
-        </video>
-
-        
-          <video id="webcamVideo" class="position-absolute otherUserCamera" autoplay playsinline>
-
-          </video>
-        
+ <div class="bg-dark container-fluid h-100">
+    <section class="col p-3 " style="height: 90%">
+      <div class="h-100 bg-accent rounded-3 position-relative row">
+        <div class="col-md h-100">
+              <video id="otherVideo"   autoplay playsinline class="rounded userCamera bg-yellow " style="background-image: url('https://repository-images.githubusercontent.com/194294975/e6cdef00-99ef-11e9-90d0-c64097fc903d');"></video>
+        </div>
+          <div class="col-md h-100">
+              <video id="webcamVideo" class="position-absolute userCamera" autoplay playsinline style="background-image: url('https://repository-images.githubusercontent.com/194294975/e6cdef00-99ef-11e9-90d0-c64097fc903d');"></video>
+        </div>
       </div>
+      
     </section>
     <section class="col align-items-center pe-3 ps-3 text-center" style="height: 10%;">
       <div class=" bg-accent rounded-3 p-2">
@@ -27,9 +25,11 @@
       </div>
     </section>
   </div>
+  
 </template>
 
 <script>
+
 export default {
   data() {
     return {
@@ -194,6 +194,11 @@ export default {
 .userCamera {
   width: 100%;
   height: 100%;
+  object-fit: cover;
+}
+.userCamera:hover {
+  width: 100%;
+  height: 50%;
   object-fit: cover;
 }
 
