@@ -80,7 +80,7 @@
                     <div>
                       <img width="40" height="40" class="me-2 rounded-circle"
                       style="object-fit: cover;"
-                      :src="`/api/v1/images/${ users.find(u => u._id === userId).avatar }`" />
+                      :src="users.find(u => u._id === userId).avatar" />
                       <span>{{ users.find(u => u._id === userId).username }}</span>
                     </div>
                     <div class="d-inline-flex bg-danger p-2 rounded-circle" 

@@ -17,6 +17,7 @@
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.10.3",
     "bootstrap-vue": "^2.23.1",
+    "boxicons": "^2.1.4",
     "peer": "^1.0.0",
     "peerjs": "^1.4.7",
     "socket.io-client": "^4.6.0",

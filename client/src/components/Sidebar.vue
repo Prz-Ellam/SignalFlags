@@ -1,5 +1,5 @@
 <template>
-  <nav class="d-flex justify-content-center align-items-center bg-accent w-100 p-2">
+  <nav class="bg-accent d-flex justify-content-center align-items-center w-100 p-2">
     <ul class="nav flex-md-column flex-row gap-5">
       <li class="nav-item">
         <RouterLink to="/" class="nav-icon position-relative">

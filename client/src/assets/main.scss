@@ -71,6 +71,11 @@ $input-color: $light-color;
 $input-line-height: 2;
 
 
+html, body, #app {
+    height: 100%;
+}
+
+
 
 input {
     border: none !important;

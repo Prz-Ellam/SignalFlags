@@ -49,6 +49,7 @@ const createHomeworkController = async (req, res) => {
     }
 }
 
+// Dead
 const updateHomeworkController = async (req, res) => {
     const { homeworkId } = req.params;
     const { name, description, dueDate } = req.body;
@@ -97,6 +98,7 @@ const updateHomeworkController = async (req, res) => {
     }
 };
 
+// Dead
 const deleteHomeworkController = async (req, res) => {
     const { homeworkId } = req.params;
 

@@ -31,7 +31,7 @@
                 class="d-flex align-items-center justify-content-between alert bg-dark my-1 py-2" role="alert">
                 <div>
                   <img width="40" height="40" class="me-2 rounded-circle" style="object-fit: cover;"
-                    :src="`/api/v1/images/${user.avatar}`" />
+                    :src="user.avatar" />
                   <span>{{ user.username }}</span>
                 </div>
                 <div class="d-inline-flex bg-danger p-2 rounded-circle" role="button" 

@@ -1,8 +1,8 @@
 <template>
-  <div class="vh-100 d-flex flex-column">
-    <div class="flex-grow-0 flex-shrink-1">
+  <div class="h-100 d-flex flex-column">
+    <header class="flex-grow-0 flex-shrink-1">
       <Navbar />
-    </div>
+    </header>
     <div
       class="d-flex flex-md-row-reverse flex-column flex-grow-1 flex-shrink-1 overflow-auto"
     >

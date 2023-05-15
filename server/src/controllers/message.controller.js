@@ -6,7 +6,7 @@ const MessageController = {};
 
 export const messageCreateController = async (req, res) => {
     const { chatId } = req.params;
-    const { text } = req.body;
+    let { text } = req.body;
     const authUser = req.user;
     const files = req.files ?? [];
 
@@ -28,16 +28,19 @@ export const messageCreateController = async (req, res) => {
             type: file.mimetype
         }));
 
-        const algorithm = 'aes-192-cbc'; //algorithm to use
-        const secret = 'your-secret-key';
-        const key = crypto.scryptSync(secret, 'salt', 24); //create key
+        if (requestedChat.encrypted) {
+            const algorithm = 'aes-192-cbc'; //algorithm to use
+            const secret = 'your-secret-key';
+            const key = crypto.scryptSync(secret, 'salt', 24); //create key
 
-        const iv = Buffer.from('1234567890123456');
-        const cipher = crypto.createCipheriv(algorithm, key, iv);
-        const encrypted = cipher.update(text, 'utf8', 'hex') + cipher.final('hex'); // encrypted text
+            const iv = Buffer.from('1234567890123456');
+            const cipher = crypto.createCipheriv(algorithm, key, iv);
+            const encrypted = cipher.update(text, 'utf8', 'hex') + cipher.final('hex'); // encrypted text
+            text = encrypted;
+        }
 
         const message = new Message({
-            text: encrypted,
+            text,
             attachments: filesuris,
             sender: authUser._id,
             chat: chatId,
@@ -86,7 +89,7 @@ export const messagefindAllByChatController = async (req, res) => {
         .select('-__v -viewed_by.id -active');
 
     console.log(messages);
-    var algorithm = "aes-192-cbc"; //algorithm to use
+    const algorithm = "aes-192-cbc"; //algorithm to use
     const secret = 'your-secret-key';
     const key = crypto.scryptSync(secret, 'salt', 24);
     messages.forEach(message => {

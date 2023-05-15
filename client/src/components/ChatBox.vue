@@ -9,8 +9,20 @@
           <img v-if="selectedChat.avatar" class="img-fluid rounded-circle actual-chat-user-image"
             :src="selectedChat.avatar" alt="Perfil">
           <span class="h5 ms-3 mb-0">{{ selectedChat.name }}</span>
+          <i class='bx bxs-send'></i>
         </div>
         <div>
+          <a v-if="!selectedChat.encrypted" 
+            class="btn border-0 position-relative fw-bold"
+            @click="encryptChat(selectedChat.chatId)">
+            <i class="h4 bi bi-unlock"></i>
+          </a>
+          <a v-else 
+            class="btn border-0 position-relative fw-bold"
+            @click="desencryptChat(selectedChat.chatId)">
+            <i class="h4 bi bi-lock"></i>
+          </a>
+
           <a v-if="selectedChat.type === 'group'" 
             data-bs-toggle="modal" data-bs-target="#members"
             class="btn border-0 position-relative fw-bold">
@@ -26,7 +38,8 @@
       <div v-if="selectedChat.name" class="overflow-auto p-2 h-100 chat" id="message-box">
         <ChatMessage v-for="message in messages" 
           :key="message._id" :automaticMessage="message.sender === null"
-          :ownMessage="message.sender?._id === user._id" :content="message.text" 
+          :ownMessage="message.sender?._id === user._id" 
+          :content="message.text" 
           :avatar="message.sender?.avatar"
           :message="message"
           :date="message.createdAt" />
@@ -40,15 +53,13 @@
               v-for="(file, i) in files"
               class="position-relative bg-dark rounded-3 m-1 p-3">
               <i class="bi bi-file-earmark-text"></i> 
-              <small> {{ file.name }} </small>
+              <small>{{ file.name }}</small>
               <span role="button" 
                 class="badge bg-danger position-absolute top-0 end-0"
                 @click="deleteFile(i)">
                 &times;
               </span>
             </div>
-            
-            
           </div> 
         </div>
       <div v-if="selectedChat.name" class="input-group mb-1 p-2">
@@ -62,9 +73,10 @@
             (e) => {
               if (e.key == 'Enter') sendMessage()
             }
-          " />
+          "/>
         <button class="btn btn-dark input-group-text" @click="sendMessage">
-          <i class="fa-solid fa-paper-plane-top"></i>Enviar
+          <i class="fa-solid fa-paper-plane-top"></i>
+          <span>Enviar</span>
         </button>
       </div>
     </div>
@@ -83,7 +95,7 @@
               <div>
                 <img width="40" height="40" class="me-2 rounded-circle"
                   style="object-fit: cover;"
-                  :src="`/api/v1/images/${ user.avatar }`" />
+                  :src="user.avatar" />
                   <span>{{ user.username }}</span>
               </div>
             </div>
@@ -191,6 +203,15 @@ export default {
     },
     deselectChat() {
       this.$emit('onDeselectChat');
+    },
+    async encryptChat(id) {
+      await ChatService.encrypt(id);
+      this.selectedChat.encrypted = true;
+    },
+    async desencryptChat(id) {
+      await ChatService.desencrypt(id);
+      console.log(this.selectedChat);
+      this.selectedChat.encrypted = false;
     },
     async sendMessage() {
       if (this.content.length < 1 && this.files.length < 1) {

@@ -24,9 +24,10 @@
           :key="chat._id"
           :chatId="chat._id"
           :type="chat.type"
-          :image="`/api/v1/images/${
+          :encrypted="chat.encrypted"
+          :image="
             chat.avatar instanceof Array ? chat.avatar[0] : chat.avatar
-          }`"
+          "
           :username="chat.name"
           :userId="chat.userId"
           :lastMessage="

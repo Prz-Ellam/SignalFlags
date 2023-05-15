@@ -70,8 +70,8 @@
 </template>
 
 <script>
-import HomeworkCard from '../components/HomeworkCard.vue';
-import HomeworkService from '../services/homework.service';
+import HomeworkCard from '@/components/HomeworkCard.vue';
+import HomeworkService from '@/services/homework.service';
 
 export default {
   components: {

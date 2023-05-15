@@ -26,7 +26,7 @@
         <div class="p-1">
           <img
             class="img-fluid rounded-circle user-image"
-            :src="`/api/v1/images/${result.avatar}`"
+            :src="result.avatar"
             alt="Perfil"
           />
           <span class="h6 m-2">{{ result.username }}</span>

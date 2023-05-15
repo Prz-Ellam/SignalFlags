@@ -35,7 +35,7 @@
                       <div class="p-3">
                         <img
                           class="rounded-circle chat user-image"
-                          :src="`/api/v1/images/${ member.avatar }`"
+                          :src="member.avatar"
                           alt="Perfil"
                         />
                         <span class="h5 ms-2 me-2">

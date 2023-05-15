@@ -9,9 +9,16 @@
         <hr>
         <p class="fw-bold mb-1">Subgrupos</p>
         <ul class="list-group">
-          <li role="button" class="bg-accent text-light py-1 rounded-0 border-0 list-group-item">General</li>
-          <li v-for="subgroup in subgroups" role="button" 
-            class="bg-primary text-light py-1 rounded-0 border-0 list-group-item">
+          <li role="button" 
+            @click="selectGroup($route.params.id)"
+            :class="{ 'bg-accent': $route.params.id !== groupId, 'bg-primary': $route.params.id === groupId }" 
+            class="text-light py-1 rounded-0 border-0 list-group-item">General</li>
+          <li v-for="subgroup in subgroups" role="button"
+            :bind="subgroup._id"
+            :class="{ 'bg-accent': subgroup._id !== groupId, 'bg-primary': subgroup._id === groupId }" 
+            class="text-light py-1 rounded-0 border-0 list-group-item"
+            @click="selectGroup(subgroup._id)"
+          >
             {{ subgroup.name }}
           </li>
         </ul>
@@ -73,6 +80,7 @@
               </div>
             </div>
            
+            <button @click="sendEmail">Correo</button>
               
             <div class="input-group p-2 my-1">
               <Buttons />
@@ -192,7 +200,13 @@ export default {
     this.group = await GroupService.findById(this.groupId);
     this.posts = await PostService.findByGroup(this.groupId);
     this.subgroups = await SubgroupService.findByGroup(this.groupId);
-    
+    this.$nextTick(() => {
+        const postBox = document.getElementById('post-box')
+        postBox.scrollTo({
+          left: 0,
+          top: postBox.scrollHeight,
+        })
+      });
 
     window.socket.on('postNotification', async () => {
       this.posts = await PostService.findByGroup(this.groupId);
@@ -215,6 +229,14 @@ export default {
       console.log(this.groupId);
       console.log(this.text);
       await PostService.create({ content: this.text }, this.groupId);
+    },
+    async selectGroup(subgroup) {
+      this.groupId = subgroup;
+      this.posts = await PostService.findByGroup(subgroup);
+    },
+    async sendEmail() {
+      const id = this.$route.params.id;
+      await GroupService.sendEmail(id);
     }
   }
 }

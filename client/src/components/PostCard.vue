@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex mt-3 px-3">
     <div class="d-flex align-items-start pt-3 mt-3">
-      <img :src="`/uploads/${post.user.avatar}`" width="50" height="50" 
+      <img :src="post.user.avatar" width="50" height="50" 
         class="rounded-circle profile-picture" alt=""
       />
     </div>
