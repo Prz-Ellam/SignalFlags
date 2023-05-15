@@ -8,7 +8,7 @@
     v-else 
     :class="{ 'd-flex my-3': true, 'justify-content-end': ownMessage, 'justify-content-start': !ownMessage }">
     <img 
-      v-if="!ownMessage" :src="`/api/v1/images/${ avatar }`" 
+      v-if="!ownMessage" :src="avatar" 
       class="rounded-circle me-2 object-fit-cover" width="32" height="32" alt="Img">
     <small
       v-if="!/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/.test(content)" 

@@ -42,6 +42,40 @@ class ChatService {
             return exception.response.data;
         }
     }
+
+    static async encrypt(chatId) {
+        try {
+            const configuration = {
+                method: 'POST',
+                url: `/api/v1/chats/${ chatId }/encrypt`,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+            const response = await axios(configuration);
+            return response.data;
+        }
+        catch (exception) {
+            return exception.response.data;
+        }
+    }
+
+    static async desencrypt(chatId) {
+        try {
+            const configuration = {
+                method: 'POST',
+                url: `/api/v1/chats/${ chatId }/desencrypt`,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+            const response = await axios(configuration);
+            return response.data;
+        }
+        catch (exception) {
+            return exception.response.data;
+        }
+    }
 }
 
 export default ChatService;

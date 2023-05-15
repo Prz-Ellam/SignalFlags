@@ -61,6 +61,10 @@ groupRouter.get('/:id/homeworks/expired', authMiddleware, HomeworkController.fin
 // [GET] /api/v1/groups/:id/subgroups
 groupRouter.get('/:id/subgroups', authMiddleware, GroupController.findSubgroups);
 
+groupRouter.post('/:id/subgroups', authMiddleware, GroupController.createSubgroup);
+
+groupRouter.post('/:id/email', authMiddleware, GroupController.email);
+
 // Obtener todos los posts de un grupo
 // [GET] /api/v1/groups/:id/posts
 groupRouter.get('/:id/posts', authMiddleware, GroupController.findPosts);

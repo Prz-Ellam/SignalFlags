@@ -23,6 +23,11 @@ export default defineConfig({
         ws: true,
         changeOrigin: true
       },
+      '/peerjs': {
+        target: 'http://localhost:3001',
+        ws: true,
+        changeOrigin: true
+      }
     }
   }
 })

@@ -123,6 +123,7 @@ export default {
       await chatAccessService(id);
     },
     async chatSelected(chat) {
+      console.log(chat);
       this.selectedChat = chat;
 
       window.socket.emit('selectChat', this.selectedChat.chatId);

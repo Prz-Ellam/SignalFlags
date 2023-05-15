@@ -67,7 +67,7 @@ export default {
 
         pictureBox.src = await this.readFileAsync(file);
 
-        const image = await ImageService.create(file);
+        const image = await ImageService.createFirebase(file);
         this.$emit('update', image.file);
       }
       catch (exception) {

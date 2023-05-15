@@ -1,15 +1,8 @@
 <template>
   <div class="bg-dark container-fluid h-100">
     <section class="col p-3" style="height: 90%">
-      <div class="h-100 bg-accent rounded-3 position-relative">
-        <video id="otherVideo" autoplay playsinline class="rounded userCamera">
-
-        </video>
-
+      <div class="h-100 bg-accent rounded-3 position-relative row" id="video-grid">
         
-          <video id="webcamVideo" class="position-absolute otherUserCamera" autoplay playsinline>
-
-          </video>
         
       </div>
     </section>
@@ -30,135 +23,86 @@
 </template>
 
 <script>
+import Peer from 'peerjs';
+
 export default {
   data() {
     return {
-      peerConnection: null,
-      localStream: null,
-      remoteStream: null
+      stream: null
     }
   },
   async created() {
-    window.socket.emit('prepareOffer', {
-      offerUser: JSON.parse(localStorage.getItem('user'))._id,
-      answerUser: this.$route.params.userId,
-      userId: JSON.parse(localStorage.getItem('user'))._id
+    // Este es el chat
+    const chatId = this.$route.params.id;
+    const userId = JSON.parse(localStorage.getItem('user'))._id;
+
+    this.stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    const grid = document.getElementById('video-grid');
+    const video = document.createElement('video');
+    video.classList.add('h-100');
+    video.classList.add('col');
+    video.srcObject = this.stream;
+    video.muted = true;
+    video.addEventListener('loadedmetadata', () => {
+      video.play();
     });
-    window.socket.on('createdOffer', async data => {
-      const servers = {
-        iceServers: [
-          {
-            urls: ['stun:stun1.l.google.com:19302', 'stun:stun2.l.google.com:19302']
-          }
-        ],
-        iceCantidatePoolSize: 10
-      }
+    grid.append(video);
 
-      this.peerConnection = new RTCPeerConnection(servers);
-      this.localStream = await navigator.mediaDevices.getUserMedia({ video: true });
-      this.remoteStream = new MediaStream();
+    const peer = new Peer(userId);
 
-      this.localStream.getTracks().forEach(track => {
-        this.peerConnection.addTrack(track, this.localStream);
+    peer.on('open', id => {
+      console.log('Join call ', id);
+      window.socket.emit('join-call', chatId, id);
+    });
+
+    peer.on('call', (otherCall) => {
+      otherCall.answer(this.stream);
+      const video = document.createElement('video');
+      const grid = document.getElementById('video-grid');
+      otherCall.on('stream', (userVideoStream) => {
+        console.log('Stream 2');
+        video.classList.add('h-100');
+        video.classList.add('col');
+        video.srcObject = userVideoStream;
+        video.addEventListener('loadedmetadata', () => {
+          video.play();
+        });
+        grid.append(video);
       });
+      otherCall.on('close', () => {
+        video.remove();
+      });
+    })
 
-      this.peerConnection.ontrack = event => {
-        event.streams[0].getTracks().forEach(track => {
-          this.remoteStream.addTrack(track);
+    window.socket.on('user-connected', (userId) => {
+      console.log('User connected event: ', userId);
+      const call = peer.call(userId, this.stream);
+      const video = document.createElement('video');
+      const grid = document.getElementById('video-grid');
+      call.on('stream', (userVideoStream) => {
+        console.log('Stream');
+        video.classList.add('h-100');
+        video.classList.add('col');
+        video.srcObject = userVideoStream;
+        video.addEventListener('loadedmetadata', () => {
+          video.play();
         });
-      }
-
-      document.getElementById('webcamVideo').srcObject = this.localStream;
-      document.getElementById('otherVideo').srcObject = this.remoteStream;
-
-      // Si el usuario es de tipo offer o answer (creo o respondio la llamada)
-      if (data.type === 'offer') {
-        this.peerConnection.onicecandidate = event => {
-          if (event.candidate) {
-            window.socket.emit('setOfferCandidate', {
-              callId: data.id,
-              candidate: JSON.stringify(event.candidate)
-            });
-          }
-        }
-
-        const offerDescription = await this.peerConnection.createOffer();
-        await this.peerConnection.setLocalDescription(offerDescription);
-
-        const offer = {
-          sdp: offerDescription.sdp,
-          type: offerDescription.type
-        };
-
-        window.socket.emit('setOffer', {
-          callId: data.id,
-          offer: JSON.stringify(offer)
-        });
-
-        // Listen for remote answer
-        socket.on('getAnswer', data => {
-          if (!this.peerConnection.currentRemoteDescription) {
-            const answerDescription = new RTCSessionDescription(JSON.parse(data.answer));
-            this.peerConnection.setRemoteDescription(answerDescription);
-          }
-        });
-
-        // When answered, add candidate to peerConnection
-        socket.on('getAnswerCandidate', candidateData => {
-          const candidate = new RTCIceCandidate(JSON.parse(candidateData));
-          this.peerConnection.addIceCandidate(candidate);
-        });
-
-      }
-      else if (data.type === 'answer') {
-        // Enviar todos los answer candidates
-        this.peerConnection.onicecandidate = event => {
-          if (event.candidate) {
-            window.socket.emit('setAnswerCandidate', {
-              callId: data.id,
-              candidate: JSON.stringify(event.candidate)
-            });
-          }
-        }
-
-        // Obtener la oferta de la llamada
-        socket.on('getOffer', async offer => {
-          // Al obtenerla la ponemos como remote description
-          const remoteDescription = new RTCSessionDescription(JSON.parse(offer));
-          this.peerConnection.setRemoteDescription(remoteDescription);
-
-          // Creamos una respuesta, la seteamos y la mandamos
-          const answerDescription = await this.peerConnection.createAnswer();
-          await this.peerConnection.setLocalDescription(answerDescription);
-
-          const answer = {
-            sdp: answerDescription.sdp,
-            type: answerDescription.type
-          };
-
-          window.socket.emit('setAnswer', {
-            callId: data.id,
-            answer: JSON.stringify(answer)
-          });
-
-          socket.on('getOfferCandidates', icecandidates => {
-            for (const icecandidate of icecandidates) {
-              const candidate = new RTCIceCandidate(JSON.parse(icecandidate));
-              this.peerConnection.addIceCandidate(candidate);
-            }
-          });
-          socket.emit('getOfferCandidates', data.id);
-
-        });
-        socket.emit('getOffer', data.id);
-      }
+        grid.append(video);
+      });
+      call.on('close', () => {
+        video.remove();
+      });
     });
+
   },
-  destroyed() {
-    window.socket.off('createdOffer');
+  onBeforeUnmount() {
+    const tracks = this.stream.getTracks();
+    tracks.forEach(track => track.stop());
   },
   methods: {
     async shareCam() {
+      const tracks = this.stream.getTracks();
+    tracks.forEach(track => track.stop());
       const cameraIcon = document.getElementById('camIcon')
       if (cameraIcon.value != "on") {
         cameraIcon.classList.remove("bi-camera-video-fill");
@@ -185,6 +129,17 @@ export default {
         cameraIcon.value = "off"
       } else cameraIcon.value = "on"
 
+    },
+    createVideo(stream) {
+      const grid = document.getElementById('video-grid');
+      const video = document.createElement('video');
+      video.classList.add('h-100');
+      video.classList.add('col');
+      video.srcObject = stream;
+      video.addEventListener('loadedmetadata', () => {
+        video.play();
+      });
+      grid.append(video);
     }
   }
 }

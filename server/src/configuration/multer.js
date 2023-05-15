@@ -14,6 +14,8 @@ const storage = multer.diskStorage({
     }
 });
 
+export const memoryUpload = multer({ storage: multer.memoryStorage() });
+
 export const multerUpload = multer({
     storage: storage,
     fileFilter: function (_req, file, callback) {

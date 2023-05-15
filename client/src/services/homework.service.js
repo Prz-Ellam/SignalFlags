@@ -1,8 +1,22 @@
 import axios from 'axios';
 
 class HomeworkService {
-    static async create() {
-
+    static async create(groupId, homework) {
+        try {
+            const configuration = {
+                method: 'POST',
+                url: `/api/v1/groups/${ groupId }/homeworks`,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify(homework)
+            }
+            const response = await axios(configuration);
+            return response.data;
+        }
+        catch (exception) {
+            return exception.response.data;
+        }
     }
 
     static async findByUser(userId) {

@@ -3,8 +3,7 @@ import { Schema, model } from 'mongoose';
 const messageSchema = new Schema({
     text: {
         type: String,
-        trim: true,
-        maxLength: 512
+        trim: true
     },
     sender: {
         type: Schema.Types.ObjectId,

@@ -3,6 +3,7 @@ import Group from '../models/group.model.js';
 import Post from '../models/post.model.js';
 import Homework from '../models/homework.model.js';
 import GroupService from '../services/group.service.js';
+import nodemailer from 'nodemailer';
 
 import { Types } from 'mongoose';
 
@@ -209,6 +210,7 @@ const groupCreateSubgroupController = async (req, res) => {
         const group = new Group({
             name,
             description,
+            parent: requestedGroup._id,
             privacy: 'private',
             members: userIds,
             admins: [ user._id ]
@@ -221,7 +223,7 @@ const groupCreateSubgroupController = async (req, res) => {
     catch (exception) {
         return res.status(500).json({
             status: false,
-            message: 'Ocurrio un error en el servidor'
+            message: exception
         });
     }
 }
@@ -375,7 +377,7 @@ const groupFindSubgroups = async (req, res) => {
         });
     }
 
-    const subgroups = await Group.find({ parent: id });
+    const subgroups = await Group.find({ parent: id, members: authUser._id });
 
     res.json(subgroups);
 }
@@ -407,6 +409,39 @@ const groupFindPosts = async (req, res) => {
     return res.json(posts);
 }
 
+const groupEmail = async (req, res) => {
+    const { id } = req.params;
+    const authUser = req.user;
+    try {
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'poisignalflags@gmail.com',
+                pass: '987Zyx$$'
+            }
+        });
+
+        const destinatario = 'PerezAlex088@outlook.com';
+        const mensaje = {
+            to: destinatario,
+            subject: '¡Bienvenido a mi aplicación!',
+            text: `Hola, bienvenido a mi aplicación. Espero que disfrutes usándola.`
+        };
+
+        transporter.sendMail(mensaje)
+            .then(() => console.log(`Correo electrónico enviado a ${destinatario}`))
+            .catch((error) => console.error(error));
+
+        res.json({});
+    }
+    catch (exception) {
+        return res.status(500).json({
+            status: false,
+            message: exception
+        });
+    }
+}
+
 export default {
     create: groupCreateController,
     update: groupUpdateController,
@@ -418,5 +453,6 @@ export default {
     findPosts: groupFindPosts,
     addAvatar: groupAddAvatarController,
     addUserToGroupController,
-    createSubgroup: groupCreateSubgroupController
+    createSubgroup: groupCreateSubgroupController,
+    email: groupEmail
 };

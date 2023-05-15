@@ -14,6 +14,10 @@ const chatSchema = new Schema({
         required: true,
         default: 'individual'
     },
+    encrypted: {
+        type: Boolean,
+        default: true
+    },
     members: [
         {
             type: Schema.Types.ObjectId,

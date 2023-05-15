@@ -5,10 +5,16 @@
         <div class="col-6">
           <h2>{{ homework.name }}</h2>
           <small>Fecha de vencimiento</small>
-          <p><i class="bi-calendar me-1"></i>{{ new Date(homework.dueDate).toLocaleString() }}</p>
+          <p>
+            <i class="bi-calendar me-1"></i>
+            <span>{{ new Date(homework.dueDate).toLocaleString() }}</span>
+          </p>
 
           <small>Instrucciones</small>
-          <p><i class="bi-list me-1"></i>{{ homework.description }}</p>
+          <p>
+            <i class="bi-list me-1"></i>
+            <span>{{ homework.description }}</span>
+          </p>
           
           <small class="d-block mb-1">Mi trabajo</small>
           <label for="file" class="btn btn-dark mb-3">
@@ -64,7 +70,7 @@
 </template>
 
 <script> 
-import HomeworkService from '../services/homework.service';
+import HomeworkService from '@/services/homework.service';
 
 export default {
   data() {
@@ -78,7 +84,7 @@ export default {
     this.homework = await HomeworkService.findById(homeworkId);
     console.log(this.homework);
 
-    for (const attachment of this.homework.delivers.attachments) {
+    for (const attachment of this.homework?.delivers?.attachments) {
       fetch(attachment.url)
         .then(response => response.blob())
         .then(blob => {
@@ -97,6 +103,6 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>

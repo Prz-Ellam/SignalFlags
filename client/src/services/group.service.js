@@ -20,6 +20,24 @@ class GroupService {
         }
     }
 
+    static async sendEmail(id) {
+        try {
+            const configuration = {
+                method: 'POST',
+                url: `/api/v1/groups/${ id }/email`,
+                headers: { 
+                    'Content-Type': 'application/json'
+                }
+            };
+    
+            const response = await axios(configuration);
+            return response.data;
+        }
+        catch (exception) {
+            return exception.response.data;
+        }
+    }
+
     static async update() {
 
     }
@@ -62,6 +80,24 @@ class GroupService {
         catch (exception) {
             return exception.response.data;
         }
+    }
+
+    static async findMembers(id) {
+        try {
+            const configuration = {
+                method: 'GET',
+                url: `/api/v1/groups/${ id }/members`,
+                headers: { 
+                'Content-Type': 'application/json'
+                }
+            };
+    
+            const response = await axios(configuration);
+            return response.data;
+        }
+        catch (exception) {
+            return exception.response.data;
+        } 
     }
 }
 

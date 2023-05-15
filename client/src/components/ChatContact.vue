@@ -23,6 +23,7 @@
 export default {
   props: [
     'chatId',
+    'encrypted',
     'userId',
     'image',
     'username',
@@ -70,7 +71,8 @@ export default {
         lastMessageTime: this.lastMessageTime,
         unseenMessagesCount: this.unseenMessagesCount,
         active: this.active,
-        type: this.type
+        type: this.type,
+        encrypted: this.encrypted
       });
     },
     userLastMessage() {
