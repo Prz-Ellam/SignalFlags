@@ -2,8 +2,6 @@ import crypto from 'crypto';
 import Chat from '../models/chat.model.js';
 import Message from '../models/message.model.js';
 
-const MessageController = {};
-
 export const messageCreateController = async (req, res) => {
     const { chatId } = req.params;
     let { text } = req.body;
@@ -107,4 +105,9 @@ export const messagefindAllByChatController = async (req, res) => {
         status: true,
         message: messages
     });
+}
+
+export default {
+    create: messageCreateController,
+    findByChat: messagefindAllByChatController
 }

@@ -81,7 +81,6 @@ export default {
       position: 'bottom-right',
       showConfirmButton: false,
       timer: 5000,
-
     });
 
     await Toast.fire({

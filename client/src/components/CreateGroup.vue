@@ -139,6 +139,7 @@ import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import UserService from '@/services/user.service';
 import GroupService from '@/services/group.service';
+import { ToastTopEnd } from '../utils/toast';
 
 export default {
   setup() {
@@ -189,15 +190,21 @@ export default {
     async CreateGroup(event) {
       this.v$.$touch()
       if (this.v$.$error) {
-        return
+        ToastTopEnd.fire({
+            icon: 'error',
+            title: 'Formulario no válido'
+        });
+        return;
       }
-      
-      await GroupService.create({
+
+      const group = {
         name: this.name,
         description: this.description,
         privacy: this.privacy,
         userIds: this.userIds
-      });
+      }
+      
+      const response = await GroupService.create(group);
     },
   },
 }

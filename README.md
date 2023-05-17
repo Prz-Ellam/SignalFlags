@@ -72,10 +72,10 @@ cd SignalFlags
 ```
 
 # Features
-- [ ] Auth
-- [ ] Chats
-- [ ] Videocalls
-- [ ] Posts
+- [x] Auth
+- [x] Chats
+- [x] Videocalls
+- [x] Posts
 - [ ] Gamification
 - [ ] Groups
 - [ ] Subgroups

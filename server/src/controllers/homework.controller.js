@@ -496,8 +496,6 @@ const homeworkCreateDeliverContoller = async (req, res) => {
     }
 }
 
-
-
 export default {
     create: createHomeworkController,
     update: updateHomeworkController,

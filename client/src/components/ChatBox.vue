@@ -113,6 +113,7 @@ import Buttons from '@/components/Buttons.vue'
 import MessageService from '@/services/message.service';
 import ChatService from '@/services/chat.service';
 import Swal from 'sweetalert2';
+import { ToastTopEnd } from '../utils/toast';
 
 export default {
   components: {
@@ -157,36 +158,16 @@ export default {
     async onUploadFiles(event) {
       const newFiles = Array.from(event.target.files);
       if (this.files.length + newFiles.length > 5) {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-right',
-            iconColor: 'danger',
-            customClass: {
-              popup: 'bg-dark'
-            },
-            showConfirmButton: false,
-            timer: 1500
-          });
-          await Toast.fire({
-            icon: 'error',
-            title: 'Solo 5 archivos por mensaje'
-          });
-          return;
+        ToastTopEnd.fire({
+          icon: 'error',
+          title: 'Solo 5 archivos por mensaje'
+        });
+        return;
       }
       
       for (const file of newFiles) {
         if (file.size > 8 * 1024 * 1024) {
-          const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-right',
-            iconColor: 'danger',
-            customClass: {
-              popup: 'bg-dark'
-            },
-            showConfirmButton: false,
-            timer: 1500
-          });
-          await Toast.fire({
+          ToastTopEnd.fire({
             icon: 'error',
             title: 'Archivo muy pesado'
           });
@@ -215,35 +196,15 @@ export default {
     },
     async sendMessage() {
       if (this.content.length < 1 && this.files.length < 1) {
-        const Toast = Swal.mixin({
-          toast: true,
-          position: 'top-right',
-          iconColor: 'danger',
-          customClass: {
-            popup: 'bg-dark'
-          },
-          showConfirmButton: false,
-          timer: 1500
-        });
-        await Toast.fire({
+        ToastTopEnd.fire({
           icon: 'error',
-          title: 'Mensaje vacio'
+          title: 'Mensaje vacío'
         });
         return;
       }
 
       if (this.content.length > 512) {
-        const Toast = Swal.mixin({
-          toast: true,
-          position: 'top-right',
-          iconColor: 'danger',
-          customClass: {
-            popup: 'bg-dark'
-          },
-          showConfirmButton: false,
-          timer: 1500
-        });
-        await Toast.fire({
+        ToastTopEnd.fire({
           icon: 'error',
           title: 'El mensaje es muy largo'
         });

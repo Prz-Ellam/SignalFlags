@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     async logout() {
-      await UserService.logout();
+      const response = await UserService.logout();
       localStorage.clear();
       this.$router.push('/home');
       //window.socket.disconnect();

@@ -36,10 +36,6 @@ import UpdateChatGroup from '@/components/UpdateChatGroup.vue';
 import MessageService from '@/services/message.service';
 import ChatService from '@/services/chat.service';
 
-import { chatFindAllByUserService } from '../services/chat.service'
-import { userFindAllWithoutChatService } from '../services/user.service'
-import { chatAccessService } from '../services/chat.service';
-
 export default {
   components: {
     ChatContact,
@@ -64,7 +60,7 @@ export default {
     }
   },
   async created() {
-    const response2 = await userFindAllWithoutChatService();
+    const response2 = await UserService.findWithoutChat();
     if (response2?.status) {
       this.users = response2.message;
     }
@@ -94,7 +90,7 @@ export default {
     });
 
     window.socket.on('pushNotification', async (id) => {
-      const response = await chatFindAllByUserService(this.user._id)
+      const response = await ChatService.findByUser(this.user._id)
       if (response?.status) {
         const chat2 = response.message.find(
           (chat) => chat._id === this.selectedChat?._id,
@@ -120,7 +116,7 @@ export default {
   },
   methods: {
     async print(id) {
-      await chatAccessService(id);
+      await ChatService.access(id);
     },
     async chatSelected(chat) {
       console.log(chat);
@@ -140,7 +136,7 @@ export default {
            })
          })
       }
-      const response2 = await chatFindAllByUserService(this.user._id)
+      const response2 = await ChatService.findByUser(this.user._id)
       if (response2?.status) {
         this.chats = response2.message
       }

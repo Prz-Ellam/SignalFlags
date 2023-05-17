@@ -57,11 +57,11 @@
 import Swal from 'sweetalert2';
 import Autocomplete from '@/components/Autocomplete.vue';
 import ProfilePicture from '@/components/ProfilePicture.vue';
-import { userFindAllService, userFindOneService } from '@/services/user.service';
 import { chatCreateChatGroupService } from '@/services/chat.service';
 
 import { useVuelidate } from '@vuelidate/core';
 import { required, email } from '@vuelidate/validators';
+import UserService from '../services/user.service';
 
 export default {
   components: {
@@ -81,7 +81,7 @@ export default {
   },
   async created() {
     const authUser = JSON.parse(localStorage.getItem('user'));
-    const response2 = await userFindAllService();
+    const response2 = await UserService.find();
     if (response2?.status) {
       this.users = response2.message;
       this.users = this.users.filter(user => user._id !== authUser._id);
@@ -122,7 +122,7 @@ export default {
     async selectedUser(userId) {
       const foundUser = this.selectedUsers.find(user => user._id === userId);
       if (!foundUser) {
-        const user = await userFindOneService(userId);
+        const user = await UserService.findById(userId);
         this.selectedUsers.push(user.message);
       }
     },

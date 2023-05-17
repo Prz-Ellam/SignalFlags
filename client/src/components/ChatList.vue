@@ -54,7 +54,6 @@ import Autocomplete from '@/components/Autocomplete.vue';
 import ChatContact from '@/components/ChatContact.vue';
 
 import ChatService from '@/services/chat.service';
-import { chatAccessService } from '../services/chat.service';
 
 export default {
   components: {
@@ -82,7 +81,7 @@ export default {
   },
   methods: {
     async onClickAutocomplete(chatId) {
-      await chatAccessService(chatId);
+      await ChatService.access(chatId);
     },
     sendAlert(chat) {
       console.log(chat);

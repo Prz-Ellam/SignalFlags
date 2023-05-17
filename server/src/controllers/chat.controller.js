@@ -6,8 +6,6 @@ import Message from '../models/message.model.js';
 import UserSocket from '../models/userSocket.model.js';
 import { format } from 'date-fns';
 
-const ChatController = {};
-
 export const chatAccessController = async (req, res) => {
     const { userId } = req.body;
     const authUser = req.user;
@@ -220,10 +218,6 @@ export const deleteUserToChatController = async (req, res) => {
     // TODO
 }
 
-const deleteChatController = async (req, res) => {
-
-}
-
 export const findUserChatsController = async (req, res) => {
     const { id } = req.params;
 
@@ -390,4 +384,8 @@ export const chatFindUsersController = async (req, res) => {
             message: 'Ocurrio un error en el servidor'
         });
     }
+}
+
+export default {
+    findByUser: findUserChatsController
 }

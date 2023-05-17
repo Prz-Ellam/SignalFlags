@@ -49,8 +49,9 @@
         </div>
 
         <div class="d-grid mb-4">
-          <button type="submit" class="btn btn-primary rounded-pill text-light">
-            Inicia sesión
+          <button type="submit" class="btn btn-primary rounded-pill text-light" ref="loginBtn">
+            <span class="spinner-border spinner-border-sm me-1 d-none" role="status" aria-hidden="true" ref="loginSpinner"></span>
+            <span>Inicia sesión</span>
           </button>
         </div>
 
@@ -66,11 +67,12 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2';
 import io from 'socket.io-client';
 import { useVuelidate } from '@vuelidate/core';
 import { required, email } from '@vuelidate/validators';
 import UserService from '@/services/user.service';
+import { ToastTopEnd } from '../utils/toast';
+import { showErrorMessage } from '../utils/show-error-message';
 
 export default {
   setup() {
@@ -97,38 +99,28 @@ export default {
     async submitLogin(event) {
       this.v$.$touch();
 			if (this.v$.$error) {
-        await Swal.fire({
+        ToastTopEnd.fire({
             icon: 'error',
-            title: '...Oops',
-            html: '<span class="text-light">Faltan parametros</span>',
-            confirmButtonColor: "#F23F43",
-            background: "#38393B",
-            customClass: {
-                title: 'text-light',
-                text: 'text-light',
-                confirmButton: 'btn btn-danger text-light shadow-none rounded-pill'
-            },
+            title: 'Formulario no válido'
         });
-				return;
+        return;
 			}
 
-      const response = await UserService.login({
+      const login = {
         email: this.email,
         password: this.password
-      });
+      };
+
+      this.$refs.loginSpinner.classList.remove('d-none');
+      this.$refs.loginBtn.setAttribute('disabled', 'disabled');
+
+      const response = await UserService.login(login);
+
+      this.$refs.loginSpinner.classList.add('d-none');
+      this.$refs.loginBtn.removeAttribute('disabled');
 
       if (!response?.status) {
-        await Swal.fire({
-            icon: 'error',
-            title: response.message,
-            confirmButtonColor: "#F23F43",
-            background: "#38393B",
-            customClass: {
-              title: 'text-white',
-              text: 'text-white',
-              confirmButton: 'btn btn-danger text-white shadow-none rounded-pill'
-            },
-        });
+        showErrorMessage(response.message);
         return;
       }
 

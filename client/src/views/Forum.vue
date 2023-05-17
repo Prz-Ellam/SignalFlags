@@ -60,7 +60,7 @@
           <!-- Grupo -->
           <div class="d-flex flex-column tab-pane fade h-100 overflow-hidden show active" id="pills-posts" role="tabpanel"
           aria-labelledby="pills-posts-tab" tabindex="0">
-            <div class="overflow-auto h-100 py-2 px-3" id="post-box">
+            <div class="overflow-auto h-100 py-2 px-3" ref="postBox" id="post-box">
               <span class="h5">Bienvenido a {{ group.name }}</span>
               <p>{{ group.description }}</p>
               <img :src="group.avatar" width="200" height="200"
@@ -201,17 +201,17 @@ export default {
     this.posts = await PostService.findByGroup(this.groupId);
     this.subgroups = await SubgroupService.findByGroup(this.groupId);
     this.$nextTick(() => {
-        const postBox = document.getElementById('post-box')
-        postBox.scrollTo({
-          left: 0,
-          top: postBox.scrollHeight,
-        })
+      const postBox = this.$refs.postBox;
+      postBox.scrollTo({
+        left: 0,
+        top: postBox.scrollHeight,
       });
+    });
 
     window.socket.on('postNotification', async () => {
       this.posts = await PostService.findByGroup(this.groupId);
       this.$nextTick(() => {
-        const postBox = document.getElementById('post-box')
+        const postBox = this.$refs.postBox;
         postBox.scrollTo({
           left: 0,
           top: postBox.scrollHeight,
@@ -228,7 +228,10 @@ export default {
     async sendPost() {
       console.log(this.groupId);
       console.log(this.text);
-      await PostService.create({ content: this.text }, this.groupId);
+      const post = {
+        content: this.text
+      }
+      await PostService.create(post, this.groupId);
     },
     async selectGroup(subgroup) {
       this.groupId = subgroup;

@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt';
-import fs from 'fs';
 import User from '../models/user.model.js';
 import Chat from '../models/chat.model.js';
 import Group from '../models/group.model.js';
@@ -237,29 +236,12 @@ export const userFindAllNotChatController = async (req, res) => {
     });
 }
 
-export const userFindGroups = async (req, res) => {
-    const { id } = req.params;
-
-    const requestedUser = await User.findById(id);
-    if (!requestedUser) {
-        return res.status(404).json({
-            status: false,
-            message: 'Usuario no encontrado'
-        });
-    }
-
-    const groups = await Group.find({ members: { $in: id }, parent: null })
-        .select('-members -admins -subgroups -homeworks -posts');
-
-    res.json(groups);
-}
-
 export default {
     login: userLoginController,
     logout: userLogoutController,
     create: userCreateController,
     update: userUpdateController,
     findOne: findOneUserController,
+    findAllNotChat: userFindAllNotChatController,
     findAllUsersController,
-    userFindGroups
 };

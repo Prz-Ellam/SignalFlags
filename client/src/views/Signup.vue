@@ -126,9 +126,11 @@ import Swal from 'sweetalert2';
 import { useVuelidate } from '@vuelidate/core';
 import { required, email, minLength, maxLength, sameAs } from '@vuelidate/validators';
 import io from 'socket.io-client';
-import UserService from '@/services/user.service';
-
 import ProfilePicture from '@/components/ProfilePicture.vue';
+
+import UserService from '@/services/user.service';
+import { ToastTopEnd } from '../utils/toast';
+import { showErrorMessage } from '../utils/show-error-message';
 
 const containsUpper = (value) => /[A-Z]/.test(value);
 const containsLower = (value) => /[a-z]/.test(value);
@@ -190,17 +192,9 @@ export default {
     async submitSignup(event) {
       this.v$.$touch();
       if (this.v$.$error) {
-        await Swal.fire({
+        ToastTopEnd.fire({
             icon: 'error',
-            title: '...Opps',
-            html: '<span class="text-light">Faltan parametros</span>',
-            confirmButtonColor: "#F23F43",
-            background: "#38393B",
-            customClass: {
-                title: 'text-light',
-                text: 'text-light',
-                confirmButton: 'btn btn-danger text-light shadow-none rounded-pill'
-            },
+            title: 'Formulario no válido'
         });
         return;
       }
@@ -214,17 +208,8 @@ export default {
       };
       const response = await UserService.create(user);
       if (!response?.status) {
-        await Swal.fire({
-            icon: 'error',
-            title: response.message,
-            confirmButtonColor: "#F23F43",
-            background: "#38393B",
-            customClass: {
-                title: 'text-white',
-                text: 'text-white',
-                confirmButton: 'btn btn-danger text-white shadow-none rounded-pill'
-            },
-        });
+        showErrorMessage(response.message);
+        return;
       }
 
       this.$store.dispatch('setToken', response.token);

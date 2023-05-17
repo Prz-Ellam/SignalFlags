@@ -77,6 +77,7 @@
 import HomeworkService from '../services/homework.service';
 import { useVuelidate } from '@vuelidate/core';
 import { required, minLength, maxLength, minValue, maxValue } from '@vuelidate/validators';
+import { ToastTopEnd } from '../utils/toast';
 
 export default {
   setup() {
@@ -110,16 +111,20 @@ export default {
     async CreateHomework(event) {
       this.v$.$touch()
       if (this.v$.$error) {
+        ToastTopEnd.fire({
+            icon: 'error',
+            title: 'Formulario no válido'
+        });
         return;
       }
-      const id = this.$route.params.id;
 
+      const id = this.$route.params.id;
       const homework = {
         name: this.name,
         description: this.description,
         dueDate: this.dueDate
       }
-      const res = await HomeworkService.create(id, homework);
+      const response = await HomeworkService.create(id, homework);
     },
   }
 }

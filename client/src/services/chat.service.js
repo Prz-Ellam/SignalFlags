@@ -2,7 +2,24 @@ import axios from 'axios';
 
 class ChatService {
     static async access(userId) {
-
+        try {
+            const configuration = {
+                method: 'POST',
+                url: `/api/v1/chats`,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify({ userId })
+            }
+            const response = await axios(configuration);
+            return response.data;
+        }
+        catch (exception) {
+            if (exception.response)
+                return exception.response.data;
+            else
+                throw exception;
+        }
     }
 
     static async createGroup(members) {
@@ -22,7 +39,10 @@ class ChatService {
             return response.data;
         }
         catch (exception) {
-            return exception.response.data;
+            if (exception.response)
+                return exception.response.data;
+            else
+                throw exception;
         }
     }
 
@@ -79,24 +99,6 @@ class ChatService {
 }
 
 export default ChatService;
-
-export const chatAccessService = async (userId) => {
-    try {
-        const configuration = {
-            method: 'POST',
-            url: `/api/v1/chats`,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            data: JSON.stringify({ userId })
-        }
-        const response = await axios(configuration);
-        return response.data;
-    }
-    catch (exception) {
-        return exception.response.data;
-    }
-}
 
 export const chatCreateChatGroupService = async (chat) => {
     try {
