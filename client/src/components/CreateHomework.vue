@@ -1,21 +1,27 @@
 <template>
   <div class="modal fade modal-lg pt-5" id="createHomeworkModal" tabindex="-1" aria-labelledby="modalGroup" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content  bg-accent">
+      <div class="modal-content bg-accent">
         <form @submit.prevent="CreateHomework" novalidate>
           <div class="modal-header">
-            <h5 class="modal-title" id="modalGroup">Crear tarea</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <h3 class="modal-title">Crear tarea</h3>
+            <button 
+              type="button" 
+              class="btn-close btn-close-white shadow-none" 
+              data-bs-dismiss="modal" 
+              aria-label="Close">
+            </button>
           </div>
           <div class="modal-body">
             <div class="mb-3">
-              <div class="">
-                <label for="name" role="button" class="col-form-label">
+              <div class="mb-4">
+                <label for="name" role="button" class="form-label">
                   Nombre de la tarea
                 </label>
                 <input v-model="name"
                   type="text bg-secondary"
-                  class="form-control shadow-none bg-secondary border-0 rounded-2 text-white" id="name"
+                  class="form-control shadow-none bg-secondary border-0 rounded-4" 
+                  id="name"
                   placeholder="Nombre del grupo.">
                 <small class="text-danger" v-if="v$.name.$dirty &&
                   v$.name.required.$invalid">
@@ -31,10 +37,13 @@
                 </small>
               </div>
 
-              <div>
-                <label for="description" class="col-form-label">Descripción:</label>
+              <div class="mb-4">
+                <label for="description" class="form-label" role="button">
+                  Descripción
+                </label>
                 <textarea type="text bg-secondary"
-                  class="form-control shadow-none bg-secondary border-0 rounded-2 text-white" id="description"
+                  class="form-control shadow-none bg-secondary border-0 rounded-4" 
+                  id="description"
                   placeholder="Descripción." v-model="description"></textarea>
                 <small class="text-danger" v-if="v$.description.$dirty &&
                   v$.description.required.$invalid">
@@ -49,8 +58,11 @@
                   El nombre de la tarea debe tener menos de 50 caracteres
                 </small>
               </div>
-              <div>
-                <label for="dueDate" class="col-form-label">Fecha de entrega:</label>
+
+              <div class="mb-4">
+                <label for="dueDate" class="form-label">
+                  Fecha de entrega
+                </label>
                 <input type="datetime-local" name="dueDate" id="dueDate" class="form-control bg-secondary"
                   v-model="dueDate">
                 <small class="text-danger" v-if="v$.dueDate.$dirty &&
@@ -62,8 +74,18 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Crear</button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button 
+              type="button" 
+              class="btn btn-secondary rounded-pill text-light" 
+              data-bs-dismiss="modal">
+              Cerrar
+            </button>
+            <button 
+              type="submit" 
+              class="btn btn-primary rounded-pill text-light"
+              data-bs-dismiss="modal">
+              Crear
+            </button>
           </div>
         </form>
       </div>

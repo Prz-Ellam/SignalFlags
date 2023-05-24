@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 class SubgroupService {
-    static async create(subgroup) {
+    static async create(groupId, subgroup) {
         try {
             const configuration = {
                 method: 'POST',

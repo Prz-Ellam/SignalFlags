@@ -37,14 +37,6 @@ class MessageService {
         }
     }
 
-    static async update() {
-
-    }
-
-    static async delete() {
-
-    }
-
     static async findByChat(chatId) {
         try {
             const configuration = {

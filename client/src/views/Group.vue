@@ -24,9 +24,10 @@
               </div>
               <div class="d-flex align-items-start px-3 h-33">
                 <div>
-                  <h6 class="text-white">Crea un grupo.</h6>
+                  <h6 class="text-white">Crea un grupo</h6>
                   <button type="button" class="text-light rounded-pill flex-fill bd-highlight btn btn-primary rounded-3"
-                    data-bs-toggle="modal" data-bs-target="#modalCreateGroup">
+                    
+                    @click="a">
                     Crear
                   </button>
                 </div>
@@ -58,11 +59,12 @@
         </div>
       </div>
     </div>
-    <CreateGroup id="modalCreateGroup" />
+    <CreateGroup />
   </section>
 </template>
 
 <script>
+import { Modal } from 'bootstrap';
 import Swal from 'sweetalert2';
 import CreateGroup from '@/components/CreateGroup.vue';
 import GroupCard from '@/components/GroupCard.vue';
@@ -100,6 +102,15 @@ export default {
     return {
       groups: []
     }
+  },
+  methods: {
+    a() {
+      // modalCreateGroup
+      console.log('A');
+      const modal = document.querySelector('#CreateGroup');
+      const modalInstance = new Modal(modal);
+      modalInstance.show();
+    }
   }
 }
 </script>
@@ -109,6 +120,13 @@ export default {
   width: 100px;
   height: 100px;
   object-fit: cover;
+}
+
+.box {
+  position: static;
+  overflow-y: scroll;
+  overflow-x: unset;
+  height: 100%;
 }
 
 .box_button {

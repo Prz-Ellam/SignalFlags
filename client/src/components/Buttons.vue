@@ -6,13 +6,13 @@
     <ul
       class="dropdown-menu text-center border-0 bg-transparent"
     >
-      <li class="my-2">
+      <li class="my-2" style="width: 0">
         <div class="form-group text-center">
           <div class="position-relative">
             <label
               for="chatFiles"
               role="button"
-              class="btns-label text-white position-absolute rounded-circle"
+              class=" text-white position-absolute rounded-circle"
             ></label>
             <button
               class="img btn rounded-circle disabled border-0"
@@ -31,7 +31,7 @@
           />
         </div>
       </li>
-      <li class="my-2">
+      <li class="" style="width: 0">
         <div class="form-group text-center">
           <div class="position-relative">
             <label
@@ -49,32 +49,6 @@
           </div>
         </div>
       </li>
-      <!-- <li class="my-2">
-        <div class="form-group text-center">
-          <div class="position-relative">
-            <label
-              for="chatImages"
-              role="button"
-              class="btns-label text-white position-absolute rounded-circle"
-            ></label>
-            <button
-              class="img btn rounded-circle disabled border-0"
-              style="background-color: #ff2655;"
-            >
-              <i class="h2 bi bi-card-image align-items-center"></i>
-            </button>
-          </div>
-          <input
-            type="file" multiple="multiple"
-            accept="image/png, image/gif, image/jpeg, image/jpg"
-            class="form-control position-absolute"
-            name="chatImages"
-            id="chatImages"
-            autocomplete="off"
-            @change="uploadImage"
-          />
-        </div>
-      </li> -->
     </ul>
   </div>
 </template>
@@ -128,7 +102,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .btn-rotate {
   transform: rotateY(0deg) rotate(45deg);
 }

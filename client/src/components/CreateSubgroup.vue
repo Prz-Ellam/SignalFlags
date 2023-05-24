@@ -1,21 +1,29 @@
 <template>
-  <div class="modal fade modal-lg pt-5" tabindex="-1" aria-labelledby="ModalSubGroup" aria-hidden="true">
+  <div class="modal fade modal-lg pt-5" id="createSubgroupModal" tabindex="-1" aria-labelledby="ModalSubGroup" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content bg-accent">
         <form @submit.prevent="CreateSubGroup" novalidate>
           <div class="modal-header">
             <h3 class="modal-title">Crear subgrupo</h3>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button 
+              type="button" 
+              class="btn-close btn-close-white shadow-none" 
+              data-bs-dismiss="modal" 
+              aria-label="Close">
+            </button>
           </div>
           <div class="modal-body">
             <div v-if="stepSub === 0" class="mb-3">
               <div>
-                <label for="recipient-name" class="col-form-label">
+                <label for="subgroup-name" role="button" class="form-label">
                   Nombre del subgrupo:
                 </label>
-                <input type="text bg-secondary"
-                  class="form-control shadow-none bg-secondary border-0 rounded-4 text-white" id="recipient-name"
-                  placeholder="Asigne un nombre a su grupo" v-model="name" />
+                <input 
+                  type="text bg-secondary"
+                  class="form-control shadow-none bg-secondary border-0 rounded-4" 
+                  id="subgroup-name"
+                  placeholder="Asigne un nombre a su grupo" 
+                  v-model="name" />
                 <small class="text-danger" v-if="v$.name.$dirty && v$.name.required.$invalid">
                   Se requiere un nombre.
                 </small>
@@ -29,7 +37,7 @@
                   class="d-flex align-items-center justify-content-between alert bg-dark my-1 py-2" role="alert">
                   <div>
                     <img width="40" height="40" class="me-2 rounded-circle" style="object-fit: cover;"
-                      :src="`/api/v1/images/${users.find(u => u._id === userId).avatar}`" />
+                      :src="users.find(u => u._id === userId).avatar" />
                     <span>{{ users.find(u => u._id === userId).username }}</span>
                   </div>
                   <div class="d-inline-flex bg-danger p-2 rounded-circle" role="button" @click="">
@@ -68,6 +76,8 @@ import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import UserService from '@/services/user.service';
 import GroupService from '@/services/group.service';
+import SubgroupService from '../services/subgroup.service';
+import { ToastTopEnd } from '../utils/toast';
 
 export default {
   setup() {
@@ -106,6 +116,10 @@ export default {
     NextStepSub() {
       this.v$.$touch()
       if (this.v$.$error) {
+        ToastTopEnd.fire({
+            icon: 'error',
+            title: 'Formulario no válido'
+        });
         return
       }
       this.stepSub++;
@@ -113,10 +127,15 @@ export default {
     async CreateSubGroup(event) {
       this.v$.$touch()
       if (this.v$.$error) {
-        return
+        ToastTopEnd.fire({
+            icon: 'error',
+            title: 'Formulario no válido'
+        });
+        return;
       }
 
-      await GroupService.CreateSubGroup({
+      const groupId = this.$route.params.id;
+      await SubgroupService.create(groupId, {
         name: this.name,
         userIds: this.userIds
       });

@@ -19,10 +19,6 @@ class PostService {
         }
     }
 
-    static async update() {
-
-    }
-
     static async findByGroup(groupId) {
         try {
             const configuration = {

@@ -20,6 +20,25 @@ class GroupService {
         }
     }
 
+    static async addAvatar(groupId, avatar) {
+        try {
+            const configuration = {
+                method: 'POST',
+                url: `/api/v1/groups/${ groupId }/avatar`,
+                headers: { 
+                    'Content-Type': 'multipart/form-data'
+                },
+                data: avatar
+            };
+    
+            const response = await axios(configuration);
+            return response.data;
+        }
+        catch (exception) {
+            return exception.response.data;
+        }
+    }
+
     static async sendEmail(id) {
         try {
             const configuration = {
@@ -36,14 +55,6 @@ class GroupService {
         catch (exception) {
             return exception.response.data;
         }
-    }
-
-    static async update() {
-
-    }
-
-    static async delete() {
-
     }
 
     static async findByUser(userId) {

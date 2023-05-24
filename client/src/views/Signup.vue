@@ -56,7 +56,7 @@
             El nombre de usuario debe tener menos de 20 caracteres
           </small>
           <small class="text-danger" 
-            v-if="v$.username.$dirty && v$.username.usernamePattern.$invalid">
+            v-if="v$.username.$dirty && !v$.username.required.$invalid && v$.username.usernamePattern.$invalid">
             El nombre de usuario no tiene el formato correcto
           </small>
         </div>
@@ -107,7 +107,10 @@
         </div>
 
         <div class="d-grid mb-4">
-          <button type="submit" class="btn btn-primary rounded-pill text-white">Registrarse</button>
+          <button type="submit" class="btn btn-primary rounded-pill text-white" ref="signupBtn">
+            <span class="spinner-border spinner-border-sm me-1 d-none" role="status" aria-hidden="true" ref="signupSpinner"></span>
+            <span>Registrarse</span>
+          </button>
         </div>
 
         <div class="text-center">
@@ -205,7 +208,15 @@ export default {
         password: this.password,
         confirmPassword: this.confirmPassword
       };
+
+      this.$refs.signupSpinner.classList.remove('d-none');
+      this.$refs.signupBtn.setAttribute('disabled', 'disabled');
+
       const response = await UserService.create(user);
+
+      this.$refs.signupSpinner.classList.add('d-none');
+      this.$refs.signupBtn.removeAttribute('disabled');
+
       if (!response?.status) {
         showErrorMessage(response.message);
         return;

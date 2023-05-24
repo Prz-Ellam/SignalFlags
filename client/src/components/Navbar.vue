@@ -28,12 +28,12 @@
                   alt="Perfil" width="30" height="30" class="object-fit-cover rounded-circle">
               </button>
               <ul id="dropdown" class="dropdown-menu dropdown-menu-end dropdown-menu-dark bg-secondary m-0">
-                <li>
+                <!--li>
                   <RouterLink class="dropdown-item" to="/profile">Mi perfil</RouterLink>
                 </li>
                 <li>
                 <hr class="dropdown-divider">
-                </li>
+                </li-->
                 <li role="button">
                   <a class="dropdown-item" @click="logout">Cerrar sesión</a>
                 </li>

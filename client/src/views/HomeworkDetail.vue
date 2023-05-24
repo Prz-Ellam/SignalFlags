@@ -7,7 +7,7 @@
           <small>Fecha de vencimiento</small>
           <p>
             <i class="bi-calendar me-1"></i>
-            <span>{{ new Date(homework.dueDate).toLocaleString() }}</span>
+            <span>{{ formatDate(homework.dueDate) }}</span>
           </p>
 
           <small>Instrucciones</small>
@@ -53,7 +53,7 @@
           </a>
         </div>
         <div class="col-6 d-block text-end">
-          <button v-if="!homework.delivers" class="btn btn-primary text-light">
+          <button v-if="!homework.delivers" @click="onDeliverSubmit" class="btn btn-primary text-light">
             <span>Entregar</span>
             <i class="text-white ms-1 bi bi-flag"></i>
           </button>
@@ -71,6 +71,9 @@
 
 <script> 
 import HomeworkService from '@/services/homework.service';
+import { showErrorMessage } from '../utils/show-error-message';
+import { ToastTopEnd } from '../utils/toast';
+import { formatDate } from '../utils/format-date';
 
 export default {
   data() {
@@ -83,21 +86,39 @@ export default {
     const homeworkId = this.$route.params.id;
     this.homework = await HomeworkService.findById(homeworkId);
     console.log(this.homework);
-
-    for (const attachment of this.homework?.delivers?.attachments) {
-      fetch(attachment.url)
-        .then(response => response.blob())
-        .then(blob => {
-          const file = new File([blob], attachment.name, { type: blob.type });
-          this.files.push(file);
-        });
-    }
+    
+    // for (const attachment of this.homework?.delivers?.attachments) {
+    //   fetch(attachment.url)
+    //     .then(response => response.blob())
+    //     .then(blob => {
+    //       const file = new File([blob], attachment.name, { type: blob.type });
+    //       this.files.push(file);
+    //     });
+    // }
   },
   methods: {
+    formatDate,
     uploadFile(event) {
       const files = Array.from(event.target.files);
       console.log(files);
       this.files = this.files.concat(files);
+
+      
+    },
+    async onDeliverSubmit() {
+      const form = new FormData();
+      for (const file of this.files) {
+        form.append('files', file);
+      }
+      const response = await HomeworkService.deliver(this.homework._id, form);
+      if (response?.status) {
+        showErrorMessage(response.message);
+      }
+
+      ToastTopEnd.fire({
+        icon: 'success',
+        title: 'La tarea se subió exitosamente'
+      });
     }
   }
 }

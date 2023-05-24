@@ -18,7 +18,7 @@
       />
     </div>
 
-    <AddUserToGroupChat id="AddUsuertoGroupChat" />
+    <CreateChatGroup id="AddUsuertoGroupChat" />
     <!-- <UpdateChatGroup /> -->
   </section>
 </template>
@@ -28,7 +28,7 @@ import ChatContact from '@/components/ChatContact.vue'
 import ChatMessage from '@/components/ChatMessage.vue'
 import Autocomplete from '@/components/Autocomplete.vue'
 import Buttons from '@/components/Buttons.vue'
-import AddUserToGroupChat from '@/components/AddUserToGroupChat.vue'
+import CreateChatGroup from '@/components/CreateChatGroup.vue'
 import ChatList from '@/components/ChatList.vue';
 import ChatBox from '@/components/ChatBox.vue';
 
@@ -41,7 +41,7 @@ export default {
     ChatContact,
     ChatMessage,
     Autocomplete,
-    AddUserToGroupChat,
+    CreateChatGroup,
     Buttons,
     ChatList,
     ChatBox

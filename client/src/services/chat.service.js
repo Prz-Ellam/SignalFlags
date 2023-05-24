@@ -22,10 +22,6 @@ class ChatService {
         }
     }
 
-    static async createGroup(members) {
-
-    }
-
     static async findByUser(userId) {
         try {
             const configuration = {

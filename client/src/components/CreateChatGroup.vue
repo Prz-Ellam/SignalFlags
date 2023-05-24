@@ -4,22 +4,30 @@
       <div class="modal-content bg-accent">
         <form @submit.prevent="submitChat">
           <div class="modal-header">
-            <h5 class="modal-title">Crear grupo</h5>
-            <button type="button" class="btn-close text-light" data-bs-dismiss="modal" aria-label="Close"></button>
+            <h3 class="modal-title">Crear chat grupal</h3>
+            <button 
+              type="button" 
+              class="btn-close btn-close-white shadow-none" 
+              data-bs-dismiss="modal" 
+              aria-label="Close">
+            </button>
           </div>
           <div class="modal-body">
             
             <ProfilePicture @update="update" />
 
-            <label for="name" role="button" class="form-label">
-              Nombre del chat
-            </label>
-            <input 
-              type="text" 
-              id="name" 
-              class="bg-secondary form-control rounded-4" 
-              v-model="name"
-            >
+            <div class="mb-4">
+              <label for="name" role="button" class="form-label">
+                Nombre del chat
+              </label>
+              <input 
+                type="text" 
+                id="name" 
+                class="bg-secondary form-control rounded-4" 
+                v-model="name"
+              >
+            </div>
+            
 
             <label for="message-text" class="col-form-label">
               Escriba un nombre para agregar miembros al chat.
@@ -43,8 +51,16 @@
 
           </div>
           <div class="modal-footer">
-            <button class="btn btn-primary text-light rounded-pill" data-bs-dismiss="modal">
-              Crear chat grupal
+            <button 
+              type="button" 
+              class="btn btn-secondary rounded-pill text-light" 
+              data-bs-dismiss="modal">
+              Cerrar
+            </button>
+            <button 
+              class="btn btn-primary text-light rounded-pill" 
+              data-bs-dismiss="modal">
+              Crear
             </button>
           </div>
         </form>

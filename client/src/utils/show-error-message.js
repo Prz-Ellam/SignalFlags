@@ -4,7 +4,7 @@ export const showErrorMessage = async (message) => {
     let text = 'Parece que algo salió mal';
     if (typeof message === 'object') {
         text = '';
-        for (const [_key, value] of Object.entries(message)) {
+        for (const value of Object.values(message)) {
             text += `${value}<br>`;
         }
     } else if (typeof message === 'string') {

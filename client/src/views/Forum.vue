@@ -2,12 +2,20 @@
   <section class="container-fluid h-100">
     <div class="h-100 p-3 d-flex col text-center">
       <div class="bg-accent text-start w-25 p-3 rounded-3 h-100 me-2 overflow-hidden">
-        <img class="img-fluid bg-primary rounded-2 mb-2 img75" 
+        <img 
+          class="img-fluid bg-primary rounded-2 mb-2 img75" 
           width="75" height="75" 
-          :src="group.avatar" alt="...">
+          :src="group.avatar" alt="..."
+        >
         <h2 class="h4 text-nowrap text-truncate">{{ group.name }}</h2>
         <hr>
-        <p class="fw-bold mb-1">Subgrupos</p>
+        <p class="d-flex justify-content-between align-items-center fw-bold mb-1">
+          <span class="">Subgrupos</span>
+          <button class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#createSubgroupModal">
+            <small>Agregar subgrupo</small>
+          </button>
+        </p>
+       
         <ul class="list-group">
           <li role="button" 
             @click="selectGroup($route.params.id)"
@@ -73,13 +81,10 @@
                   :post="post"
                 />
 
-
- 
-
               </div>
             </div>
            
-            <button @click="sendEmail">Correo</button>
+            <!-- <button @click="sendEmail">Correo</button> -->
               
             <div class="input-group p-2 my-1">
               <Buttons />
@@ -155,10 +160,12 @@
     </div>
   </section>
   <CreateHomework />
+  <CreateSubgroup />
 </template>
 
 <script>
 import CreateHomework from '@/components/CreateHomework.vue';
+import CreateSubgroup from '@/components/CreateSubgroup.vue';
 import Buttons from '@/components/Buttons.vue';
 import Homework from '@/views/Homework.vue';
 import HomeworkCard from '@/components/HomeworkCard.vue';
@@ -172,6 +179,7 @@ import HomeworkService from '../services/homework.service';
 export default {
   components: {
     CreateHomework,
+    CreateSubgroup,
     Buttons,
     HomeworkCard,
     Homework,
@@ -241,14 +249,7 @@ export default {
 }
 </script>
 
-<style>
-.box {
-  position: static;
-  overflow-y: scroll;
-  overflow-x: unset;
-  height: 100%;
-}
-
+<style scoped>
 .box2 {
   position: static;
   overflow-y: scroll;

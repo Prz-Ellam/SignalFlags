@@ -14,7 +14,7 @@ const groupCreateController = async (req, res) => {
     const { name, description, privacy, userIds } = req.body;
 
     for (const userId of userIds) {
-        const existingUser = User.findById(userId);
+        const existingUser = await User.findById(userId);
         if (!existingUser) {
             return res.status(404).json({
                 status: false,
@@ -100,7 +100,7 @@ const groupAddAvatarController = async (req, res) => {
     catch (exception) {
         return res.status(500).json({
             status: false,
-            message: 'Ocurrio un error en el servidor'
+            message: exception
         });
     }
 }

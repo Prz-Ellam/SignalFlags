@@ -86,7 +86,12 @@
         <div class="modal-content bg-accent">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="exampleModalLabel">Miembros</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button 
+              type="button" 
+              class="btn-close btn-close-white shadow-none" 
+              data-bs-dismiss="modal" 
+              aria-label="Close">
+            </button>
           </div>
           <div class="modal-body">
             <div v-for="user in members"

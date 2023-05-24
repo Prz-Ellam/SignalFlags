@@ -31,6 +31,7 @@ groupRouter.get('/:id', authMiddleware, GroupController.findOne);
 // [POST] /api/v1/groups
 groupRouter.post('/', authMiddleware, validateCreateGroup, GroupController.create);
 
+
 // Asigna una imagen a un grupo
 // [POST] /api/v1/groups/:id/avatar
 groupRouter.post('/:id/avatar', authMiddleware, multerUpload.single('avatar'), GroupController.addAvatar);
