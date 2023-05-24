@@ -22,7 +22,7 @@
                   type="text bg-secondary"
                   class="form-control shadow-none bg-secondary border-0 rounded-4" 
                   id="name"
-                  placeholder="Nombre del grupo.">
+                  placeholder="Nombre de la tarea">
                 <small class="text-danger" v-if="v$.name.$dirty &&
                   v$.name.required.$invalid">
                   Se requiere una descripción.

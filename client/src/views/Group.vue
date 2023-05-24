@@ -115,7 +115,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .group-img {
   width: 100px;
   height: 100px;

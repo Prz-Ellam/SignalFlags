@@ -40,7 +40,8 @@ const userLoginController = async (req, res) => {
             _id: requestedUser._id, 
             username: requestedUser.username,
             email: requestedUser.email,
-            avatar: requestedUser.avatar
+            avatar: requestedUser.avatar,
+            score: requestedUser.score
         },
         token: token
     });

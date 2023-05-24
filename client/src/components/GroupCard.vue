@@ -24,6 +24,12 @@ export default {
 </script>
 
 <style scoped>
+.group-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
 .text {
   overflow: hidden;
   text-overflow: ellipsis;

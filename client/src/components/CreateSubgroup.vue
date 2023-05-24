@@ -22,8 +22,9 @@
                   type="text bg-secondary"
                   class="form-control shadow-none bg-secondary border-0 rounded-4" 
                   id="subgroup-name"
-                  placeholder="Asigne un nombre a su grupo" 
-                  v-model="name" />
+                  placeholder="Asigne un nombre a su subgrupo" 
+                  v-model="name" 
+                />
                 <small class="text-danger" v-if="v$.name.$dirty && v$.name.required.$invalid">
                   Se requiere un nombre.
                 </small>
@@ -144,4 +145,4 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped></style>

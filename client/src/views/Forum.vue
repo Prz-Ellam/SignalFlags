@@ -11,7 +11,7 @@
         <hr>
         <p class="d-flex justify-content-between align-items-center fw-bold mb-1">
           <span class="">Subgrupos</span>
-          <button class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#createSubgroupModal">
+          <button class="btn btn-primary rounded-pill text-light" data-bs-toggle="modal" data-bs-target="#createSubgroupModal">
             <small>Agregar subgrupo</small>
           </button>
         </p>
@@ -71,7 +71,7 @@
               <img 
                 :src="group.avatar" 
                 width="200" height="200"
-                class="rounded-circle img200"
+                class="rounded-2 img200 bg-primary"
                 alt="Foto de grupo" 
               />
               <div class="row" id="forum-container">
@@ -210,6 +210,10 @@ export default {
         left: 0,
         top: postBox.scrollHeight,
       });
+    });
+
+    window.socket.on('groupNotification', async () => {
+      this.subgroups = await SubgroupService.findByGroup(this.groupId);
     });
 
     window.socket.on('postNotification', async () => {

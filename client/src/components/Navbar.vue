@@ -19,7 +19,11 @@
             </button>
           </div>
         </form-->
+        
         <ul class="col-auto navbar-nav ms-auto d-flex align-items-lg-center me-2">
+          <li class="nav-item me-2">
+            Puntuación: {{ user.score }}
+          </li>
           <li class="nav-item">
             <div class="nav-link dropdown text-end">
               <button class="btn border-0 p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -54,6 +58,9 @@ export default {
     return {
       user: JSON.parse(localStorage.getItem('user'))
     }
+  },
+  created() {
+    console.log(JSON.parse(localStorage.getItem('user')));
   },
   methods: {
     async logout() {
