@@ -15,7 +15,13 @@
       :class="{ 'p-2 rounded-4 overflow-auto': true, 'bg-primary': ownMessage, 'bg-secondary': !ownMessage }" 
       data-bs-toggle="tooltip" 
       :data-bs-placement="ownMessage ? 'left' : 'right'"
-      :data-bs-title="new Date(date).toLocaleString('es-MX', 'America/Monterrey')"  
+      :data-bs-title="new Date(date).toLocaleString('es-MX', {
+        day: '2-digit',
+        month: '2-digit',
+        year: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      }).replace(',', ' ')"   
     >
       {{ content }}
       <a v-for="attachment in message.attachments"
@@ -32,7 +38,13 @@
       data-bs-toggle="tooltip"
       :href="content" target="_blank"
       :data-bs-placement="ownMessage ? 'left' : 'right'"
-      :data-bs-title="new Date(date).toLocaleString('es-MX', 'America/Monterrey')"  
+      :data-bs-title="new Date(date).toLocaleString('es-MX', {
+        day: '2-digit',
+        month: '2-digit',
+        year: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      }).replace(',', ' ')"  
     >
       {{ content }}
       <a v-for="attachment in message.attachments"

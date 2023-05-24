@@ -122,15 +122,14 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2';
 import { useVuelidate } from '@vuelidate/core';
 import { required, email, minLength, maxLength, sameAs } from '@vuelidate/validators';
 import io from 'socket.io-client';
 import ProfilePicture from '@/components/ProfilePicture.vue';
 
 import UserService from '@/services/user.service';
-import { ToastTopEnd } from '../utils/toast';
-import { showErrorMessage } from '../utils/show-error-message';
+import { ToastTopEnd } from '@/utils/toast';
+import { showErrorMessage } from '@/utils/show-error-message';
 
 const containsUpper = (value) => /[A-Z]/.test(value);
 const containsLower = (value) => /[a-z]/.test(value);

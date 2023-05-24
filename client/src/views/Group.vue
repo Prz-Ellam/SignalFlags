@@ -19,10 +19,10 @@
           <div class="col-sm-6 col-md-4 col-lg-3">
             <div class="mb-4 text-white d-flex flex-column justify-content-center align-items-center shadow-sm rounded-3"
               style="background-color: #38393b; height: 240px;">
-              <div class="d-flex align-items-center" style="height: 66%">
+              <div class="d-flex align-items-center h-66">
                 <img src="../assets/images/POI_SignalFalgs.png" class="rounded group-img" alt="..." />
               </div>
-              <div class="d-flex align-items-start px-3" style="height: 33%">
+              <div class="d-flex align-items-start px-3 h-33">
                 <div>
                   <h6 class="text-white">Crea un grupo.</h6>
                   <button type="button" class="text-light rounded-pill flex-fill bd-highlight btn btn-primary rounded-3"
@@ -34,13 +34,13 @@
             </div>
           </div>
 
-          <div class="col-sm-6 col-md-4 col-lg-3">
+          <!--div class="col-sm-6 col-md-4 col-lg-3">
             <div class="mb-4 text-white d-flex flex-column justify-content-center align-items-center shadow-sm rounded-3"
               style="background-color: #38393b; height: 240px;">
-              <div class="d-flex align-items-center" style="height: 50%">
+              <div class="d-flex align-items-center h-50">
                 <img src="../assets/images/POI_SignalFalgs.png" class="rounded group-img" alt="..." />
               </div>
-              <div class="d-flex align-items-center px-3" style="height: 50%">
+              <div class="d-flex align-items-center px-3 h-50">
                 <div>
                   <h6 class="text-white">Unete a un grupo público</h6>
                   <input type="text" name="code" id="code"
@@ -53,7 +53,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div-->
 
         </div>
       </div>
@@ -119,5 +119,13 @@ export default {
 
 .box_button:hover {
   background-color: #6d6f7d;
+}
+
+.h-33 {
+  height: 33%;
+}
+
+.h-66 {
+  height: 66%;
 }
 </style>

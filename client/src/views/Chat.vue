@@ -19,7 +19,7 @@
     </div>
 
     <AddUserToGroupChat id="AddUsuertoGroupChat" />
-    <UpdateChatGroup />
+    <!-- <UpdateChatGroup /> -->
   </section>
 </template>
 
@@ -31,10 +31,10 @@ import Buttons from '@/components/Buttons.vue'
 import AddUserToGroupChat from '@/components/AddUserToGroupChat.vue'
 import ChatList from '@/components/ChatList.vue';
 import ChatBox from '@/components/ChatBox.vue';
-import UpdateChatGroup from '@/components/UpdateChatGroup.vue';
 
 import MessageService from '@/services/message.service';
 import ChatService from '@/services/chat.service';
+import UserService from '@/services/user.service';
 
 export default {
   components: {
@@ -44,8 +44,7 @@ export default {
     AddUserToGroupChat,
     Buttons,
     ChatList,
-    ChatBox,
-    UpdateChatGroup
+    ChatBox
   },
   data() {
     return {
@@ -79,24 +78,32 @@ export default {
         if (response?.status) {
           this.messages = response.message;
           this.$nextTick(() => {
-           const messageBox = document.getElementById('message-box')
-           messageBox.scrollTo({
-             left: 0,
-             top: messageBox.scrollHeight,
-           })
-         })
+            const messageBox = document.getElementById('message-box')
+            messageBox.scrollTo({
+              left: 0,
+              top: messageBox.scrollHeight,
+            })
+          })
         }
       }
     });
 
     window.socket.on('pushNotification', async (id) => {
+
+      console.log(id);
+      console.log(this.selectedChat);
+      
       const response = await ChatService.findByUser(this.user._id)
       if (response?.status) {
         const chat2 = response.message.find(
-          (chat) => chat._id === this.selectedChat?._id,
+          (chat) => chat._id == this.selectedChat?.chatId,
         )
 
-        this.chats = response.message
+        if (chat2) {
+          this.selectedChat.encrypted = chat2.encrypted;
+        }
+        
+        this.chats = response.message;
         const totalUnseenMessages = this.chats.reduce(
           (total, message) => total + message.unseenMessagesCount,
           0,
@@ -137,9 +144,10 @@ export default {
          })
       }
       const response2 = await ChatService.findByUser(this.user._id)
-      if (response2?.status) {
-        this.chats = response2.message
+      if (!response2?.status) {
+        return;
       }
+      this.chats = response2.message
       this.isChatDrawerFocus = false;
     }
   },

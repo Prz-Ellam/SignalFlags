@@ -46,6 +46,26 @@ class ChatService {
         }
     }
 
+    static async findById(id) {
+        try {
+            const configuration = {
+                method: 'GET',
+                url: `/api/v1/chats/${ id }`,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+            const response = await axios(configuration);
+            return response.data;
+        }
+        catch (exception) {
+            if (exception.response)
+                return exception.response.data;
+            else
+                throw exception;
+        }
+    }
+
     static async findMembers(chatId) {
         try {
             const configuration = {

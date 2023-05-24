@@ -24,6 +24,7 @@
 
 <script>
 import Peer from 'peerjs';
+import ChatService from '../services/chat.service';
 
 export default {
   data() {
@@ -35,6 +36,13 @@ export default {
     // Este es el chat
     const chatId = this.$route.params.id;
     const userId = JSON.parse(localStorage.getItem('user'))._id;
+
+    const members = await ChatService.findMembers(chatId);
+    const isPartOfChat = members.find(user => user._id === userId);
+
+    if (!isPartOfChat) {
+      this.$router.push('/');
+    }
 
     this.stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
     const grid = document.getElementById('video-grid');

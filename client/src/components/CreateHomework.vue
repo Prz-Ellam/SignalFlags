@@ -1,6 +1,5 @@
 <template>
-  <div class="modal fade modal-lg pt-5" id="createHomeworkModal" tabindex="-1" aria-labelledby="modalGroup"
-    aria-hidden="true">
+  <div class="modal fade modal-lg pt-5" id="createHomeworkModal" tabindex="-1" aria-labelledby="modalGroup" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content  bg-accent">
         <form @submit.prevent="CreateHomework" novalidate>
@@ -10,7 +9,6 @@
           </div>
           <div class="modal-body">
             <div class="mb-3">
-
               <div class="">
                 <label for="name" role="button" class="col-form-label">
                   Nombre de la tarea

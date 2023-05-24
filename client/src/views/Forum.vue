@@ -2,8 +2,8 @@
   <section class="container-fluid h-100">
     <div class="h-100 p-3 d-flex col text-center">
       <div class="bg-accent text-start w-25 p-3 rounded-3 h-100 me-2 overflow-hidden">
-        <img class="img-fluid bg-primary rounded-2 mb-2" 
-          width="75" height="75" style="width: 75px; height: 75px; object-fit: cover" 
+        <img class="img-fluid bg-primary rounded-2 mb-2 img75" 
+          width="75" height="75" 
           :src="group.avatar" alt="...">
         <h2 class="h4 text-nowrap text-truncate">{{ group.name }}</h2>
         <hr>
@@ -25,10 +25,9 @@
       </div>
       <div class="d-flex flex-column w-75 bg-accent p-3 rounded-3 h-100 overflow-hidden">
         <div class="d-flex align-items-center">
-          <img class="img-fluid bg-primary rounded-2" width="50" height="50" 
-            style="width: 50px; height: 50px; object-fit: cover"
+          <img class="img-fluid bg-primary rounded-2 imgXD" width="50" height="50"
             :src="group.avatar"
-            alt="...">
+            alt="Avatar">
           <span class="h5 ms-3 mb-0">General</span>
           <ul class="nav nav-pills ms-3 mb-0 rounded-1" id="pills-tab" role="tablist">
             <li class="nav-item" role="presentation">
@@ -51,9 +50,7 @@
             Nueva Tarea
             <i class="ms-1 bi bi-flag"></i>
           </button>
-          <button class="btn border-0 bg-primary ms-2" data-bs-toggle="modal" data-bs-target="#modalAddUsers">
-            <i class="ms-1 bi-person-plus-fill"></i>
-          </button>
+         
         </div>
         <hr>
         <div class="tab-content h-100 overflow-hidden" id="pills-tabContent">
@@ -63,10 +60,12 @@
             <div class="overflow-auto h-100 py-2 px-3" ref="postBox" id="post-box">
               <span class="h5">Bienvenido a {{ group.name }}</span>
               <p>{{ group.description }}</p>
-              <img :src="group.avatar" width="200" height="200"
-                class="rounded-circle"
-                style="width: 200px; height: 200px; object-fit: cover"
-                alt="Foto de grupo" />
+              <img 
+                :src="group.avatar" 
+                width="200" height="200"
+                class="rounded-circle img200"
+                alt="Foto de grupo" 
+              />
               <div class="row" id="forum-container">
                 
                 <PostCard
@@ -156,12 +155,10 @@
     </div>
   </section>
   <CreateHomework />
-  <AddUser />
 </template>
 
 <script>
 import CreateHomework from '@/components/CreateHomework.vue';
-import AddUser from '@/components/AddUser.vue';
 import Buttons from '@/components/Buttons.vue';
 import Homework from '@/views/Homework.vue';
 import HomeworkCard from '@/components/HomeworkCard.vue';
@@ -175,7 +172,6 @@ import HomeworkService from '../services/homework.service';
 export default {
   components: {
     CreateHomework,
-    AddUser,
     Buttons,
     HomeworkCard,
     Homework,
@@ -269,5 +265,23 @@ export default {
 
 .bg:hover {
   background-color: #6d6f7d !important;
+}
+
+.imgXD {
+  width: 50px; 
+  height: 50px; 
+  object-fit: cover;
+}
+
+.img75 {
+  width: 75px; 
+  height: 75px; 
+  object-fit: cover;
+}
+
+.img200 {
+  width: 200px; 
+  height: 200px; 
+  object-fit: cover;
 }
 </style>

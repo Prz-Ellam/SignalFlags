@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-lg shadow-lg bg-accent">
     <div class="container-fluid">
       <RouterLink to="/" class="navbar-brand text-light">
-        <img src="../assets/images/isotipo.png" alt="Signal Flags" width="30" height="30">
+        <img src="@/assets/images/isotipo.png" alt="Signal Flags" width="30" height="30">
         <span>SignalFlags</span>
       </RouterLink>
       <button class="navbar-toggler shadow-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"

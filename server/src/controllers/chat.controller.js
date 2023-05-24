@@ -307,6 +307,76 @@ export const findUserChatsController = async (req, res) => {
     });
 }
 
+export const findChatController = async (req, res) => {
+    const { id } = req.params;
+
+    const chat = await Chat.findById(id)
+        .populate('members', '-password -__v -active')
+        .populate({
+            path: 'latestMessage',
+            select: '-chat -__v -active',
+            populate: { path: 'sender', select: '-password -__v' }
+        })
+        .select('-__v -groupAdmin -active');
+
+        const _id = chat.id;
+        const userId = chat.members.filter(member => member._id.toString() !== id).map(member => member._id)[0];
+        const name = chat.name || chat.members.filter(member => member._id.toString() !== id).map(member => member.username).join(', ');
+        const avatar = chat.avatar || chat.members.filter(member => member._id.toString() !== id)[0]?.avatar;
+        const encrypted = chat.encrypted;
+        let lastMessage = chat.latestMessage ? chat.latestMessage : { text: '', sender: {username: ''} };
+        
+        if (chat.encrypted) {
+            try {
+                const algorithm = 'aes-192-cbc'; //algorithm to use
+                const secret = 'your-secret-key';
+                const key = crypto.scryptSync(secret, 'salt', 24);
+                const iv = Buffer.from('1234567890123456');
+
+                const decipher = crypto.createDecipheriv(algorithm, key, Buffer.from('1234567890123456'));
+                var decrypted = decipher.update(lastMessage.text, 'hex', 'utf8') + decipher.final('utf8'); //deciphered text
+                lastMessage.text = decrypted;
+            }
+            catch(e){}
+        }
+
+        // Cosas de la zona horaria
+        const lastMessageTime = chat.latestMessage ? format(new Date(new Date(chat.latestMessage.createdAt).getTime() - (3600 * 1000)), 'dd/MM/yy HH:mm') : '';
+        
+        const activeUser = chat.activeUsers.filter(activeUser => activeUser.toString() !== id);
+        //console.log(chat.activeUsers);
+        const active = activeUser.length > 0 ? true : false;
+
+        let unseenMessagesCount = 0;
+
+        if (chat.latestMessage) {
+            const viewedByUser = chat.latestMessage.viewed_by.find(view => view.user.toString() === id);
+
+            if (viewedByUser && viewedByUser.viewed_at >= lastMessageTime) {
+                unseenMessagesCount = 0;
+            } else {
+                // Obtener todos los mensajes no vistos del chat
+                const unseenMessages = await Message.find({ chat: chat._id, 'viewed_by.user': { $ne: id } });
+                unseenMessagesCount = unseenMessages.length;
+            }
+        }
+
+    const convertedChat = {
+        _id,
+        name,
+        avatar,
+        userId,
+        type: chat.type,
+        lastMessage,
+        lastMessageTime,
+        unseenMessagesCount,
+        active,
+        encrypted
+    };
+
+    return res.json(convertedChat);
+}
+
 export const chatDesencrypt = async (req, res) => {
     const { id } = req.params;
 
@@ -387,5 +457,6 @@ export const chatFindUsersController = async (req, res) => {
 }
 
 export default {
-    findByUser: findUserChatsController
+    findByUser: findUserChatsController,
+    findById: findChatController
 }

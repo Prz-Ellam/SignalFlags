@@ -1,11 +1,13 @@
 import { Router } from 'express';
 import { multerUpload2 } from '../configuration/multer.js';
-import { addUserToChatController, chatAccessController, chatDesencrypt, chatEncrypt, chatFindUsersController } from '../controllers/chat.controller.js';
+import ChatController, { addUserToChatController, chatAccessController, chatDesencrypt, chatEncrypt, chatFindUsersController } from '../controllers/chat.controller.js';
 import MessageController from '../controllers/message.controller.js';
 import { authMiddleware } from '../middlewares/auth.middleware.js';
 import { validateIdMiddleware } from '../middlewares/validate-id.middleware.js';
 
 const chatRouter = Router();
+
+chatRouter.get('/:id', ChatController.findById);
 
 // Crear un chat
 chatRouter.post('/', authMiddleware, chatAccessController);

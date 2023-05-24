@@ -1,58 +1,56 @@
 <template>
-    <div class="modal fade modal-lg pt-5" tabindex="-1" aria-labelledby="ModalGroup" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content bg-accent">
-          <form @submit.prevent="CreateGroup" novalidate>
-            <div class="modal-header">
-              <h3 class="modal-title">Crear un grupo</h3>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <div v-if="step === 0" class="mb-3">
-                <div>
-                  <label for="recipient-name" class="col-form-label">
-                    Nombre del grupo:
-                  </label>
-                  <input
-                    type="text bg-secondary"
-                    class="form-control shadow-none bg-secondary border-0 rounded-4 text-white"
-                    id="recipient-name"
-                    placeholder="Asigne un nombre a su grupo"
-                    v-model="name"
-                  />
-                  <small
-                    class="text-danger"
-                    v-if="v$.name.$dirty && v$.name.required.$invalid"
-                  >
-                    Se requiere un nombre.
-                  </small>
-                </div>
-                <div>
-                  <label for="recipient-description" class="col-form-label">
-                    Descripción:
-                  </label>
-                  <textarea
-                    type="text bg-secondary"
-                    class="form-control shadow-none bg-secondary border-0 rounded-4 text-white"
-                    id="recipient-description"
-                    placeholder="De que tratará este grupo"
-                    v-model="description">
-                  </textarea>
-                  <small
-                    class="text-danger"
-                    v-if="
-                      v$.description.$dirty &&
-                      v$.description.required.$invalid
-                    "
-                  >
-                    Se requiere una descripción.
-                  </small>
-                </div>
+  <div class="modal fade modal-lg pt-5" tabindex="-1" aria-labelledby="ModalGroup" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content bg-accent">
+        <form @submit.prevent="CreateGroup" novalidate>
+          <div class="modal-header">
+            <h3 class="modal-title">Crear un grupo</h3>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            >
+            </button>
+          </div>
+          <div class="modal-body">
+            <div v-if="step === 0" class="mb-3">
+              <div>
+                <label for="recipient-name" class="col-form-label">
+                  Nombre del grupo:
+                </label>
+                <input
+                  type="text bg-secondary"
+                  class="form-control shadow-none bg-secondary border-0 rounded-4 text-white"
+                  id="recipient-name"
+                  placeholder="Asigne un nombre a su grupo"
+                  v-model="name"
+                />
+                <small
+                  class="text-danger"
+                  v-if="v$.name.$dirty && v$.name.required.$invalid"
+                >
+                  Se requiere un nombre.
+                </small>
+              </div>
+              <div>
+                <label for="recipient-description" class="col-form-label">
+                  Descripción:
+                </label>
+                <textarea
+                  type="text bg-secondary"
+                  class="form-control shadow-none bg-secondary border-0 rounded-4 text-white"
+                  id="recipient-description"
+                  placeholder="De que tratará este grupo"
+                  v-model="description">
+                </textarea>
+                <small
+                  class="text-danger"
+                  v-if="v$.description.$dirty && v$.description.required.$invalid"
+                >
+                  Se requiere una descripción.
+                </small>
+              </div>
 
                 <label for="recipient-privacity" class="col-form-label">
                   Privacidad:
@@ -109,28 +107,27 @@
                 Continuar
               </button>
             </div>
-            <div v-else class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary rounded-pill text-light"
-                @click="step--"
-              >
-                Anterior
-              </button>
-              <button
-                type="submit"
-                class="btn btn-primary rounded-pill text-light"
-                data-bs-dismiss="modal"
-                data-bs-target="#modalAddUsers"
-              >
-                Finalizar
-              </button>
-            </div>
-          </form>
-        </div>
+          <div v-else class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary rounded-pill text-light"
+              @click="step--"
+            >
+              Anterior
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary rounded-pill text-light"
+              data-bs-dismiss="modal"
+              data-bs-target="#modalAddUsers"
+            >
+              Finalizar
+            </button>
+          </div>
+        </form>
       </div>
     </div>
-  
+  </div>
 </template>
 
 <script>
