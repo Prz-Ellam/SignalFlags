@@ -1,5 +1,6 @@
 import Post from '../models/post.model.js';
 import Group from '../models/group.model.js';
+import UserSocketModel from '../models/userSocket.model.js';
 
 export const postCreateController = async (req, res) => {
     const user = req.user;
@@ -27,13 +28,16 @@ export const postCreateController = async (req, res) => {
         const filesuris = files.map(file => ({ 
             url: `/uploads/${ file.filename }`,
             type: file.mimetype
-        })); 
+        }));
+
+        const sockets = await UserSocketModel.find({ user: user._id });
 
         const post = new Post({
             content,
             group: id,
             user: user._id,
-            attachments: filesuris
+            attachments: filesuris,
+            activeUser: !!sockets
         });
         await post.save();
 

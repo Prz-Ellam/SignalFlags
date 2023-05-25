@@ -145,8 +145,6 @@
             <button
               type="submit"
               class="btn btn-primary rounded-pill text-light"
-              data-bs-dismiss="modal"
-              data-bs-target="#modalAddUsers"
             >
               Finalizar
             </button>
@@ -164,6 +162,7 @@ import { required, maxLength, minLength } from '@vuelidate/validators'
 import UserService from '@/services/user.service';
 import GroupService from '@/services/group.service';
 import { ToastTopEnd } from '../utils/toast';
+import { Modal } from 'bootstrap';
 import { showErrorMessage } from '../utils/show-error-message';
 
 export default {
@@ -263,6 +262,10 @@ export default {
         formData.append('avatar', this.image);
         await GroupService.addAvatar(groupR._id, formData);
       }
+
+      const modal = document.querySelector('#CreateGroup');
+      const modalInstance = Modal.getInstance(modal);
+      modalInstance.hide();
     },
     async handleChangeImage(event) {
       const { files } = event.target;

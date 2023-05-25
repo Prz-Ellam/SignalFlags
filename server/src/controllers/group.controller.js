@@ -410,29 +410,30 @@ const groupFindPosts = async (req, res) => {
 }
 
 const groupEmail = async (req, res) => {
-    const { id } = req.params;
-    const authUser = req.user;
+    const { content, userIds } = req.body;
     try {
         const transporter = nodemailer.createTransport({
-            service: 'gmail',
+            host: 'smtp.gmail.com',
             auth: {
-                user: 'poisignalflags@gmail.com',
-                pass: '987Zyx$$'
-            }
+                user: process.env.EMAIL,
+                pass: process.env.EMAIL_PASSWORD
+            },
+            port: 465
         });
 
-        const destinatario = 'PerezAlex088@outlook.com';
-        const mensaje = {
-            to: destinatario,
-            subject: '¡Bienvenido a mi aplicación!',
-            text: `Hola, bienvenido a mi aplicación. Espero que disfrutes usándola.`
-        };
+        const users = await User.find({ _id: { $in: userIds } });
+        for (const user of users) {
+            transporter.sendMail({
+                from: process.env.EMAIL,
+                to: user.email,
+                subject: 'SignalFlags',
+                html: content
+            });            
+        }
 
-        transporter.sendMail(mensaje)
-            .then(() => console.log(`Correo electrónico enviado a ${destinatario}`))
-            .catch((error) => console.error(error));
-
-        res.json({});
+        res.json({
+            message: 'Correos enviados'
+        });
     }
     catch (exception) {
         return res.status(500).json({

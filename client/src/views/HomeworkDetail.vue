@@ -80,6 +80,7 @@ import HomeworkService from '@/services/homework.service';
 import { showErrorMessage } from '../utils/show-error-message';
 import { ToastTopEnd } from '../utils/toast';
 import { formatDate } from '../utils/format-date';
+import { showErrorToast } from '../utils/show-error-toast';
 
 export default {
   data() {
@@ -117,7 +118,7 @@ export default {
       }
       const response = await HomeworkService.deliver(this.homework._id, form);
       if (!response?.status) {
-        showErrorMessage(response.message);
+        showErrorToast(response.message);
         return;
       }
 

@@ -39,14 +39,15 @@ class GroupService {
         }
     }
 
-    static async sendEmail(id) {
+    static async sendMail(groupId, content) {
         try {
             const configuration = {
                 method: 'POST',
-                url: `/api/v1/groups/${ id }/email`,
+                url: `/api/v1/groups/${ groupId }/email`,
                 headers: { 
                     'Content-Type': 'application/json'
-                }
+                },
+                data: JSON.stringify(content)
             };
     
             const response = await axios(configuration);

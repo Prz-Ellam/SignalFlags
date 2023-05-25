@@ -6,7 +6,7 @@
         <button
           class="btn border-0"
           data-bs-toggle="modal"
-          data-bs-target="#AddUsuertoGroupChat"
+          data-bs-target="#CreateChatGroup"
         >
           <i class="h4 me-1 bi bi-pencil-square"></i>
         </button>

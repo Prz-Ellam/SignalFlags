@@ -27,7 +27,7 @@
                   <h6 class="text-white">Crea un grupo</h6>
                   <button type="button" class="text-light rounded-pill flex-fill bd-highlight btn btn-primary rounded-3"
                     
-                    @click="a">
+                    @click="openCreateGroup">
                     Crear
                   </button>
                 </div>
@@ -78,17 +78,17 @@ export default {
   async created() {
     const user = JSON.parse(localStorage.getItem('user'));
     this.groups = await GroupService.findByUser(user._id);
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'bottom-right',
-      showConfirmButton: false,
-      timer: 5000,
-    });
+    // const Toast = Swal.mixin({
+    //   toast: true,
+    //   position: 'bottom-right',
+    //   showConfirmButton: false,
+    //   timer: 5000,
+    // });
 
-    await Toast.fire({
-      //icon: 'success',
-      html: '<h1> Success </h1>'
-    });
+    // await Toast.fire({
+    //   //icon: 'success',
+    //   html: '<h1> Success </h1>'
+    // });
 
     // Actualizar en tiempo real
     window.socket.on('groupNotification', async () => {
@@ -104,9 +104,7 @@ export default {
     }
   },
   methods: {
-    a() {
-      // modalCreateGroup
-      console.log('A');
+    openCreateGroup() {
       const modal = document.querySelector('#CreateGroup');
       const modalInstance = new Modal(modal);
       modalInstance.show();

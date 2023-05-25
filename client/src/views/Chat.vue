@@ -18,7 +18,7 @@
       />
     </div>
 
-    <CreateChatGroup id="AddUsuertoGroupChat" />
+    <CreateChatGroup />
     <!-- <UpdateChatGroup /> -->
   </section>
 </template>

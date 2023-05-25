@@ -11,7 +11,7 @@
         <hr>
         <p class="d-flex justify-content-between align-items-center fw-bold mb-1">
           <span class="">Subgrupos</span>
-          <button class="btn btn-primary rounded-pill text-light" data-bs-toggle="modal" data-bs-target="#createSubgroupModal">
+          <button class="btn btn-primary rounded-pill text-light" data-bs-toggle="modal" data-bs-target="#CreateSubgroup">
             <small>Agregar subgrupo</small>
           </button>
         </p>
@@ -57,9 +57,14 @@
           </ul>
           <!-- Estos botones se muestran al admin del grupo  -->
           <button v-if="isAdmin" 
-            class="btn border-0 bg-primary" data-bs-toggle="modal" data-bs-target="#createHomeworkModal">
+            class="btn border-0 bg-primary" data-bs-toggle="modal" data-bs-target="#CreateHomework">
             Nueva Tarea
-            <i class="ms-1 bi bi-flag"></i>
+            <i class="ms-1 bi bi-flag text-light"></i>
+          </button>
+          <button v-if="isAdmin" 
+            class="btn border-0 bg-primary ms-2" data-bs-toggle="modal" data-bs-target="#CreateEmail">
+            Correo
+            <i class="ms-1 bi bi-flag text-light"></i>
           </button>
          
         </div>
@@ -89,11 +94,30 @@
             </div>
            
             <!-- <button @click="sendEmail">Correo</button> -->
-              
+            <div v-if="files.length > 0" class="w-100" 
+              style="height: 120px; white-space: nowrap; overflow-x: scroll;overflow-y:hidden; list-style: none;">
+              <div id="filesContainer" class="d-flex pb-3">
+                <div
+                  v-for="(file, i) in files"
+                  class="position-relative bg-dark rounded-3 m-1 p-3">
+                  <i class="bi bi-file-earmark-text"></i> 
+                  <small>{{ file.name }}</small>
+                  <span role="button" 
+                    class="badge bg-danger position-absolute top-0 end-0"
+                    @click="deleteFile(i)">
+                    &times;
+                  </span>
+                </div>
+              </div> 
+            </div>
             <div class="input-group p-2 my-1">
-              <Buttons />
+              <Buttons 
+                @onClickFile="onUploadFiles"
+                @onClickGeolocalization="onClickGeolocalization"
+              />
               <input class="form-control bg-secondary text-white shadow-none py-0" 
-                type="text" placeholder="Inicia una conversación..." 
+                type="text" placeholder="Inicia una conversación..."
+                id="message" 
                 v-model="text"
                 @keydown="
                 (e) => {
@@ -132,27 +156,27 @@
                   <div class="tab-pane fade show active" id="pills-asign_homework" role="tabpanel"
                     aria-labelledby="pills-asign_homework-tab" tabindex="0">
                     
-                    <HomeworkCard v-for="homework in assignedHomeworks"
+                    <!-- <HomeworkCard v-for="homework in assignedHomeworks"
                       :key="homework._id"
                       :homeworkId="homework._id"
                       :name="homework.name"
                       :groupName="homework.group.name" 
                       :groupAvatar="homework.group.avatar"
                       :dueDate="homework.dueDate"
-                    />
+                    /> -->
 
                   </div>
                   <div class="tab-pane fade" id="pills-completed-homework" role="tabpanel"
                     aria-labelledby="pills-completed-homework-tab" tabindex="0">
 
-                    <HomeworkCard v-for="homework in completeHomeworks"
+                    <!-- <HomeworkCard v-for="homework in completeHomeworks"
                       :key="homework._id"
                       :homeworkId="homework._id"
                       :name="homework.name"
                       :groupName="homework.group.name" 
                       :groupAvatar="homework.group.avatar"
                       :dueDate="homework.dueDate"
-                    />
+                    /> -->
                     
                   </div>
                 </div>
@@ -165,11 +189,13 @@
   </section>
   <CreateHomework />
   <CreateSubgroup />
+  <CreateEmail />
 </template>
 
 <script>
 import CreateHomework from '@/components/CreateHomework.vue';
 import CreateSubgroup from '@/components/CreateSubgroup.vue';
+import CreateEmail from '@/components/CreateEmail.vue';
 import Buttons from '@/components/Buttons.vue';
 import Homework from '@/views/Homework.vue';
 import HomeworkCard from '@/components/HomeworkCard.vue';
@@ -179,11 +205,13 @@ import GroupService from '@/services/group.service';
 import PostService from '@/services/post.service';
 import SubgroupService from '@/services/subgroup.service';
 import HomeworkService from '../services/homework.service';
+import { ToastTopEnd } from '../utils/toast';
 
 export default {
   components: {
     CreateHomework,
     CreateSubgroup,
+    CreateEmail,
     Buttons,
     HomeworkCard,
     Homework,
@@ -199,6 +227,7 @@ export default {
       assignedHomeworks: [],
       completeHomeworks: [],
       expiredHomeworks: [],
+      files: [],
       text: '',
       isAdmin: false
     }
@@ -246,13 +275,63 @@ export default {
     window.socket.off('postNotification');
   },
   methods: {
+    onClickGeolocalization(url) {
+      this.text = url;
+    },
+    async onUploadFiles(event) {
+      const newFiles = Array.from(event.target.files);
+      if (this.files.length + newFiles.length > 5) {
+        ToastTopEnd.fire({
+          icon: 'error',
+          title: 'Solo 5 archivos por mensaje'
+        });
+        return;
+      }
+      
+      for (const file of newFiles) {
+        if (file.size > 8 * 1024 * 1024) {
+          ToastTopEnd.fire({
+            icon: 'error',
+            title: 'Archivo muy pesado'
+          });
+          return;
+        }
+      }
+
+      this.files = this.files.concat(newFiles);
+      console.log(this.files);
+    },
+    deleteFile(i) {
+      this.files.splice(i, 1);
+      console.log(this.files);
+    },
     async sendPost() {
-      console.log(this.groupId);
-      console.log(this.text);
+      if (this.text.trim().length < 1 && this.files.length < 1) {
+        ToastTopEnd.fire({
+          icon: 'error',
+          title: 'Mensaje vacío'
+        });
+        return;
+      }
+
       const post = {
         content: this.text
       }
-      await PostService.create(post, this.groupId);
+      
+      if (this.files.length > 0) {
+        const formData = new FormData();
+        formData.append('payload', JSON.stringify(post));
+        for (const file of this.files) {
+          formData.append('files', file);
+        }
+        await PostService.createUploads(formData, this.groupId);
+      }
+      else {
+        await PostService.create(post, this.groupId);
+      }
+
+      this.text = '';
+      this.files = [];
     },
     async selectGroup(subgroup) {
       this.groupId = subgroup;

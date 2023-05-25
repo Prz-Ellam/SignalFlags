@@ -1,5 +1,5 @@
 <template>
-  <div class="modal fade modal-lg" tabindex="-1" aria-labelledby="modalGroup" aria-hidden="true">
+  <div class="modal fade modal-lg" tabindex="-1" id="CreateChatGroup" aria-labelledby="modalGroup" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content bg-accent">
         <form @submit.prevent="submitChat">
@@ -58,8 +58,7 @@
               Cerrar
             </button>
             <button 
-              class="btn btn-primary text-light rounded-pill" 
-              data-bs-dismiss="modal">
+              class="btn btn-primary text-light rounded-pill">
               Crear
             </button>
           </div>
@@ -78,6 +77,9 @@ import { chatCreateChatGroupService } from '@/services/chat.service';
 import { useVuelidate } from '@vuelidate/core';
 import { required, email } from '@vuelidate/validators';
 import UserService from '../services/user.service';
+import { showErrorMessage } from '../utils/show-error-message';
+import { Modal } from 'bootstrap';
+import { ToastTopEnd } from '../utils/toast';
 
 export default {
   components: {
@@ -109,17 +111,9 @@ export default {
     },
     async submitChat() {
       if (this.name.trim() === '' || this.selectedUsers.length < 1) {
-        await Swal.fire({
-            icon: 'error',
-            title: '...Oops',
-            html: '<span class="text-light">Faltan parametros</span>',
-            confirmButtonColor: "#F23F43",
-            background: "#38393B",
-            customClass: {
-                title: 'text-light',
-                text: 'text-light',
-                confirmButton: 'btn btn-danger text-light shadow-none rounded-pill'
-            },
+        ToastTopEnd.fire({
+          icon: 'error',
+          title: 'Faltar parametros'
         });
 				return;
       }
@@ -134,6 +128,10 @@ export default {
       this.avatar = '';
       this.name = '';
       this.selectedUsers = [];
+
+      const modal = document.querySelector('#CreateChatGroup');
+      const modalInstance = Modal.getInstance(modal);
+      modalInstance.hide();
     },
     async selectedUser(userId) {
       const foundUser = this.selectedUsers.find(user => user._id === userId);

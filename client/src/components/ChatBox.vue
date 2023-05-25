@@ -46,7 +46,7 @@
       </div>
       <hr v-if="selectedChat.name" class="mb-1 text-light" />
       
-      <div v-if="selectedChat.name && files.length > 0" class="w-100" 
+        <div v-if="selectedChat.name && files.length > 0" class="w-100" 
           style="height: 120px; white-space: nowrap; overflow-x: scroll;overflow-y:hidden; list-style: none;">
           <div id="filesContainer" class="d-flex pb-3">
             <div
@@ -200,7 +200,7 @@ export default {
       this.selectedChat.encrypted = false;
     },
     async sendMessage() {
-      if (this.content.length < 1 && this.files.length < 1) {
+      if (this.content.trim().length < 1 && this.files.length < 1) {
         ToastTopEnd.fire({
           icon: 'error',
           title: 'Mensaje vacío'

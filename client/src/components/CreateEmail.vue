@@ -1,36 +1,35 @@
 <template>
-  <div class="modal fade modal-lg pt-5" id="CreateSubgroup" tabindex="-1" aria-labelledby="ModalSubGroup" aria-hidden="true">
+  <div class="modal fade modal-lg pt-5" id="CreateEmail" tabindex="-1" aria-labelledby="modalGroup" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content bg-accent">
-        <form @submit.prevent="CreateSubGroup" novalidate>
+        <form @submit.prevent="sendMail" novalidate>
           <div class="modal-header">
-            <h3 class="modal-title">Crear subgrupo</h3>
-            <button 
-              type="button" 
-              class="btn-close btn-close-white shadow-none" 
-              data-bs-dismiss="modal" 
+            <h3 class="modal-title">Enviar correo electrónico</h3>
+            <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal"
               aria-label="Close">
             </button>
           </div>
           <div class="modal-body">
-            <div v-if="stepSub === 0" class="mb-3">
-              <div>
-                <label for="subgroup-name" role="button" class="form-label">
-                  Nombre del subgrupo:
+            <div class="mb-3">
+
+              <div class="mb-4">
+                <label for="description" class="form-label" role="button">
+                  Mensaje
                 </label>
-                <input 
-                  type="text bg-secondary"
-                  class="form-control shadow-none bg-secondary border-0 rounded-4" 
-                  id="subgroup-name"
-                  placeholder="Asigne un nombre a su subgrupo" 
-                  v-model="name" 
-                />
-                <small class="text-danger" v-if="v$.name.$dirty && v$.name.required.$invalid">
-                  Se requiere un nombre.
+                <textarea type="text bg-secondary" class="form-control shadow-none bg-secondary border-0 rounded-4"
+                  id="description" placeholder="Descripción." v-model="content"></textarea>
+                <small class="text-danger" v-if="v$.content.$dirty &&
+                  v$.content.required.$invalid">
+                  Se requiere una descripción.
+                </small>
+                <small class="text-danger" v-if="v$.content.$dirty && v$.content.minLength.$invalid">
+                  El nombre de la tarea debe tener al menos 1 caracter
+                </small>
+                <small class="text-danger" v-if="v$.content.$dirty && v$.content.maxLength.$invalid">
+                  El nombre de la tarea debe tener menos de 50 caracteres
                 </small>
               </div>
-            </div>
-            <div v-else>
+
               <label for="" class="mb-1">Comience a escribir nombres para agregarlos a su equipo</label>
               <Autocomplete :items="users" @click="onClickAutocomplete" />
               <div class="overflow-auto" style="max-height: 200px;">
@@ -41,29 +40,20 @@
                       :src="users.find(u => u._id === userId).avatar" />
                     <span>{{ users.find(u => u._id === userId).username }}</span>
                   </div>
-                  <div class="d-inline-flex bg-danger p-2 rounded-circle" 
-                    role="button" 
-                    @click="deleteUser(userId)">
+                  <div class="d-inline-flex bg-danger p-2 rounded-circle" role="button" @click="deleteUser(userId)">
                     <i class="fa-solid fa-trash"></i>
                   </div>
                 </div>
               </div>
+
             </div>
           </div>
-          <div v-if="stepSub === 0" class="modal-footer">
+          <div class="modal-footer">
             <button type="button" class="btn btn-secondary rounded-pill text-light" data-bs-dismiss="modal">
-              Cancelar
-            </button>
-            <button type="button" class="btn btn-primary rounded-pill text-light" @click="NextStepSub">
-              Continuar
-            </button>
-          </div>
-          <div v-else class="modal-footer">
-            <button type="button" class="btn btn-secondary rounded-pill text-light" @click="stepSub--">
-              Anterior
+              Cerrar
             </button>
             <button type="submit" class="btn btn-primary rounded-pill text-light">
-              Finalizar
+              Enviar
             </button>
           </div>
         </form>
@@ -75,9 +65,8 @@
 <script>
 import Autocomplete from '@/components/Autocomplete.vue';
 import { useVuelidate } from '@vuelidate/core';
-import { required } from '@vuelidate/validators';
+import { required, minLength, maxLength } from '@vuelidate/validators';
 import GroupService from '@/services/group.service';
-import SubgroupService from '../services/subgroup.service';
 import { ToastTopEnd } from '../utils/toast';
 import { Modal } from 'bootstrap';
 
@@ -90,17 +79,18 @@ export default {
   },
   data() {
     return {
-      stepSub: 0,
-      name: '',
+      content: '',
       users: [],
       userIds: []
     }
   },
   validations() {
     return {
-      name: {
+      content: {
         required,
-      },
+        minLength: minLength(1),
+        maxLength: maxLength(255)
+      }
     }
   },
   async created() {
@@ -109,11 +99,6 @@ export default {
 
     const members = await GroupService.findMembers(groupId);
     this.users = members.filter(user => user._id !== authUser._id);
-    
-    // console.log(response);
-    // if (response?.status) {
-    //   this.users = response.message;
-    // }
   },
   methods: {
     deleteUser(userId) {
@@ -124,22 +109,11 @@ export default {
         this.userIds.push(id);
       }
     },
-    NextStepSub() {
-      this.v$.$touch()
-      if (this.v$.$error) {
-        ToastTopEnd.fire({
-            icon: 'error',
-            title: 'Formulario no válido'
-        });
-        return
-      }
-      this.stepSub++;
-    },
-    async CreateSubGroup(event) {
+    async sendMail() {
       if (this.userIds.length < 1) {
         ToastTopEnd.fire({
             icon: 'error',
-            title: 'Debe haber al menos 1 usuario'
+            title: 'Faltan destinatarios'
         });
         return;
       }
@@ -152,18 +126,24 @@ export default {
         });
         return;
       }
-
+      
       const groupId = this.$route.params.id;
-      await SubgroupService.create(groupId, {
-        name: this.name,
+      const content = {
+        content: this.content,
         userIds: this.userIds
+      }
+      await GroupService.sendMail(groupId, content);
+
+      ToastTopEnd.fire({
+        icon: 'success',
+        title: 'Los correos han sido enviados'
       });
 
-      const modal = document.querySelector('#CreateSubgroup');
+      const modal = document.querySelector('#CreateEmail');
       const modalInstance = Modal.getInstance(modal);
       modalInstance.hide();
-    },
-  },
+    }
+  }
 }
 </script>
 

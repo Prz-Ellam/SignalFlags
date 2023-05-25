@@ -1,5 +1,5 @@
 <template>
-  <div class="modal fade modal-lg pt-5" id="createHomeworkModal" tabindex="-1" aria-labelledby="modalGroup" aria-hidden="true">
+  <div class="modal fade modal-lg pt-5" id="CreateHomework" tabindex="-1" aria-labelledby="modalGroup" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content bg-accent">
         <form @submit.prevent="CreateHomework" novalidate>
@@ -54,7 +54,7 @@
                   El nombre de la tarea debe tener al menos 1 caracter
                 </small>
                 <small class="text-danger" 
-                  v-if="v$.description.$dirty && v$.homewodescriptionrkName.maxLength.$invalid">
+                  v-if="v$.description.$dirty && v$.description.maxLength.$invalid">
                   El nombre de la tarea debe tener menos de 50 caracteres
                 </small>
               </div>
@@ -82,8 +82,7 @@
             </button>
             <button 
               type="submit" 
-              class="btn btn-primary rounded-pill text-light"
-              data-bs-dismiss="modal">
+              class="btn btn-primary rounded-pill text-light">
               Crear
             </button>
           </div>
@@ -98,6 +97,8 @@ import HomeworkService from '../services/homework.service';
 import { useVuelidate } from '@vuelidate/core';
 import { required, minLength, maxLength, minValue, maxValue } from '@vuelidate/validators';
 import { ToastTopEnd } from '../utils/toast';
+import { Modal } from 'bootstrap';
+import { showErrorMessage } from '../utils/show-error-message';
 
 export default {
   setup() {
@@ -145,6 +146,20 @@ export default {
         dueDate: this.dueDate
       }
       const response = await HomeworkService.create(id, homework);
+
+      if (!response?.status) {
+        showErrorMessage(response.message);
+        return;
+      }
+
+      ToastTopEnd.fire({
+        icon: 'success',
+        title: 'La tarea fue creada éxitosamente'
+      });
+
+      const modal = document.querySelector('#CreateHomework');
+      const modalInstance = Modal.getInstance(modal);
+      modalInstance.hide();
     },
   }
 }
