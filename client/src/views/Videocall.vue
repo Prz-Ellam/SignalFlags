@@ -1,15 +1,79 @@
 <template>
  <div class="bg-dark container-fluid h-100">
     <section class="col p-3 " style="height: 90%">
-      <div class="h-100 bg-accent rounded-3 position-relative row">
-        <div class="col-md h-100">
-              <video id="otherVideo"   autoplay playsinline class="rounded userCamera bg-yellow " style="background-image: url('https://repository-images.githubusercontent.com/194294975/e6cdef00-99ef-11e9-90d0-c64097fc903d');"></video>
-        </div>
-          <div class="col-md h-100">
-              <video id="webcamVideo" class="position-absolute userCamera" autoplay playsinline style="background-image: url('https://repository-images.githubusercontent.com/194294975/e6cdef00-99ef-11e9-90d0-c64097fc903d');"></video>
+      <div class="app-container">
+      <div class="app-main">
+        <div class="video-call-wrapper justify-content-center ">
+          <!-- Video Participant 1 -->
+          <div class="video-participant">            
+            <a href="#" class="name-tag">Andy Will</a>
+            <video id="otherVideo" autoplay playsinline class="bg-dark" style="background-image: url('https://repository-images.githubusercontent.com/194294975/e6cdef00-99ef-11e9-90d0-c64097fc903d');"></video>
+             
+            
+          </div>
+          <!-- Video Participant 2 -->
+          <div class="video-participant">            
+            <a href="#" class="name-tag">Emmy Lou</a>
+            <video id="otherVideo" autoplay playsinline class="bg-yellow" style="background-image: url('https://repository-images.githubusercontent.com/194294975/e6cdef00-99ef-11e9-90d0-c64097fc903d');"></video>
+          </div>
+          <!-- Video Participant 3 -->
+          <div class="video-participant">            
+            <a href="#" class="name-tag">Tim Russel</a>
+            <video id="webcamVideo" class="bg-dark" autoplay playsinline style="background-image: url('https://repository-images.githubusercontent.com/194294975/e6cdef00-99ef-11e9-90d0-c64097fc903d');"> </video>
+          </div>
+          <!-- Video Participant 4 -->
+          <div class="video-participant">            
+            <a href="#" class="name-tag">Jessica Bell</a>
+            <video id="webcamVideo" class="bg-yellow" autoplay playsinline style="background-image: url('https://repository-images.githubusercontent.com/194294975/e6cdef00-99ef-11e9-90d0-c64097fc903d');"> </video>
+          </div>
+          <!-- Video Participant 5 -->
+          <div class="video-participant">            
+            <a href="#" class="name-tag">Ryan Patrick</a>
+            <video id="webcamVideo" class="bg-dark" autoplay playsinline style="background-image: url('https://repository-images.githubusercontent.com/194294975/e6cdef00-99ef-11e9-90d0-c64097fc903d');"> </video>
+          </div>
+          <!-- Video Participant 6 -->
+          <div class="video-participant">            
+            <a href="#" class="name-tag">Tina Cate</a>
+            <video id="webcamVideo" class="bg-yellow" autoplay playsinline > </video>
+          </div>
         </div>
       </div>
-      
+
+      <!-- Right Side -->
+      <div class="right-side">       
+        <div class="participants">
+          <!-- Participant pic 1 -->
+          <div class="participant profile-picture">
+            <img
+              src="https://images.unsplash.com/photo-1576110397661-64a019d88a98?ixlib=rb-1.2.1&auto=format&fit=crop&w=1234&q=80"
+              alt=""
+            />
+          </div>
+          <!-- Participant pic 2 -->
+          <div class="participant profile-picture">
+            <img
+              src="https://images.unsplash.com/photo-1566821582776-92b13ab46bb4?ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=60"
+              alt=""
+            />
+          </div>
+          <!-- Participant pic 3 -->
+          <div class="participant profile-picture">
+            <img
+              src="https://images.unsplash.com/photo-1600207438283-a5de6d9df13e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1234&q=80"
+              alt=""
+            />
+          </div>
+          <!-- Participant pic 4 -->
+          <div class="participant profile-picture">
+            <img
+              src="https://images.unsplash.com/photo-1581824283135-0666cf353f35?ixlib=rb-1.2.1&auto=format&fit=crop&w=1276&q=80"
+              alt=""
+            />
+          </div>
+          <div class="participant-more">2+</div>
+        </div>
+      </div>      
+    </div>
     </section>
     <section class="col align-items-center pe-3 ps-3 text-center" style="height: 10%;">
       <div class=" bg-accent rounded-3 p-2">
@@ -191,23 +255,123 @@ export default {
 </script>
 
 <style scoped>
-.userCamera {
+/*==================== LAYOUT ====================*/
+
+.app-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.profile-picture {
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+  margin: 12px;
+}
+.profile-picture img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-.userCamera:hover {
+.video-call-wrapper {
   width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
+}
+.video-participant {
+  width: 33.3%;
   height: 50%;
+  position: relative;
+}
+.video-participant img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
-
-.otherUserCamera {
-  top: 0;
-  right: 0%;
-  width: 320px;
-  height: 180px;
+.video-participant video {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+  background-size: cover;
+}
+.name-tag {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  font-size: 12px;
+  color: #fff;
+  background-color: rgba(0, 15, 47, 0.5);
+  border-radius: 4px;
+  padding: 4px 12px;
+}
+.participants {
+  padding: 12px;
+  max-width: 232px;
+  margin-left: auto;
+}
 
+.participant-more {
+  min-width: 32px;
+  height: 32px;
+  background-color: #e1e0e1;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  color: #232323;
+  font-weight: 700;
+  border-radius: 8px;
+  max-width: 232px;
+  padding: 0px;
+}
+
+/*==================== Devices smaller than 900px ====================*/
+
+@media screen and (max-width: 900px) {
+  
+  .right-side {
+    position: absolute;
+    right: 0;
+    background-color: var(--chat-background);
+    transform: translateX(100%);
+    z-index: 2;
+    width: 100%;
+  }
+  .right-side.show {
+    transform: translateX(0);
+  }
+  .btn-close-right {
+    display: block;
+  }
+}
+
+/*==================== Devices smaller than 520px ====================*/
+@media screen and (max-width: 520px) {
+  .left-side {
+    display: none;
+  }
+  .app-main {
+    padding: 72px 16px 16px 16px;
+  }
+  .video-call-actions {
+    padding-top: 32px;
+  }
+  .video-action-button {
+    width: 32px;
+    height: 32px;
+    background-size: 14px;
+    margin: 0 4px;
+  }
+}
+/*==================== Devices Between 520px - 720px ====================*/
+@media screen and (max-width: 520px) and (max-width: 720px) {
+  .video-participant {
+    width: 50%;
+    height: 33.3%;
+  }
 }
 </style>
