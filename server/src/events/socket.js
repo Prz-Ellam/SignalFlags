@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-import Call from '../models/call.model.js';
+import User from '../models/user.model.js';
 import Chat from '../models/chat.model.js';
 import Message from '../models/message.model.js';
 import Group from '../models/group.model.js';
@@ -11,6 +11,10 @@ import UserSocket from '../models/userSocket.model.js';
 export default async function(io) {
 
     await UserSocket.deleteMany({});
+    await Post.updateMany({  },
+    {
+        activeUser: false
+    });
 
     io.use((socket, next) => {
         const { token } = socket.handshake.auth;
@@ -24,6 +28,10 @@ export default async function(io) {
             next(new Error('Autenticación fallida'));
         }
     });
+
+    const userStream = User.watch([
+        { $match: { "operationType": { $in: [ "insert", "update", "replace" ] } } }
+    ], { fullDocument: 'updateLookup' })
     
     const chatStream = Chat.watch([
         { $match: { "operationType": { $in: [ "insert", "update", "replace" ] } } }
@@ -58,6 +66,19 @@ export default async function(io) {
             io.to(socketIds).emit('pushNotification', change.fullDocument._id);
         }
     });
+
+    userStream.on('change', async (change) => {
+        if (change.operationType == 'update') {
+            const userId = change.fullDocument?._id;
+
+            console.log(userId);
+
+            const sockets = await UserSocket.find({ user: userId});
+            const socketIds = sockets.map(socket => socket._id);
+
+            io.to(socketIds).emit('updateUser', change.fullDocument);
+        }
+    })
     
     messageStream.on('change', async (change) => {
         if (change.operationType == 'insert') {
@@ -98,7 +119,7 @@ export default async function(io) {
     });
 
     postObserver.on('change', async (change) => {
-        if (change.operationType === 'insert') {
+        if (change.operationType === 'insert' || change.operationType == 'update') {
             //console.log(change.fullDocument);
             const groupId = change.fullDocument?.group.toString();
 
@@ -127,12 +148,17 @@ export default async function(io) {
             }
         });
 
+        await Post.updateMany({ user: socket.userId },
+        {
+            activeUser: true
+        });
+
         socket.on('selectChat', (chatId) => {
             // Unirse a la sala del chat correspondiente
             socket.leaveAll();
             socket.join(socket.id);
             socket.join(chatId);
-            console.log(socket.rooms);
+            //console.log(socket.rooms);
         });
 
         socket.on('leaveRooms', () => {
@@ -145,14 +171,6 @@ export default async function(io) {
             socket.join(chatId);
             socket.to(chatId).emit('user-connected', userId);
         });
-
-
-
-
-        
-
-
-
 
 
         socket.on('disconnect', async () => {
@@ -171,6 +189,11 @@ export default async function(io) {
                         $pull: {
                             activeUsers: socket.userId
                         }
+                    });
+
+                await Post.updateMany({ user: socket.userId },
+                    {
+                        activeUser: false
                     });
 
                 const chats = await Chat.find({ members: socket.userId });

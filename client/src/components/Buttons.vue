@@ -1,11 +1,10 @@
 <template>
   <div class="dropup-center dropup">
-    <button class="btn border-0" data-bs-toggle="dropdown" aria-expanded="false" style="transform: rotateY(0deg) rotate(45deg);" >
+    <button class="btn border-0 btn-rotate" data-bs-toggle="dropdown" aria-expanded="false">
       <i class="h4 mb-0 me-1 bi bi-paperclip"></i>
     </button>
     <ul
-      class="dropdown-menu text-center border-0"
-      style="background-color: transparent;"
+      class="dropdown-menu text-center border-0 bg-transparent"
     >
       <li class="my-2">
         <div class="form-group text-center">
@@ -130,6 +129,14 @@ export default {
 </script>
 
 <style>
+.btn-rotate {
+  transform: rotateY(0deg) rotate(45deg);
+}
+
+.bg-transparent {
+  background-color: transparent;
+}
+
 .img {
   width: 60px;
   height: 60px;

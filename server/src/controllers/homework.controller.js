@@ -483,6 +483,10 @@ const homeworkCreateDeliverContoller = async (req, res) => {
 
         await homework.save();
 
+        const user = await User.findById(authUser._id);
+        user.score++;
+        await user.save();
+
         return res.status(201).json({
             status: true,
             message: 'La tarea fue entregada'
@@ -495,8 +499,6 @@ const homeworkCreateDeliverContoller = async (req, res) => {
         });
     }
 }
-
-
 
 export default {
     create: createHomeworkController,

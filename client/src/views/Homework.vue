@@ -6,21 +6,24 @@
           <li class="nav-item" role="presentation">
             <button class="nav-link active rounded-0 bg-accent" id="pills-asign_homework-tab" data-bs-toggle="pill"
               data-bs-target="#pills-asign-homework" type="button" role="tab" aria-controls="pills-asign-homework"
-              aria-selected="true">
+              aria-selected="true"
+            >
               Asignadas
             </button>
           </li>
           <li class="nav-item" role="presentation">
             <button class="nav-link rounded-0 bg-accent" id="pills-expired-tab" data-bs-toggle="pill"
               data-bs-target="#pills-expired-homework" type="button" role="tab" aria-controls="pills-expired-homework"
-              aria-selected="false">
+              aria-selected="false"
+            >
               Vencidas
             </button>
           </li>
           <li class="nav-item" role="presentation">
             <button class="nav-link rounded-0 bg-accent" id="pills-completed-homework-tab" data-bs-toggle="pill"
               data-bs-target="#pills-completed-homework" type="button" role="tab"
-              aria-controls="pills-completed-homework" aria-selected="false"> Completadas
+              aria-controls="pills-completed-homework" aria-selected="false">
+              Completadas
             </button>
           </li>
         </ul>
@@ -29,7 +32,6 @@
               id="pills-asign-homework" 
               role="tabpanel"
               aria-labelledby="pills-asign-homework-tab" tabindex="0">
-              
               <HomeworkCard v-for="homework in assignedHomeworks"
                 :key="homework._id"
                 :homeworkId="homework._id"
@@ -38,11 +40,9 @@
                 :groupAvatar="homework.group.avatar"
                 :dueDate="homework.dueDate"
               />
-
             </div>
             <div class="tab-pane fade" id="pills-expired-homework" role="tabpanel"
               aria-labelledby="pills-asign_homework-tab" tabindex="1">
-              
               <HomeworkCard v-for="homework in expiredHomeworks"
                 :key="homework._id"
                 :homeworkId="homework._id"
@@ -72,6 +72,7 @@
 <script>
 import HomeworkCard from '@/components/HomeworkCard.vue';
 import HomeworkService from '@/services/homework.service';
+import { ToastTopEnd } from '../utils/toast';
 
 export default {
   components: {
@@ -94,4 +95,11 @@ export default {
 </script>
 
 <style scoped>
+.box {
+  position: static;
+  overflow-y: scroll;
+  overflow-x: unset;
+  height: 100%;
+}
+
 </style>

@@ -42,7 +42,10 @@ const postSchema = new Schema({
                 ref: 'User'
             }
         }
-    ]
+    ],
+    activeUser: {
+        type: Boolean
+    }
 },
 {
     timestamps: true,

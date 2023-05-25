@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-lg shadow-lg bg-accent">
     <div class="container-fluid">
       <RouterLink to="/" class="navbar-brand text-light">
-        <img src="../assets/images/isotipo.png" alt="Signal Flags" width="30" height="30">
+        <img src="@/assets/images/isotipo.png" alt="Signal Flags" width="30" height="30">
         <span>SignalFlags</span>
       </RouterLink>
       <button class="navbar-toggler shadow-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -19,7 +19,11 @@
             </button>
           </div>
         </form-->
+        
         <ul class="col-auto navbar-nav ms-auto d-flex align-items-lg-center me-2">
+          <li class="nav-item me-2">
+            Puntuación: {{ user.score }}
+          </li>
           <li class="nav-item">
             <div class="nav-link dropdown text-end">
               <button class="btn border-0 p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -28,12 +32,12 @@
                   alt="Perfil" width="30" height="30" class="object-fit-cover rounded-circle">
               </button>
               <ul id="dropdown" class="dropdown-menu dropdown-menu-end dropdown-menu-dark bg-secondary m-0">
-                <li>
+                <!--li>
                   <RouterLink class="dropdown-item" to="/profile">Mi perfil</RouterLink>
                 </li>
                 <li>
                 <hr class="dropdown-divider">
-                </li>
+                </li-->
                 <li role="button">
                   <a class="dropdown-item" @click="logout">Cerrar sesión</a>
                 </li>
@@ -55,9 +59,18 @@ export default {
       user: JSON.parse(localStorage.getItem('user'))
     }
   },
+  created() {
+    window.socket.on('updateUser', user => {
+      console.log('A');
+      this.user = user;
+    });
+  },
+  onBeforeUnmount() {
+    window.socket.off('updateUser');
+  },
   methods: {
     async logout() {
-      await UserService.logout();
+      const response = await UserService.logout();
       localStorage.clear();
       this.$router.push('/home');
       //window.socket.disconnect();

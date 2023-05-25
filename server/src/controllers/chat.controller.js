@@ -6,8 +6,6 @@ import Message from '../models/message.model.js';
 import UserSocket from '../models/userSocket.model.js';
 import { format } from 'date-fns';
 
-const ChatController = {};
-
 export const chatAccessController = async (req, res) => {
     const { userId } = req.body;
     const authUser = req.user;
@@ -71,8 +69,6 @@ export const chatAccessController = async (req, res) => {
 export const chatCreateController = async (req, res) => {
     const authUser = req.user;
     const { name, avatar, members } = req.body;
-
-    // TODO: Cuando se cree el chat validar si los usuarios involucrados estan conectados
 
     // Validar que el propio authUser no este ya en la lista de miembros
     // Validar que la lista contenga miembros que si existen
@@ -212,18 +208,6 @@ export const addUserToChatController = async (req, res) => {
     return res.json('Ya quedo');
 }
 
-export const deleteUserToChatController = async (req, res) => {
-    const { userId, chatId } = req.params;
-
-    // Validar que el chat no sea individual
-
-    // TODO
-}
-
-const deleteChatController = async (req, res) => {
-
-}
-
 export const findUserChatsController = async (req, res) => {
     const { id } = req.params;
 
@@ -313,59 +297,145 @@ export const findUserChatsController = async (req, res) => {
     });
 }
 
-export const chatDesencrypt = async (req, res) => {
+export const findChatController = async (req, res) => {
     const { id } = req.params;
 
-    const chat = await Chat.findById(id);
-    chat.encrypted = false;
-    chat.save();
+    const chat = await Chat.findById(id)
+        .populate('members', '-password -__v -active')
+        .populate({
+            path: 'latestMessage',
+            select: '-chat -__v -active',
+            populate: { path: 'sender', select: '-password -__v' }
+        })
+        .select('-__v -groupAdmin -active');
 
-    const messages = await Message.find({ chat: id });
+        const _id = chat.id;
+        const userId = chat.members.filter(member => member._id.toString() !== id).map(member => member._id)[0];
+        const name = chat.name || chat.members.filter(member => member._id.toString() !== id).map(member => member.username).join(', ');
+        const avatar = chat.avatar || chat.members.filter(member => member._id.toString() !== id)[0]?.avatar;
+        const encrypted = chat.encrypted;
+        let lastMessage = chat.latestMessage ? chat.latestMessage : { text: '', sender: {username: ''} };
+        
+        if (chat.encrypted) {
+            try {
+                const algorithm = 'aes-192-cbc'; //algorithm to use
+                const secret = 'your-secret-key';
+                const key = crypto.scryptSync(secret, 'salt', 24);
+                const iv = Buffer.from('1234567890123456');
 
-    const algorithm = 'aes-192-cbc';
-    const secret = 'your-secret-key';
-    const key = crypto.scryptSync(secret, 'salt', 24);
-    messages.forEach(message => {
-        try {
-            const decipher = crypto.createDecipheriv(algorithm, key, Buffer.from('1234567890123456'));
-            var decrypted = decipher.update(message.text, 'hex', 'utf8') + decipher.final('utf8'); //deciphered text
-            message.text = decrypted;
-            message.save();
+                const decipher = crypto.createDecipheriv(algorithm, key, Buffer.from('1234567890123456'));
+                var decrypted = decipher.update(lastMessage.text, 'hex', 'utf8') + decipher.final('utf8'); //deciphered text
+                lastMessage.text = decrypted;
+            }
+            catch(e){}
         }
-        catch(exception) {
 
+        // Cosas de la zona horaria
+        const lastMessageTime = chat.latestMessage ? format(new Date(new Date(chat.latestMessage.createdAt).getTime() - (3600 * 1000)), 'dd/MM/yy HH:mm') : '';
+        
+        const activeUser = chat.activeUsers.filter(activeUser => activeUser.toString() !== id);
+        //console.log(chat.activeUsers);
+        const active = activeUser.length > 0 ? true : false;
+
+        let unseenMessagesCount = 0;
+
+        if (chat.latestMessage) {
+            const viewedByUser = chat.latestMessage.viewed_by.find(view => view.user.toString() === id);
+
+            if (viewedByUser && viewedByUser.viewed_at >= lastMessageTime) {
+                unseenMessagesCount = 0;
+            } else {
+                // Obtener todos los mensajes no vistos del chat
+                const unseenMessages = await Message.find({ chat: chat._id, 'viewed_by.user': { $ne: id } });
+                unseenMessagesCount = unseenMessages.length;
+            }
         }
-    });
 
-    res.json({});
+    const convertedChat = {
+        _id,
+        name,
+        avatar,
+        userId,
+        type: chat.type,
+        lastMessage,
+        lastMessageTime,
+        unseenMessagesCount,
+        active,
+        encrypted
+    };
+
+    return res.json(convertedChat);
+}
+
+export const chatDesencrypt = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const chat = await Chat.findById(id);
+        chat.encrypted = false;
+        chat.save();
+
+        const messages = await Message.find({ chat: id });
+
+        const algorithm = 'aes-192-cbc';
+        const secret = 'your-secret-key';
+        const key = crypto.scryptSync(secret, 'salt', 24);
+        messages.forEach(message => {
+            try {
+                const decipher = crypto.createDecipheriv(algorithm, key, Buffer.from('1234567890123456'));
+                var decrypted = decipher.update(message.text, 'hex', 'utf8') + decipher.final('utf8'); //deciphered text
+                message.text = decrypted;
+                message.save();
+            }
+            catch(exception) {
+
+            }
+        });
+
+        res.json({});
+    }
+    catch (exception) {
+        res.json({
+            status: false,
+            message: 'Error'
+        })
+    }
 }
 
 export const chatEncrypt = async (req, res) => {
-    const { id } = req.params;
+    try {
+        const { id } = req.params;
 
-    const chat = await Chat.findById(id);
-    chat.encrypted = true;
-    chat.save();
+        const chat = await Chat.findById(id);
+        chat.encrypted = true;
+        chat.save();
 
-    const messages = await Message.find({ chat: id });
+        const messages = await Message.find({ chat: id });
 
-    const algorithm = 'aes-192-cbc';
-    const secret = 'your-secret-key';
-    const key = crypto.scryptSync(secret, 'salt', 24);
-    messages.forEach(message => {
-        try {
-            const iv = Buffer.from('1234567890123456');
-            const cipher = crypto.createCipheriv(algorithm, key, iv);
-            const encrypted = cipher.update(message.text, 'utf8', 'hex') + cipher.final('hex'); // encrypted text
-            message.text = encrypted;
-            message.save();
-        }
-        catch(exception) {
+        const algorithm = 'aes-192-cbc';
+        const secret = 'your-secret-key';
+        const key = crypto.scryptSync(secret, 'salt', 24);
+        messages.forEach(message => {
+            try {
+                const iv = Buffer.from('1234567890123456');
+                const cipher = crypto.createCipheriv(algorithm, key, iv);
+                const encrypted = cipher.update(message.text, 'utf8', 'hex') + cipher.final('hex'); // encrypted text
+                message.text = encrypted;
+                message.save();
+            }
+            catch(exception) {
 
-        }
-    });
+            }
+        });
 
-    res.json({});
+        res.json({});
+    }
+    catch (exception) {
+        res.json({
+            status: false,
+            message: 'Error'
+        })
+    }
 }
 
 export const chatFindUsersController = async (req, res) => {
@@ -390,4 +460,9 @@ export const chatFindUsersController = async (req, res) => {
             message: 'Ocurrio un error en el servidor'
         });
     }
+}
+
+export default {
+    findByUser: findUserChatsController,
+    findById: findChatController
 }

@@ -14,7 +14,7 @@ const groupCreateController = async (req, res) => {
     const { name, description, privacy, userIds } = req.body;
 
     for (const userId of userIds) {
-        const existingUser = User.findById(userId);
+        const existingUser = await User.findById(userId);
         if (!existingUser) {
             return res.status(404).json({
                 status: false,
@@ -100,7 +100,7 @@ const groupAddAvatarController = async (req, res) => {
     catch (exception) {
         return res.status(500).json({
             status: false,
-            message: 'Ocurrio un error en el servidor'
+            message: exception
         });
     }
 }
@@ -410,29 +410,30 @@ const groupFindPosts = async (req, res) => {
 }
 
 const groupEmail = async (req, res) => {
-    const { id } = req.params;
-    const authUser = req.user;
+    const { content, userIds } = req.body;
     try {
         const transporter = nodemailer.createTransport({
-            service: 'gmail',
+            host: 'smtp.gmail.com',
             auth: {
-                user: 'poisignalflags@gmail.com',
-                pass: '987Zyx$$'
-            }
+                user: process.env.EMAIL,
+                pass: process.env.EMAIL_PASSWORD
+            },
+            port: 465
         });
 
-        const destinatario = 'PerezAlex088@outlook.com';
-        const mensaje = {
-            to: destinatario,
-            subject: '¡Bienvenido a mi aplicación!',
-            text: `Hola, bienvenido a mi aplicación. Espero que disfrutes usándola.`
-        };
+        const users = await User.find({ _id: { $in: userIds } });
+        for (const user of users) {
+            transporter.sendMail({
+                from: process.env.EMAIL,
+                to: user.email,
+                subject: 'SignalFlags',
+                html: content
+            });            
+        }
 
-        transporter.sendMail(mensaje)
-            .then(() => console.log(`Correo electrónico enviado a ${destinatario}`))
-            .catch((error) => console.error(error));
-
-        res.json({});
+        res.json({
+            message: 'Correos enviados'
+        });
     }
     catch (exception) {
         return res.status(500).json({
@@ -440,6 +441,23 @@ const groupEmail = async (req, res) => {
             message: exception
         });
     }
+}
+
+const userFindGroups = async (req, res) => {
+    const { id } = req.params;
+
+    const requestedUser = await User.findById(id);
+    if (!requestedUser) {
+        return res.status(404).json({
+            status: false,
+            message: 'Usuario no encontrado'
+        });
+    }
+
+    const groups = await Group.find({ members: { $in: id }, parent: null })
+        .select('-members -admins -subgroups -homeworks -posts');
+
+    res.json(groups);
 }
 
 export default {
@@ -451,6 +469,7 @@ export default {
     findHomeworks: groupFindHomeworks,
     findSubgroups: groupFindSubgroups,
     findPosts: groupFindPosts,
+    findByUser: userFindGroups,
     addAvatar: groupAddAvatarController,
     addUserToGroupController,
     createSubgroup: groupCreateSubgroupController,

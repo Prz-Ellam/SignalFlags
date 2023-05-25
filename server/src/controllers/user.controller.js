@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt';
-import fs from 'fs';
 import User from '../models/user.model.js';
 import Chat from '../models/chat.model.js';
 import Group from '../models/group.model.js';
@@ -41,7 +40,8 @@ const userLoginController = async (req, res) => {
             _id: requestedUser._id, 
             username: requestedUser.username,
             email: requestedUser.email,
-            avatar: requestedUser.avatar
+            avatar: requestedUser.avatar,
+            score: requestedUser.score
         },
         token: token
     });
@@ -49,13 +49,13 @@ const userLoginController = async (req, res) => {
 
 const userLogoutController = async (req, res) => {
     const authUser = req.user;
-    //try {
+    try {
         const sockets = await UserSocket.find({ user: authUser._id });
     
-        console.log(io.sockets.sockets);
+        //console.log(io.sockets.sockets);
         sockets.forEach(function(socket) {
             var nsocket = io.sockets.sockets.get(socket._id.toString());
-            console.log(socket._id.toString());
+            //console.log(socket._id.toString());
             if (nsocket) {
                 console.log(`Desconectar ${socket._id}`);
                 nsocket.disconnect();
@@ -63,13 +63,13 @@ const userLogoutController = async (req, res) => {
         });
 
         res.json({});
-    //}
-    // catch (exception) {
-    //     return res.status(500).json({
-    //         status: false,
-    //         message: 'Ocurrio un error en el servidor'
-    //     });
-    // }
+    }
+    catch (exception) {
+        return res.status(500).json({
+            status: false,
+            message: 'Ocurrio un error en el servidor'
+        });
+    }
 }
 
 export const userCreateController = async (req, res) => {
@@ -91,30 +91,6 @@ export const userCreateController = async (req, res) => {
         });
     }
     
-    // Validar que la imagen que paso realmente exista
-    // TODO: Esta hardcodeada la direccion de uploads, parametrizarla en caso de cambios
-    /*
-    const uploadsDir = path.join(__dirname, '../../../uploads/');
-    const existingAvatar = fs.existsSync(path.join(uploadsDir, avatar));
-    if (!existingAvatar) {
-        return res.status(404).json({
-            status: false,
-            message: 'No se encontró la foto de perfil especificada'
-        });
-    }
-    */
-
-    /*
-    const isAvatarTaken = await UserService.isAvatarTaken(avatar);
-    if (isAvatarTaken) {
-        return res.status(409).json({
-            status: false,
-            message: 'La foto de perfil no es valida'
-        });
-    }
-    */
-
-    // TODO: Validar que sea una foto
     try {
         const user = await UserService.create(avatar, email, username, password);
         return res.status(201).json({
@@ -124,7 +100,8 @@ export const userCreateController = async (req, res) => {
                 _id: user._id, 
                 username: user.username,
                 email: user.email,
-                avatar: user.avatar
+                avatar: user.avatar,
+                score: user.score
             },
             token: generateToken(user._id)
         });
@@ -237,29 +214,12 @@ export const userFindAllNotChatController = async (req, res) => {
     });
 }
 
-export const userFindGroups = async (req, res) => {
-    const { id } = req.params;
-
-    const requestedUser = await User.findById(id);
-    if (!requestedUser) {
-        return res.status(404).json({
-            status: false,
-            message: 'Usuario no encontrado'
-        });
-    }
-
-    const groups = await Group.find({ members: { $in: id }, parent: null })
-        .select('-members -admins -subgroups -homeworks -posts');
-
-    res.json(groups);
-}
-
 export default {
     login: userLoginController,
     logout: userLogoutController,
     create: userCreateController,
     update: userUpdateController,
     findOne: findOneUserController,
+    findAllNotChat: userFindAllNotChatController,
     findAllUsersController,
-    userFindGroups
 };

@@ -20,14 +20,15 @@ class GroupService {
         }
     }
 
-    static async sendEmail(id) {
+    static async addAvatar(groupId, avatar) {
         try {
             const configuration = {
                 method: 'POST',
-                url: `/api/v1/groups/${ id }/email`,
+                url: `/api/v1/groups/${ groupId }/avatar`,
                 headers: { 
-                    'Content-Type': 'application/json'
-                }
+                    'Content-Type': 'multipart/form-data'
+                },
+                data: avatar
             };
     
             const response = await axios(configuration);
@@ -38,12 +39,23 @@ class GroupService {
         }
     }
 
-    static async update() {
-
-    }
-
-    static async delete() {
-
+    static async sendMail(groupId, content) {
+        try {
+            const configuration = {
+                method: 'POST',
+                url: `/api/v1/groups/${ groupId }/email`,
+                headers: { 
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify(content)
+            };
+    
+            const response = await axios(configuration);
+            return response.data;
+        }
+        catch (exception) {
+            return exception.response.data;
+        }
     }
 
     static async findByUser(userId) {

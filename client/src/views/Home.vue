@@ -57,8 +57,7 @@
             <i class="text-light h1 bi bi-camera-video-fill"></i>
             <h3>Videollamadas</h3>
             <p class="mb-0">
-              Reunete y comunicate con tu equipo a través de
-              videollamadas.
+              Reunete y comunicate con tu equipo a través de videollamadas.
             </p>
           </div> 
         </div>
@@ -67,8 +66,7 @@
             <i class="text-light h1 bi bi-journal-check"></i>
           <h3>Tareas</h3>
           <p class="mb-0">
-            Crea asignaciones y cuando los usuarios las cumplan podrán recibir
-            recompensas.
+            Crea asignaciones y cuando los usuarios las cumplan podrán recibir recompensas.
           </p>
           </div>
         </div>

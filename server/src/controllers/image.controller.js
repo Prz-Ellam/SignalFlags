@@ -16,7 +16,7 @@ export const createImage = async(req, res) => {
 
 export const createImageFirebase = async(req, res) => {
     const storage = getStorage(app);
-    console.log(req.file);
+    //console.log(req.file);
     const file = req.file;
     if (!file) res.status(404).json({
         status: false,

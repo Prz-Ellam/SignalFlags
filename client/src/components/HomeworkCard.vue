@@ -55,6 +55,12 @@ export default {
 </script>
 
 <style scoped>
+img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}
+
 .bg {
   background-color: #38393b;
 }

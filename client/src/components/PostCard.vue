@@ -1,14 +1,17 @@
 <template>
-  <div class="d-flex mt-3 px-3">
+  <div class="d-flex px-3">
     <div class="d-flex align-items-start pt-3 mt-3">
-      <img :src="post.user.avatar" width="50" height="50" 
-        class="rounded-circle profile-picture" alt=""
-      />
+      <div class="position-relative">
+        <img :src="post.user.avatar" width="50" height="50" 
+          class="rounded-circle profile-picture" alt=""
+        />
+        <span :class="dotClasses"></span>
+      </div>
     </div>
     <div class="text-start bg-dark mx-3 my-4 w-100 rounded-3">
       <div class="p-3">
         <span class="ms-1 me-2 mb-0">{{ post.user.username }}</span>
-        <small class="me-3">{{ new Date(post.createdAt).toLocaleString() }}</small>
+        <small class="me-3">{{ formatDate(post.createdAt) }}</small>
         <p class="ms-1 me-3 mt-1 mb-0">{{ post.content }}</p>
         <div v-for="attachment in post.attachments">
           <img v-if="/^(image\/(jpg|jpeg|png|gif))$/.exec(attachment.type)" :src="attachment.url" class="img-fluid"
@@ -33,10 +36,24 @@
 </template>
 
 <script>
+import { formatDate } from '../utils/format-date';
+
 export default {
   props: [
     'post'
-  ]
+  ],
+  methods: {
+    formatDate
+  },
+  computed: {
+    dotClasses() {
+      return {
+        dot: true,
+        green: this.post.activeUser,
+        gray: !this.post.activeUser
+      };
+    },
+  }
 }
 </script>
 
@@ -50,5 +67,23 @@ export default {
 input {
   outline: none !important; 
   border: none !important
+}
+
+.dot {
+  position: absolute;
+  bottom: 0;
+  left: 70%;
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.green {
+  background-color: #31a24c;
+}
+
+.gray {
+  background-color: #494949;
 }
 </style>

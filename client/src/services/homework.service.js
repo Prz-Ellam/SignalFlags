@@ -19,6 +19,24 @@ class HomeworkService {
         }
     }
 
+    static async deliver(homeworkId, deliver) {
+        try {
+            const configuration = {
+                method: 'POST',
+                url: `/api/v1/homeworks/${ homeworkId }/delivers`,
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+                data: deliver
+            }
+            const response = await axios(configuration);
+            return response.data;
+        }
+        catch (exception) {
+            return exception.response.data;
+        }
+    }
+
     static async findByUser(userId) {
         try {
             const configuration = {

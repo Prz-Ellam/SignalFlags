@@ -19,14 +19,15 @@
           <div class="col-sm-6 col-md-4 col-lg-3">
             <div class="mb-4 text-white d-flex flex-column justify-content-center align-items-center shadow-sm rounded-3"
               style="background-color: #38393b; height: 240px;">
-              <div class="d-flex align-items-center" style="height: 66%">
+              <div class="d-flex align-items-center h-66">
                 <img src="../assets/images/POI_SignalFalgs.png" class="rounded group-img" alt="..." />
               </div>
-              <div class="d-flex align-items-start px-3" style="height: 33%">
+              <div class="d-flex align-items-start px-3 h-33">
                 <div>
-                  <h6 class="text-white">Crea un grupo.</h6>
+                  <h6 class="text-white">Crea un grupo</h6>
                   <button type="button" class="text-light rounded-pill flex-fill bd-highlight btn btn-primary rounded-3"
-                    data-bs-toggle="modal" data-bs-target="#modalCreateGroup">
+                    
+                    @click="openCreateGroup">
                     Crear
                   </button>
                 </div>
@@ -34,13 +35,13 @@
             </div>
           </div>
 
-          <div class="col-sm-6 col-md-4 col-lg-3">
+          <!--div class="col-sm-6 col-md-4 col-lg-3">
             <div class="mb-4 text-white d-flex flex-column justify-content-center align-items-center shadow-sm rounded-3"
               style="background-color: #38393b; height: 240px;">
-              <div class="d-flex align-items-center" style="height: 50%">
+              <div class="d-flex align-items-center h-50">
                 <img src="../assets/images/POI_SignalFalgs.png" class="rounded group-img" alt="..." />
               </div>
-              <div class="d-flex align-items-center px-3" style="height: 50%">
+              <div class="d-flex align-items-center px-3 h-50">
                 <div>
                   <h6 class="text-white">Unete a un grupo público</h6>
                   <input type="text" name="code" id="code"
@@ -53,16 +54,17 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div-->
 
         </div>
       </div>
     </div>
-    <CreateGroup id="modalCreateGroup" />
+    <CreateGroup />
   </section>
 </template>
 
 <script>
+import { Modal } from 'bootstrap';
 import Swal from 'sweetalert2';
 import CreateGroup from '@/components/CreateGroup.vue';
 import GroupCard from '@/components/GroupCard.vue';
@@ -76,18 +78,17 @@ export default {
   async created() {
     const user = JSON.parse(localStorage.getItem('user'));
     this.groups = await GroupService.findByUser(user._id);
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'bottom-right',
-      showConfirmButton: false,
-      timer: 5000,
+    // const Toast = Swal.mixin({
+    //   toast: true,
+    //   position: 'bottom-right',
+    //   showConfirmButton: false,
+    //   timer: 5000,
+    // });
 
-    });
-
-    await Toast.fire({
-      //icon: 'success',
-      html: '<h1> Success </h1>'
-    });
+    // await Toast.fire({
+    //   //icon: 'success',
+    //   html: '<h1> Success </h1>'
+    // });
 
     // Actualizar en tiempo real
     window.socket.on('groupNotification', async () => {
@@ -101,15 +102,29 @@ export default {
     return {
       groups: []
     }
+  },
+  methods: {
+    openCreateGroup() {
+      const modal = document.querySelector('#CreateGroup');
+      const modalInstance = new Modal(modal);
+      modalInstance.show();
+    }
   }
 }
 </script>
 
-<style>
+<style scoped>
 .group-img {
   width: 100px;
   height: 100px;
   object-fit: cover;
+}
+
+.box {
+  position: static;
+  overflow-y: scroll;
+  overflow-x: unset;
+  height: 100%;
 }
 
 .box_button {
@@ -120,5 +135,13 @@ export default {
 
 .box_button:hover {
   background-color: #6d6f7d;
+}
+
+.h-33 {
+  height: 33%;
+}
+
+.h-66 {
+  height: 66%;
 }
 </style>

@@ -1,12 +1,12 @@
 <template>
   <div class="bg-dark container-fluid h-100">
-    <section class="col p-3" style="height: 90%">
+    <section class="col p-3 h-100">
       <div class="h-100 bg-accent rounded-3 position-relative row" id="video-grid">
         
         
       </div>
     </section>
-    <section class="col align-items-center pe-3 ps-3 text-center" style="height: 10%;">
+    <!--section class="col align-items-center pe-3 ps-3 text-center" style="height: 10%;">
       <div class=" bg-accent rounded-3 p-2">
         <button class="btn bd-highlight btn-danger rounded-3 border-0 me-2 ms-2" @click="endVideocall" s>
           <i class="bi bi-telephone-fill pe-2" style="color: #ECECEC;"></i> salir
@@ -18,12 +18,13 @@
           <i class="bi bi-mic-fill" id="micIcon"></i>
         </button>
       </div>
-    </section>
+    </section-->
   </div>
 </template>
 
 <script>
 import Peer from 'peerjs';
+import ChatService from '@/services/chat.service';
 
 export default {
   data() {
@@ -36,10 +37,18 @@ export default {
     const chatId = this.$route.params.id;
     const userId = JSON.parse(localStorage.getItem('user'))._id;
 
+    const members = await ChatService.findMembers(chatId);
+    const isPartOfChat = members.find(user => user._id === userId);
+
+    if (!isPartOfChat) {
+      this.$router.push('/');
+    }
+
     this.stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
     const grid = document.getElementById('video-grid');
     const video = document.createElement('video');
-    video.classList.add('h-100');
+    video.classList.add('h-50');
+    video.classList.add('w-50');
     video.classList.add('col');
     video.srcObject = this.stream;
     video.muted = true;
@@ -61,7 +70,8 @@ export default {
       const grid = document.getElementById('video-grid');
       otherCall.on('stream', (userVideoStream) => {
         console.log('Stream 2');
-        video.classList.add('h-100');
+        video.classList.add('h-50');
+        video.classList.add('w-50');
         video.classList.add('col');
         video.srcObject = userVideoStream;
         video.addEventListener('loadedmetadata', () => {
@@ -70,6 +80,7 @@ export default {
         grid.append(video);
       });
       otherCall.on('close', () => {
+        console.log('Close');
         video.remove();
       });
     })
@@ -80,8 +91,8 @@ export default {
       const video = document.createElement('video');
       const grid = document.getElementById('video-grid');
       call.on('stream', (userVideoStream) => {
-        console.log('Stream');
-        video.classList.add('h-100');
+        video.classList.add('h-50');
+        video.classList.add('w-50');
         video.classList.add('col');
         video.srcObject = userVideoStream;
         video.addEventListener('loadedmetadata', () => {
@@ -90,6 +101,7 @@ export default {
         grid.append(video);
       });
       call.on('close', () => {
+        console.log('Close');
         video.remove();
       });
     });

@@ -46,7 +46,7 @@
       </div>
       <hr v-if="selectedChat.name" class="mb-1 text-light" />
       
-      <div v-if="selectedChat.name && files.length > 0" class="w-100" 
+        <div v-if="selectedChat.name && files.length > 0" class="w-100" 
           style="height: 120px; white-space: nowrap; overflow-x: scroll;overflow-y:hidden; list-style: none;">
           <div id="filesContainer" class="d-flex pb-3">
             <div
@@ -86,7 +86,12 @@
         <div class="modal-content bg-accent">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="exampleModalLabel">Miembros</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button 
+              type="button" 
+              class="btn-close btn-close-white shadow-none" 
+              data-bs-dismiss="modal" 
+              aria-label="Close">
+            </button>
           </div>
           <div class="modal-body">
             <div v-for="user in members"
@@ -113,6 +118,7 @@ import Buttons from '@/components/Buttons.vue'
 import MessageService from '@/services/message.service';
 import ChatService from '@/services/chat.service';
 import Swal from 'sweetalert2';
+import { ToastTopEnd } from '../utils/toast';
 
 export default {
   components: {
@@ -157,36 +163,16 @@ export default {
     async onUploadFiles(event) {
       const newFiles = Array.from(event.target.files);
       if (this.files.length + newFiles.length > 5) {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-right',
-            iconColor: 'danger',
-            customClass: {
-              popup: 'bg-dark'
-            },
-            showConfirmButton: false,
-            timer: 1500
-          });
-          await Toast.fire({
-            icon: 'error',
-            title: 'Solo 5 archivos por mensaje'
-          });
-          return;
+        ToastTopEnd.fire({
+          icon: 'error',
+          title: 'Solo 5 archivos por mensaje'
+        });
+        return;
       }
       
       for (const file of newFiles) {
         if (file.size > 8 * 1024 * 1024) {
-          const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-right',
-            iconColor: 'danger',
-            customClass: {
-              popup: 'bg-dark'
-            },
-            showConfirmButton: false,
-            timer: 1500
-          });
-          await Toast.fire({
+          ToastTopEnd.fire({
             icon: 'error',
             title: 'Archivo muy pesado'
           });
@@ -214,36 +200,16 @@ export default {
       this.selectedChat.encrypted = false;
     },
     async sendMessage() {
-      if (this.content.length < 1 && this.files.length < 1) {
-        const Toast = Swal.mixin({
-          toast: true,
-          position: 'top-right',
-          iconColor: 'danger',
-          customClass: {
-            popup: 'bg-dark'
-          },
-          showConfirmButton: false,
-          timer: 1500
-        });
-        await Toast.fire({
+      if (this.content.trim().length < 1 && this.files.length < 1) {
+        ToastTopEnd.fire({
           icon: 'error',
-          title: 'Mensaje vacio'
+          title: 'Mensaje vacío'
         });
         return;
       }
 
       if (this.content.length > 512) {
-        const Toast = Swal.mixin({
-          toast: true,
-          position: 'top-right',
-          iconColor: 'danger',
-          customClass: {
-            popup: 'bg-dark'
-          },
-          showConfirmButton: false,
-          timer: 1500
-        });
-        await Toast.fire({
+        ToastTopEnd.fire({
           icon: 'error',
           title: 'El mensaje es muy largo'
         });

@@ -18,8 +18,8 @@
       />
     </div>
 
-    <AddUserToGroupChat id="AddUsuertoGroupChat" />
-    <UpdateChatGroup />
+    <CreateChatGroup />
+    <!-- <UpdateChatGroup /> -->
   </section>
 </template>
 
@@ -28,28 +28,23 @@ import ChatContact from '@/components/ChatContact.vue'
 import ChatMessage from '@/components/ChatMessage.vue'
 import Autocomplete from '@/components/Autocomplete.vue'
 import Buttons from '@/components/Buttons.vue'
-import AddUserToGroupChat from '@/components/AddUserToGroupChat.vue'
+import CreateChatGroup from '@/components/CreateChatGroup.vue'
 import ChatList from '@/components/ChatList.vue';
 import ChatBox from '@/components/ChatBox.vue';
-import UpdateChatGroup from '@/components/UpdateChatGroup.vue';
 
 import MessageService from '@/services/message.service';
 import ChatService from '@/services/chat.service';
-
-import { chatFindAllByUserService } from '../services/chat.service'
-import { userFindAllWithoutChatService } from '../services/user.service'
-import { chatAccessService } from '../services/chat.service';
+import UserService from '@/services/user.service';
 
 export default {
   components: {
     ChatContact,
     ChatMessage,
     Autocomplete,
-    AddUserToGroupChat,
+    CreateChatGroup,
     Buttons,
     ChatList,
-    ChatBox,
-    UpdateChatGroup
+    ChatBox
   },
   data() {
     return {
@@ -64,7 +59,7 @@ export default {
     }
   },
   async created() {
-    const response2 = await userFindAllWithoutChatService();
+    const response2 = await UserService.findWithoutChat();
     if (response2?.status) {
       this.users = response2.message;
     }
@@ -83,24 +78,32 @@ export default {
         if (response?.status) {
           this.messages = response.message;
           this.$nextTick(() => {
-           const messageBox = document.getElementById('message-box')
-           messageBox.scrollTo({
-             left: 0,
-             top: messageBox.scrollHeight,
-           })
-         })
+            const messageBox = document.getElementById('message-box')
+            messageBox.scrollTo({
+              left: 0,
+              top: messageBox.scrollHeight,
+            })
+          })
         }
       }
     });
 
     window.socket.on('pushNotification', async (id) => {
-      const response = await chatFindAllByUserService(this.user._id)
+
+      console.log(id);
+      console.log(this.selectedChat);
+      
+      const response = await ChatService.findByUser(this.user._id)
       if (response?.status) {
         const chat2 = response.message.find(
-          (chat) => chat._id === this.selectedChat?._id,
+          (chat) => chat._id == this.selectedChat?.chatId,
         )
 
-        this.chats = response.message
+        if (chat2) {
+          this.selectedChat.encrypted = chat2.encrypted;
+        }
+        
+        this.chats = response.message;
         const totalUnseenMessages = this.chats.reduce(
           (total, message) => total + message.unseenMessagesCount,
           0,
@@ -120,7 +123,7 @@ export default {
   },
   methods: {
     async print(id) {
-      await chatAccessService(id);
+      await ChatService.access(id);
     },
     async chatSelected(chat) {
       console.log(chat);
@@ -140,10 +143,11 @@ export default {
            })
          })
       }
-      const response2 = await chatFindAllByUserService(this.user._id)
-      if (response2?.status) {
-        this.chats = response2.message
+      const response2 = await ChatService.findByUser(this.user._id)
+      if (!response2?.status) {
+        return;
       }
+      this.chats = response2.message
       this.isChatDrawerFocus = false;
     }
   },

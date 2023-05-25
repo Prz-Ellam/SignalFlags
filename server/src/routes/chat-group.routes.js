@@ -10,8 +10,4 @@ chatGroupRouter.post('/', authMiddleware, chatCreateController);
 // Actualizar un grupo
 chatGroupRouter.put('/:id');
 
-// Añadir un miembro al grupo
-
-// Eliminar un miembro del grupo
-
 export default chatGroupRouter;
