@@ -90,6 +90,10 @@
             </div>
             <div v-else>
               <label for="" class="mb-1">Comience a escribir nombres para agregarlos a su equipo</label>
+              <small class="text-danger"
+                v-if="v$.userIds.$dirty && v$.userIds.minLength.$invalid">
+                Debes agregar al menos un usuario.
+              </small>
               <Autocomplete 
                 :items="users"
                 @click="onClickAutocomplete" />
@@ -106,7 +110,7 @@
                     </div>
                     <div class="d-inline-flex bg-danger p-2 rounded-circle" 
                       role="button"
-                      @click=""
+                      @click="deleteUser(userId)"
                     >
                       <i class="fa-solid fa-trash"></i>
                     </div>
@@ -156,7 +160,7 @@
 <script>
 import Autocomplete from '@/components/Autocomplete.vue';
 import { useVuelidate } from '@vuelidate/core'
-import { required, maxLength } from '@vuelidate/validators'
+import { required, maxLength, minLength } from '@vuelidate/validators'
 import UserService from '@/services/user.service';
 import GroupService from '@/services/group.service';
 import { ToastTopEnd } from '../utils/toast';
@@ -191,6 +195,9 @@ export default {
         required,
         maxLength: maxLength(255),
       },
+      userIds: {
+        minLength: minLength(1)
+      }
     }
   },
   async created() {
@@ -200,6 +207,9 @@ export default {
     }
   },
   methods: {
+    deleteUser(userId) {
+      this.userIds = this.userIds.filter(user => user !== userId);
+    },
     onClickAutocomplete(id) {
       if (!this.userIds.includes(id)) {
         this.userIds.push(id);
@@ -217,6 +227,14 @@ export default {
       this.step++;
     },
     async CreateGroup(event) {
+      if (this.userIds.length < 1) {
+        ToastTopEnd.fire({
+            icon: 'error',
+            title: 'Debe haber al menos 1 usuario'
+        });
+        return;
+      }
+
       this.v$.$touch()
       if (this.v$.$error) {
         ToastTopEnd.fire({

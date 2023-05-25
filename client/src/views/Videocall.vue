@@ -1,12 +1,12 @@
 <template>
   <div class="bg-dark container-fluid h-100">
-    <section class="col p-3" style="height: 90%">
+    <section class="col p-3 h-100">
       <div class="h-100 bg-accent rounded-3 position-relative row" id="video-grid">
         
         
       </div>
     </section>
-    <section class="col align-items-center pe-3 ps-3 text-center" style="height: 10%;">
+    <!--section class="col align-items-center pe-3 ps-3 text-center" style="height: 10%;">
       <div class=" bg-accent rounded-3 p-2">
         <button class="btn bd-highlight btn-danger rounded-3 border-0 me-2 ms-2" @click="endVideocall" s>
           <i class="bi bi-telephone-fill pe-2" style="color: #ECECEC;"></i> salir
@@ -18,13 +18,13 @@
           <i class="bi bi-mic-fill" id="micIcon"></i>
         </button>
       </div>
-    </section>
+    </section-->
   </div>
 </template>
 
 <script>
 import Peer from 'peerjs';
-import ChatService from '../services/chat.service';
+import ChatService from '@/services/chat.service';
 
 export default {
   data() {
