@@ -70,8 +70,6 @@ export const chatCreateController = async (req, res) => {
     const authUser = req.user;
     const { name, avatar, members } = req.body;
 
-    // TODO: Cuando se cree el chat validar si los usuarios involucrados estan conectados
-
     // Validar que el propio authUser no este ya en la lista de miembros
     // Validar que la lista contenga miembros que si existen
     for (const member of members) {
@@ -208,14 +206,6 @@ export const addUserToChatController = async (req, res) => {
     requestedChat.save();
 
     return res.json('Ya quedo');
-}
-
-export const deleteUserToChatController = async (req, res) => {
-    const { userId, chatId } = req.params;
-
-    // Validar que el chat no sea individual
-
-    // TODO
 }
 
 export const findUserChatsController = async (req, res) => {

@@ -24,7 +24,6 @@ const chatSchema = new Schema({
             ref: 'User'
         }
     ],
-    // TODO: admins
     groupAdmin: [
         {
             type: Schema.Types.ObjectId,

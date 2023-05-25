@@ -91,30 +91,6 @@ export const userCreateController = async (req, res) => {
         });
     }
     
-    // Validar que la imagen que paso realmente exista
-    // TODO: Esta hardcodeada la direccion de uploads, parametrizarla en caso de cambios
-    /*
-    const uploadsDir = path.join(__dirname, '../../../uploads/');
-    const existingAvatar = fs.existsSync(path.join(uploadsDir, avatar));
-    if (!existingAvatar) {
-        return res.status(404).json({
-            status: false,
-            message: 'No se encontró la foto de perfil especificada'
-        });
-    }
-    */
-
-    /*
-    const isAvatarTaken = await UserService.isAvatarTaken(avatar);
-    if (isAvatarTaken) {
-        return res.status(409).json({
-            status: false,
-            message: 'La foto de perfil no es valida'
-        });
-    }
-    */
-
-    // TODO: Validar que sea una foto
     try {
         const user = await UserService.create(avatar, email, username, password);
         return res.status(201).json({
