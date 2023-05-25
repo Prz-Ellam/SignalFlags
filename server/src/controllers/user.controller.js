@@ -49,13 +49,13 @@ const userLoginController = async (req, res) => {
 
 const userLogoutController = async (req, res) => {
     const authUser = req.user;
-    //try {
+    try {
         const sockets = await UserSocket.find({ user: authUser._id });
     
-        console.log(io.sockets.sockets);
+        //console.log(io.sockets.sockets);
         sockets.forEach(function(socket) {
             var nsocket = io.sockets.sockets.get(socket._id.toString());
-            console.log(socket._id.toString());
+            //console.log(socket._id.toString());
             if (nsocket) {
                 console.log(`Desconectar ${socket._id}`);
                 nsocket.disconnect();
@@ -63,13 +63,13 @@ const userLogoutController = async (req, res) => {
         });
 
         res.json({});
-    //}
-    // catch (exception) {
-    //     return res.status(500).json({
-    //         status: false,
-    //         message: 'Ocurrio un error en el servidor'
-    //     });
-    // }
+    }
+    catch (exception) {
+        return res.status(500).json({
+            status: false,
+            message: 'Ocurrio un error en el servidor'
+        });
+    }
 }
 
 export const userCreateController = async (req, res) => {

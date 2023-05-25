@@ -103,10 +103,16 @@ export default {
     }
   },
   async created() {
-    const response = await UserService.find();
-    if (response?.status) {
-      this.users = response.message;
-    }
+    const groupId = this.$route.params.id;
+    const authUser = JSON.parse(localStorage.getItem('user'));
+
+    const members = await GroupService.findMembers(groupId);
+    this.users = members.filter(user => user._id !== authUser._id);
+    
+    // console.log(response);
+    // if (response?.status) {
+    //   this.users = response.message;
+    // }
   },
   methods: {
     onClickAutocomplete(id) {

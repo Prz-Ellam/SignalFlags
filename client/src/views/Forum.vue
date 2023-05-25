@@ -20,11 +20,14 @@
           <li role="button" 
             @click="selectGroup($route.params.id)"
             :class="{ 'bg-accent': $route.params.id !== groupId, 'bg-primary': $route.params.id === groupId }" 
-            class="text-light py-1 rounded-0 border-0 list-group-item">General</li>
+            class="text-light py-1 rounded-2 border-0 list-group-item"
+          >
+            General
+          </li>
           <li v-for="subgroup in subgroups" role="button"
             :bind="subgroup._id"
             :class="{ 'bg-accent': subgroup._id !== groupId, 'bg-primary': subgroup._id === groupId }" 
-            class="text-light py-1 rounded-0 border-0 list-group-item"
+            class="text-light py-1 rounded-2 border-0 list-group-item"
             @click="selectGroup(subgroup._id)"
           >
             {{ subgroup.name }}
@@ -53,7 +56,7 @@
             </li>
           </ul>
           <!-- Estos botones se muestran al admin del grupo  -->
-          <button v-if="group.admins.includes(id)" 
+          <button v-if="isAdmin" 
             class="btn border-0 bg-primary" data-bs-toggle="modal" data-bs-target="#createHomeworkModal">
             Nueva Tarea
             <i class="ms-1 bi bi-flag"></i>
@@ -65,22 +68,23 @@
           <!-- Grupo -->
           <div class="d-flex flex-column tab-pane fade h-100 overflow-hidden show active" id="pills-posts" role="tabpanel"
           aria-labelledby="pills-posts-tab" tabindex="0">
+            
             <div class="overflow-auto h-100 py-2 px-3" ref="postBox" id="post-box">
-              <span class="h5">Bienvenido a {{ group.name }}</span>
-              <p>{{ group.description }}</p>
-              <img 
-                :src="group.avatar" 
-                width="200" height="200"
-                class="rounded-2 img200 bg-primary"
-                alt="Foto de grupo" 
-              />
-              <div class="row" id="forum-container">
-                
+              <div v-if="groupId === $route.params.id">
+                <h5>Bienvenido a {{ group.name }}</h5>
+                <p>{{ group.description }}</p>
+                <img 
+                  :src="group.avatar" 
+                  width="200" height="200"
+                  class="rounded-2 img200 bg-primary"
+                  alt="Foto de grupo" 
+                />
+              </div>
+              <div class="row">  
                 <PostCard
                   v-for="post in posts" 
                   :post="post"
                 />
-
               </div>
             </div>
            
@@ -195,13 +199,17 @@ export default {
       assignedHomeworks: [],
       completeHomeworks: [],
       expiredHomeworks: [],
-      text: ''
+      text: '',
+      isAdmin: false
     }
   },
   async created() {
     this.id = JSON.parse(localStorage.getItem('user'))._id;
     this.groupId = this.$route.params.id;
     this.group = await GroupService.findById(this.groupId);
+    
+    this.isAdmin = this.group.admins.includes(this.id)
+
     this.posts = await PostService.findByGroup(this.groupId);
     this.subgroups = await SubgroupService.findByGroup(this.groupId);
     this.$nextTick(() => {
@@ -213,7 +221,8 @@ export default {
     });
 
     window.socket.on('groupNotification', async () => {
-      this.subgroups = await SubgroupService.findByGroup(this.groupId);
+      const groupId = this.$route.params.id;
+      this.subgroups = await SubgroupService.findByGroup(groupId);
     });
 
     window.socket.on('postNotification', async () => {
@@ -231,6 +240,10 @@ export default {
     //this.assignedHomeworks = await HomeworkService.findByGroupPending(this.groupId);
     //this.completeHomeworks = await HomeworkService.findByGroup(this.groupId);
     //this.expiredHomeworks = await HomeworkService.findByGroupExpired(this.groupId);
+  },
+  beforeUnmount() {
+    window.socket.off('groupNotification');
+    window.socket.off('postNotification');
   },
   methods: {
     async sendPost() {

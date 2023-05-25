@@ -7,8 +7,6 @@ export const postCreateController = async (req, res) => {
     const { content } = req.body;
     const files = req.files ?? [];
 
-    console.log('Post');
-
     try {
         const requestedGroup = await Group.findById(id);
         if (!requestedGroup) {

@@ -72,6 +72,7 @@
 <script>
 import HomeworkCard from '@/components/HomeworkCard.vue';
 import HomeworkService from '@/services/homework.service';
+import { ToastTopEnd } from '../utils/toast';
 
 export default {
   components: {
@@ -94,4 +95,11 @@ export default {
 </script>
 
 <style scoped>
+.box {
+  position: static;
+  overflow-y: scroll;
+  overflow-x: unset;
+  height: 100%;
+}
+
 </style>

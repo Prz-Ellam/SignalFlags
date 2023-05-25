@@ -8,7 +8,7 @@ export const messageCreateController = async (req, res) => {
     const authUser = req.user;
     const files = req.files ?? [];
 
-    console.log(files);
+    //console.log(files);
 
     // Buscar si el usuario pertenece al chat
     const requestedChat = await Chat.findOne({ _id: chatId, members: authUser._id });
@@ -86,7 +86,7 @@ export const messagefindAllByChatController = async (req, res) => {
         .populate('sender', '-__v -password -active')
         .select('-__v -viewed_by.id -active');
 
-    console.log(messages);
+    //console.log(messages);
     const algorithm = "aes-192-cbc"; //algorithm to use
     const secret = 'your-secret-key';
     const key = crypto.scryptSync(secret, 'salt', 24);

@@ -60,7 +60,13 @@ export default {
     }
   },
   created() {
-    console.log(JSON.parse(localStorage.getItem('user')));
+    window.socket.on('updateUser', user => {
+      console.log('A');
+      this.user = user;
+    });
+  },
+  onBeforeUnmount() {
+    window.socket.off('updateUser');
   },
   methods: {
     async logout() {
