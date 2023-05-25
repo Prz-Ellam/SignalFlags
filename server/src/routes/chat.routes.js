@@ -18,13 +18,6 @@ chatRouter.post('/:id/encrypt', authMiddleware, chatEncrypt);
 // Añadir usuario al chat
 chatRouter.post('/:chatId/users/:userId', validateIdMiddleware, authMiddleware, addUserToChatController);
 
-// Eliminar usuario del chat
-chatRouter.delete('/:chatId/users/:userId');
-
-// Eliminar un chat
-chatRouter.delete('/:id');
-
-
 // Enviar un mensaje a un chat
 chatRouter.post('/:chatId/messages', authMiddleware, MessageController.create);
 chatRouter.post('/:chatId/messages/uploads', authMiddleware, multerUpload2.array('files'), 
@@ -44,8 +37,6 @@ chatRouter.get('/:chatId/messages', authMiddleware, MessageController.findByChat
 
 
 chatRouter.get('/:id/members', chatFindUsersController);
-
-
 
 
 export default chatRouter;

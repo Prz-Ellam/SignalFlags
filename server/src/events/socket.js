@@ -173,14 +173,6 @@ export default async function(io) {
         });
 
 
-
-
-        
-
-
-
-
-
         socket.on('disconnect', async () => {
             console.log(`User ${ socket.id } disconnect`);
 

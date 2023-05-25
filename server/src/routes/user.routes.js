@@ -10,18 +10,6 @@ import GroupController from '../controllers/group.controller.js';
 
 const userRouter = Router();
 
-// Iniciar sesión
-// Cerrar sesión
-// Registrarse
-// Actualizar informacion
-// Actualizar contraseña
-// Actualizar avatar
-// Confirmar cuenta con el token
-
-// Obtener todos los chats de un usuario
-// Obtener un usuario basado en su id
-// Obtener todos los usuarios excepto el autenticado
-// Obtener todos los usuarios con los que no se tiene un chat
 userRouter.post('/auth', UserController.login);
 userRouter.delete('/auth', authMiddleware, UserController.logout);
 
