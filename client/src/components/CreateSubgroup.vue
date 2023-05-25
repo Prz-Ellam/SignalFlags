@@ -159,6 +159,10 @@ export default {
         userIds: this.userIds
       });
 
+      this.stepSub = 0;
+      this.name = '';
+      this.userIds = []
+
       const modal = document.querySelector('#CreateSubgroup');
       const modalInstance = Modal.getInstance(modal);
       modalInstance.hide();

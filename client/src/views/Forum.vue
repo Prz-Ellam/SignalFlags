@@ -11,7 +11,7 @@
         <hr>
         <p class="d-flex justify-content-between align-items-center fw-bold mb-1">
           <span class="">Subgrupos</span>
-          <button class="btn btn-primary rounded-pill text-light" data-bs-toggle="modal" data-bs-target="#CreateSubgroup">
+          <button v-if="isAdmin" class="btn btn-primary rounded-pill text-light" data-bs-toggle="modal" data-bs-target="#CreateSubgroup">
             <small>Agregar subgrupo</small>
           </button>
         </p>

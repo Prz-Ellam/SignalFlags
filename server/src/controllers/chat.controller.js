@@ -378,58 +378,74 @@ export const findChatController = async (req, res) => {
 }
 
 export const chatDesencrypt = async (req, res) => {
-    const { id } = req.params;
+    try {
+        const { id } = req.params;
 
-    const chat = await Chat.findById(id);
-    chat.encrypted = false;
-    chat.save();
+        const chat = await Chat.findById(id);
+        chat.encrypted = false;
+        chat.save();
 
-    const messages = await Message.find({ chat: id });
+        const messages = await Message.find({ chat: id });
 
-    const algorithm = 'aes-192-cbc';
-    const secret = 'your-secret-key';
-    const key = crypto.scryptSync(secret, 'salt', 24);
-    messages.forEach(message => {
-        try {
-            const decipher = crypto.createDecipheriv(algorithm, key, Buffer.from('1234567890123456'));
-            var decrypted = decipher.update(message.text, 'hex', 'utf8') + decipher.final('utf8'); //deciphered text
-            message.text = decrypted;
-            message.save();
-        }
-        catch(exception) {
+        const algorithm = 'aes-192-cbc';
+        const secret = 'your-secret-key';
+        const key = crypto.scryptSync(secret, 'salt', 24);
+        messages.forEach(message => {
+            try {
+                const decipher = crypto.createDecipheriv(algorithm, key, Buffer.from('1234567890123456'));
+                var decrypted = decipher.update(message.text, 'hex', 'utf8') + decipher.final('utf8'); //deciphered text
+                message.text = decrypted;
+                message.save();
+            }
+            catch(exception) {
 
-        }
-    });
+            }
+        });
 
-    res.json({});
+        res.json({});
+    }
+    catch (exception) {
+        res.json({
+            status: false,
+            message: 'Error'
+        })
+    }
 }
 
 export const chatEncrypt = async (req, res) => {
-    const { id } = req.params;
+    try {
+        const { id } = req.params;
 
-    const chat = await Chat.findById(id);
-    chat.encrypted = true;
-    chat.save();
+        const chat = await Chat.findById(id);
+        chat.encrypted = true;
+        chat.save();
 
-    const messages = await Message.find({ chat: id });
+        const messages = await Message.find({ chat: id });
 
-    const algorithm = 'aes-192-cbc';
-    const secret = 'your-secret-key';
-    const key = crypto.scryptSync(secret, 'salt', 24);
-    messages.forEach(message => {
-        try {
-            const iv = Buffer.from('1234567890123456');
-            const cipher = crypto.createCipheriv(algorithm, key, iv);
-            const encrypted = cipher.update(message.text, 'utf8', 'hex') + cipher.final('hex'); // encrypted text
-            message.text = encrypted;
-            message.save();
-        }
-        catch(exception) {
+        const algorithm = 'aes-192-cbc';
+        const secret = 'your-secret-key';
+        const key = crypto.scryptSync(secret, 'salt', 24);
+        messages.forEach(message => {
+            try {
+                const iv = Buffer.from('1234567890123456');
+                const cipher = crypto.createCipheriv(algorithm, key, iv);
+                const encrypted = cipher.update(message.text, 'utf8', 'hex') + cipher.final('hex'); // encrypted text
+                message.text = encrypted;
+                message.save();
+            }
+            catch(exception) {
 
-        }
-    });
+            }
+        });
 
-    res.json({});
+        res.json({});
+    }
+    catch (exception) {
+        res.json({
+            status: false,
+            message: 'Error'
+        })
+    }
 }
 
 export const chatFindUsersController = async (req, res) => {

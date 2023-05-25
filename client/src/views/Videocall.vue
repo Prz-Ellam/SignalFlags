@@ -47,7 +47,8 @@ export default {
     this.stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
     const grid = document.getElementById('video-grid');
     const video = document.createElement('video');
-    video.classList.add('h-100');
+    video.classList.add('h-50');
+    video.classList.add('w-50');
     video.classList.add('col');
     video.srcObject = this.stream;
     video.muted = true;
@@ -69,7 +70,8 @@ export default {
       const grid = document.getElementById('video-grid');
       otherCall.on('stream', (userVideoStream) => {
         console.log('Stream 2');
-        video.classList.add('h-100');
+        video.classList.add('h-50');
+        video.classList.add('w-50');
         video.classList.add('col');
         video.srcObject = userVideoStream;
         video.addEventListener('loadedmetadata', () => {
@@ -78,6 +80,7 @@ export default {
         grid.append(video);
       });
       otherCall.on('close', () => {
+        console.log('Close');
         video.remove();
       });
     })
@@ -88,8 +91,8 @@ export default {
       const video = document.createElement('video');
       const grid = document.getElementById('video-grid');
       call.on('stream', (userVideoStream) => {
-        console.log('Stream');
-        video.classList.add('h-100');
+        video.classList.add('h-50');
+        video.classList.add('w-50');
         video.classList.add('col');
         video.srcObject = userVideoStream;
         video.addEventListener('loadedmetadata', () => {
@@ -98,6 +101,7 @@ export default {
         grid.append(video);
       });
       call.on('close', () => {
+        console.log('Close');
         video.remove();
       });
     });

@@ -69,6 +69,10 @@
                   v$.dueDate.required.$invalid">
                   Se requiere la fecha.
                 </small>
+                <small class="text-danger" v-if="v$.dueDate.$dirty &&
+                  v$.dueDate.minValue.$invalid">
+                  La fecha no es válida
+                </small>
               </div>
 
             </div>
@@ -95,7 +99,7 @@
 <script>
 import HomeworkService from '../services/homework.service';
 import { useVuelidate } from '@vuelidate/core';
-import { required, minLength, maxLength, minValue, maxValue } from '@vuelidate/validators';
+import { required, minLength, maxLength } from '@vuelidate/validators';
 import { ToastTopEnd } from '../utils/toast';
 import { Modal } from 'bootstrap';
 import { showErrorMessage } from '../utils/show-error-message';
@@ -124,7 +128,10 @@ export default {
         maxLength: maxLength(255)
       },
       dueDate: {
-        required
+        required,
+        minValue(value) {
+          return new Date(value) > new Date();
+        }
       }
     }
   },
@@ -156,6 +163,10 @@ export default {
         icon: 'success',
         title: 'La tarea fue creada éxitosamente'
       });
+
+      this.name = '';
+      this.description = '';
+      this.dueDate = '';
 
       const modal = document.querySelector('#CreateHomework');
       const modalInstance = Modal.getInstance(modal);

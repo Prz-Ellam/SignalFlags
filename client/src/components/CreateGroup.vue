@@ -263,6 +263,12 @@ export default {
         await GroupService.addAvatar(groupR._id, formData);
       }
 
+      this.step = 0;
+      this.name = '',
+      this.description = ''
+      this.imageSrc = 'src/assets/images/default-placeholder.png',
+      this.image = null;
+
       const modal = document.querySelector('#CreateGroup');
       const modalInstance = Modal.getInstance(modal);
       modalInstance.hide();

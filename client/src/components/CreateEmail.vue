@@ -139,6 +139,9 @@ export default {
         title: 'Los correos han sido enviados'
       });
 
+      this.content = '';
+      this.userIds = [];
+
       const modal = document.querySelector('#CreateEmail');
       const modalInstance = Modal.getInstance(modal);
       modalInstance.hide();

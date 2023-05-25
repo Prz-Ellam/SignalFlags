@@ -112,6 +112,11 @@ export default {
       
     },
     async onDeliverSubmit() {
+      if (this.files.length < 1) {
+        showErrorToast('No se ha cargado ningún archivo');
+        return;
+      }
+
       const form = new FormData();
       for (const file of this.files) {
         form.append('files', file);
